@@ -15,6 +15,7 @@ using mat2x2 = std::array<vec2, 2>;
 using mat3x3 = std::array<vec3, 3>;
 using mat4x4 = std::array<vec4, 4>;
 
+#include "../common.hpp"
 #include "glx/glx.hpp"
 #include "shaders/lines.hpp"
 #include "shaders/points.hpp"
@@ -81,6 +82,10 @@ int main() {
     gladLoadGL();
     glfwSwapInterval(1);
 
+    int width{}, height{};
+    glfwGetFramebufferSize(window, &width, &height); // Get window size
+    float ratio = (float)width / (float)height;
+
     // Triangle
     // New
     ShaderProgram triangle_shaderProgram
@@ -106,13 +111,15 @@ int main() {
 
     for (size_t i = 0; i<initialNumberBirds; ++i) {
 
-        randomCenter = {(float)((2*unif(rng))-1), (float)((2*unif(rng))-1)};
+        randomCenter = {(float)(ratio*((2*unif(rng))-1)), (float)((2*unif(rng))-1)};
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
         randomOrientation = 2*PI*unif(rng);
 
-        centers.push_back(randomCenter);
-        orientations.push_back(randomOrientation);
-        triangles.push_back(triangle::newTriangle(randomCenter,randomColor,randomOrientation));
+        if ( (not overlap(randomCenter, centers)) and (not outsideWindow(randomCenter, ratio)) ) {
+            centers.push_back(randomCenter);
+            orientations.push_back(randomOrientation);
+            triangles.push_back(triangle::newTriangle(randomCenter, randomColor, randomOrientation));
+        }
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -132,22 +139,23 @@ int main() {
     vec2 center;
 
     while (!glfwWindowShouldClose(window)) {
-        int width{}, height{};
         glfwGetFramebufferSize(window, &width, &height); // Get window size
-        const float ratio = (float)width / (float)height;
+        ratio = (float)width / (float)height;
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (add) { // Add new triangle to the window
             center = scale(xpos, ypos, width, height, ratio);
-            centers.push_back(center);
-            randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-            randomOrientation = 2*PI*unif(rng);
-            orientations.push_back(randomOrientation);
-            triangles.push_back(triangle::newTriangle(center,
-                                                      randomColor,
-                                                      randomOrientation));
+            if ( (not overlap(center, centers)) and (not outsideWindow(center, ratio)) ) {
+                centers.push_back(center);
+                randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
+                randomOrientation = 2 * PI * unif(rng);
+                orientations.push_back(randomOrientation);
+                triangles.push_back(triangle::newTriangle(center,
+                                                          randomColor,
+                                                          randomOrientation));
+            }
             add = false;
         }
 

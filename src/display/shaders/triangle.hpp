@@ -1,5 +1,4 @@
-#define triangleSize    0.025
-#define PI  3.14159265358979323846
+#include "../../common.hpp"
 
 namespace triangle {
 
@@ -67,6 +66,32 @@ inline mat4x4 mat4x4_ortho(float l, float r, float b, float t, float n, float f)
   return M;
 }
 
+inline double distance(vec2 p1, vec2 p2) {
+    double d(0);
+    d = std::sqrt( (p2[0]-p1[0])*(p2[0]-p1[0]) +  (p2[1]-p1[1])*(p2[1]-p1[1]) );
+    return d;
+}
+
+inline bool overlap(vec2 c, std::vector<vec2> centers) {
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
+    for (auto& center : centers) {
+        if (distance(c, center)<2*l) {
+            return true;
+        }
+    }
+    return false;
+}
+
+inline bool outsideWindow(vec2 center, float ratio) {
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
+    if ( std::abs(center[0])>ratio-l or std::abs(center[1])>1-l ) {
+        return true;
+    }
+    return false;
+}
+
 struct Vertex {
   vec2 pos;
   vec3 col;
@@ -105,17 +130,18 @@ inline vec2 center(std::array<Vertex, 3> triangle) {
 }
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orientation) {
-    float l = triangleSize*std::sqrt(3)/2;
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
 
     float x0 = center[0];
     float y0 = center[1];
-    float x1 = x0+(2*l/3);
+    float x1 = x0+l;
     float y1 = y0;
 
-    float x2 = x0-l/3;
+    float x2 = x0-l/2;
     float y2 = y0+triangleSize/2;
 
-    float x3 = x0-l/3;
+    float x3 = x0-l/2;
     float y3 = y0-triangleSize/2;
 
     std::array<Vertex, 3> triangle = {{
