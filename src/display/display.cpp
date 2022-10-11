@@ -17,13 +17,6 @@
 static bool add(false);
 static double xpos, ypos;
 
-static vec2 scale(double xPos, double yPos, int Width, int Height, float Ratio) {
-    float x(0), y(0);
-    x = (float)(2*Ratio*(xPos/(Width/2))-Ratio);
-    y = (float)(2*((-yPos)/(Height/2))+1);
-    return {x,y};
-}
-
 static void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";
 }
@@ -45,11 +38,8 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 }
 
 int main() {
-    std::vector<vec2> centers;
-    std::vector<double> angles;
-    std::vector<double> velocities;
 
-    std::tie(centers, angles, velocities) = initialiazeAgents();
+    std::vector<Agent> agents = initialiazeAgents();
 
     glfwSetErrorCallback(error_callback);
 
@@ -94,13 +84,17 @@ int main() {
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::mt19937_64 rng;
 
+    float x, y;
     vec3 randomColor;
-    double randomOrientation;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
-    for (size_t i = 0; i<centers.size(); ++i) {
+    for (Agent agent : agents) {
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-        triangles.push_back(triangle::newTriangle(centers[i], randomColor, angles[i]));
+
+        x = 2*ratio*( ( (float)(agent.getX()) )/ (float)(WIDTH) ) - ratio;
+        y = 2*( ( (float)(agent.getY())) / (float)(HEIGHT) ) - 1;
+
+        triangles.push_back(triangle::newTriangle({x,y}, randomColor, agent.getAngle()));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -117,41 +111,41 @@ int main() {
     // Global loop
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
-    vec2 point;
-    float t(0.1);
-
     while (!glfwWindowShouldClose(window)) {
+
         glfwGetFramebufferSize(window, &width, &height); // Get window size
         ratio = (float)width / (float)height;
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        updateAgents(agents);
+
+        for (size_t i(0); i<agents.size(); i++) {
+
+            x = 2*ratio*( ( (float)(agents[i].getX()) )/ (float)(WIDTH) ) - ratio;
+            y = 2*( ( (float)(agents[i].getY())) / (float)(HEIGHT) ) - 1;
+
+            triangles[i] = triangle::newTriangle({x,y}, triangles[i][0].col, agents[i].getAngle());
+        }
+
         if (add) { // Add new triangle to the window
-            point = scale(xpos, ypos, width, height, ratio);
-            if ( (not overlap(point, centers)) and (not outsideWindow(point, ratio)) ) {
-                centers.push_back(point);
-                randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-                randomOrientation = 2 * PI * unif(rng);
-                angles.push_back(randomOrientation);
-                triangles.push_back(triangle::newTriangle(point,
-                                                          randomColor,
-                                                          randomOrientation));
+            randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
+
+            std::cout << (int)xpos << " " << HEIGHT-(int)ypos << std::endl;
+
+            agents.push_back(Agent((int)xpos, HEIGHT-(int)ypos, 2 * PI * unif(rng), unif(rng)));
+
+            triangles.push_back(triangle::newTriangle({ 2*ratio*( ( (float)( (float)xpos) )/ (float)(WIDTH) ) - ratio , 2*( ( (float)(HEIGHT-(int)ypos)) / (float)(HEIGHT) ) - 1 },
+                                                      randomColor,
+                                                      2 * PI * unif(rng)));
             }
             add = false;
-        }
 
         {  // Triangle
             mat4x4 m = triangle::mat4x4_identity();
             mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
             mat4x4 mvp = triangle::mat4x4_mul(p, m); // MVP = Projection (* View) * Model (= Translation * Rotation)
-
-            for (size_t i(0); i<triangles.size(); i++) {
-                triangles[i] = triangle::rotate(triangles[i], t, centers[i]);
-                triangles[i] = triangle::translate(triangles[i], t/100, t/100);
-                centers[i][0] += t/100;
-                centers[i][1] += t/100;
-            }
 
             VertexArray_bind(triangle_vertexArray);
             Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);

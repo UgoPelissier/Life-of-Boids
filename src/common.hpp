@@ -15,7 +15,7 @@ using mat3x3 = std::array<vec3, 3>;
 using mat4x4 = std::array<vec4, 4>;
 
 //====================DEFAULT PARAMETERS DEFINED==================
-#define DEFAULT_NUM_AGENTS 100
+#define DEFAULT_NUM_AGENTS 10
 
 #define ANGLE_MIN -135
 #define ANGLE_MAX 135
@@ -38,37 +38,24 @@ using mat4x4 = std::array<vec4, 4>;
 double distance(vec2 p1, vec2 p2);
 bool overlap(vec2 c, std::vector<vec2> centers);
 bool outsideWindow(vec2 center, float ratio);
-std::tuple<std::vector<vec2>, std::vector<double>, std::vector<double>> initialiazeAgents();
 //====================USEFUL FUNCTIONS END============================
-
-class Vec {
-
-private:
-	//coordinates of the agent
-	int x;
-	int y;
-	double angle; // alignment angle of the agent
-	double velocity; // speed of the agent
-
-public:
-	Vec(); // default constructor
-	Vec(int x, int y, double angle, double velocity); // parameterized constructor
-	int& X(); // get x by reference
-	int& Y(); // get y by reference
-	double& theta(); // get angle by reference
-	double& speed(); // get speed by reference
-	Vec operator+(Vec b); // vector + vector
-	Vec operator-(Vec b); // vector - vector
-	Vec operator*(Vec b); // vector * vector (dot product)
-	Vec operator*(double b); // vector * scalar
-
-};
 
 class Agent {
 private:
-	Vec vec;
+    int m_x;
+    int m_y;
+    double m_angle;
+    double m_velocity;
 public:
 	Agent(int x, int y, double angle, double velocity);
-	bool update_vector(int x, int y, double angle, double velocity);
+
+    int& getX();
+    int& getY();
+    double& getAngle();
+
+    void update();
 };
 
+std::vector<Agent> initialiazeAgents();
+
+void updateAgents(std::vector<Agent>& agents);
