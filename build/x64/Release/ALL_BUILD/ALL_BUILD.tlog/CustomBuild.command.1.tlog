@@ -1,0 +1,10 @@
+^C:\USERS\THOMAS.BANCEL\DOCUMENTS\1_SOFTWARE_DEV\1_PROJECT_CPP\SOFTWARE-ENGINEERING-PROJECT\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project -BC:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build --check-stamp-file C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
