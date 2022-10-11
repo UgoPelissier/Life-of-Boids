@@ -16,45 +16,45 @@ Vec::Vec(int x, int y, double angle, double velocity) {
     this->velocity = velocity;
 }
 int& Vec::X() {
-    return x;
+	return x;
 }
 
 int& Vec::Y() {
-    return y;
+	return y;
 }
 
 double& Vec::theta() {
-    return angle;
+	return angle;
 }
 
 double& Vec::speed() {
-    return velocity;
+	return velocity;
 }
 
 Vec::operator+(Vec b) {
-    Vec result = Vec(this->X() + b.X(),
-                     this->Y() + b.Y(),
-                     this->theta() + b.theta(),
-                     this->speed() + b.speed());
+	Vec result = Vec(this->X() + b.X(),
+		this->Y() + b.Y(),
+		this->theta() + b.theta(),
+		this->speed() + b.speed());
 
 
     return result;
 }
 
 Vec::operator-(Vec b) {
-    Vec result = Vec(this->X() - b.X(),
-                     this->Y() - b.Y(),
-                     this->theta() - b.theta(),
-                     this->speed() - b.speed());
+	Vec result = Vec(this->X() - b.X(),
+		this->Y() - b.Y(),
+		this->theta() - b.theta(),
+		this->speed() - b.speed());
 
     return result;
 }
 
 Vec::operator*(Vec b) {
-    Vec result = Vec(this->X() * b.X(),
-                     this->Y() * b.Y(),
-                     this->theta() * b.theta(),
-                     this->speed() * b.speed());
+	Vec result = Vec(this->X() * b.X(),
+		this->Y() * b.Y(),
+		this->theta() * b.theta(),
+		this->speed() * b.speed());
 
     return result;
 }
