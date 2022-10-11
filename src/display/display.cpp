@@ -97,17 +97,22 @@ int main() {
     std::mt19937_64 rng;
 
     std::vector<vec2> centers;
+    std::vector<double> orientations;
+
     vec2 randomCenter;
     vec3 randomColor;
+    double randomOrientation;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
     for (size_t i = 0; i<initialNumberBirds; ++i) {
 
         randomCenter = {(float)((2*unif(rng))-1), (float)((2*unif(rng))-1)};
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
+        randomOrientation = 2*PI*unif(rng);
 
         centers.push_back(randomCenter);
-        triangles.push_back(triangle::newTriangle(randomCenter,randomColor));
+        orientations.push_back(randomOrientation);
+        triangles.push_back(triangle::newTriangle(randomCenter,randomColor,randomOrientation));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -123,6 +128,9 @@ int main() {
 
     // Global loop
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
+
+    vec2 center;
+
     while (!glfwWindowShouldClose(window)) {
         int width{}, height{};
         glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -132,8 +140,14 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (add) { // Add new triangle to the window
-            triangles.push_back(triangle::newTriangle(scale(xpos, ypos, width, height, ratio),
-                                                      {float(unif(rng)), float(unif(rng)), float(unif(rng))}));
+            center = scale(xpos, ypos, width, height, ratio);
+            centers.push_back(center);
+            randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
+            randomOrientation = 2*PI*unif(rng);
+            orientations.push_back(randomOrientation);
+            triangles.push_back(triangle::newTriangle(center,
+                                                      randomColor,
+                                                      randomOrientation));
             add = false;
         }
 
