@@ -49,7 +49,7 @@ std::tuple<std::vector<vec2>, std::vector<double>, std::vector<double>> initiali
 
         randomPoint = {(float)(ratio*((2*unif(rng))-1)), (float)((2*unif(rng))-1)};
         randomAngle = 2*PI*unif(rng);
-        randomVelocity = 2*unif(rng)-1;
+        randomVelocity = unif(rng);
 
         if ( (not overlap(randomPoint, points)) and (not outsideWindow(randomPoint, ratio)) ) {
             points.push_back(randomPoint);
