@@ -118,6 +118,7 @@ int main() {
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
     vec2 point;
+    float t(0.1);
 
     while (!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -145,10 +146,12 @@ int main() {
             mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
             mat4x4 mvp = triangle::mat4x4_mul(p, m); // MVP = Projection (* View) * Model (= Translation * Rotation)
 
-/*            for (auto& triangle : triangles) {
-                    triangle = triangle::rotate(triangle, angle, origin);
-                triangle = triangle::translate(triangle, X, Y);
-            }*/
+            for (size_t i(0); i<triangles.size(); i++) {
+                triangles[i] = triangle::rotate(triangles[i], t, centers[i]);
+                triangles[i] = triangle::translate(triangles[i], t/100, t/100);
+                centers[i][0] += t/100;
+                centers[i][1] += t/100;
+            }
 
             VertexArray_bind(triangle_vertexArray);
             Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);

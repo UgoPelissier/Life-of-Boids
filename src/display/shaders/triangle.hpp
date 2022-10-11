@@ -66,32 +66,6 @@ inline mat4x4 mat4x4_ortho(float l, float r, float b, float t, float n, float f)
   return M;
 }
 
-inline double distance(vec2 p1, vec2 p2) {
-    double d(0);
-    d = std::sqrt( (p2[0]-p1[0])*(p2[0]-p1[0]) +  (p2[1]-p1[1])*(p2[1]-p1[1]) );
-    return d;
-}
-
-inline bool overlap(vec2 c, std::vector<vec2> centers) {
-    float h = triangleSize*std::sqrt(3)/2;
-    float l = 2*h/3;
-    for (auto& center : centers) {
-        if (distance(c, center)<2*l) {
-            return true;
-        }
-    }
-    return false;
-}
-
-inline bool outsideWindow(vec2 center, float ratio) {
-    float h = triangleSize*std::sqrt(3)/2;
-    float l = 2*h/3;
-    if ( std::abs(center[0])>ratio-l or std::abs(center[1])>1-l ) {
-        return true;
-    }
-    return false;
-}
-
 struct Vertex {
   vec2 pos;
   vec3 col;
