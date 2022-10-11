@@ -1,4 +1,5 @@
-#define PI           3.14159265358979323846
+#define triangleSize    0.025
+#define PI  3.14159265358979323846
 
 namespace triangle {
 
@@ -84,27 +85,38 @@ inline std::array<Vertex, 3> rotate(std::array<Vertex, 3> triangle, float angle,
     float c = std::cos(angle);
     float x0 = origin[0];
     float y0 = origin[1];
+    float tempX, tempY;
     for (size_t i(0); i<triangle.size(); i++) {
-        triangle[i].pos[0] = x0 + c*(triangle[i].pos[0]-x0) + s*(triangle[i].pos[1]-y0);
-        triangle[i].pos[1] = y0 - s*(triangle[i].pos[0]-x0) + c*(triangle[i].pos[1]-y0);
+        tempX = x0 + c*(triangle[i].pos[0]-x0) - s*(triangle[i].pos[1]-y0);
+        tempY = y0 + s*(triangle[i].pos[0]-x0) + c*(triangle[i].pos[1]-y0);
+        triangle[i].pos[0] = tempX;
+        triangle[i].pos[1] = tempY;
     }
     return triangle;
 }
 
-inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color) {
-    float a = 0.05;
-    float l = a*std::sqrt(3)/2;
+inline vec2 center(std::array<Vertex, 3> triangle) {
+    vec2 center = {0,0};
+    for (size_t i(0); i<triangle.size(); i++) {
+        center[0] += (triangle[i].pos[0]/3) ;
+        center[1] += (triangle[i].pos[1]/3) ;
+    }
+    return center;
+}
+
+inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orientation) {
+    float l = triangleSize*std::sqrt(3)/2;
 
     float x0 = center[0];
     float y0 = center[1];
-    float x1 = x0;
-    float y1 = y0+(2*l/3);
+    float x1 = x0+(2*l/3);
+    float y1 = y0;
 
-    float x2 = x0+a/2;
-    float y2 = y0-l/3;
+    float x2 = x0-l/3;
+    float y2 = y0+triangleSize/2;
 
-    float x3 = x0-a/2;
-    float y3 = y0-l/3;
+    float x3 = x0-l/3;
+    float y3 = y0-triangleSize/2;
 
     std::array<Vertex, 3> triangle = {{
         // (position 2d + color 3d pack)
@@ -112,6 +124,9 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color) {
         {{x2, y2}, color},  //
         {{x3, y3}, color}   //
     }};
+
+    triangle = rotate(triangle, orientation, center);
+
     return triangle;
 }
 
