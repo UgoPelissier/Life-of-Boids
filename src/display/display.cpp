@@ -8,13 +8,6 @@
 #include <vector>
 #include <random>
 
-using vec2 = std::array<float, 2>;
-using vec3 = std::array<float, 3>;
-using vec4 = std::array<float, 4>;
-using mat2x2 = std::array<vec2, 2>;
-using mat3x3 = std::array<vec3, 3>;
-using mat4x4 = std::array<vec4, 4>;
-
 #include "../common.hpp"
 #include "glx/glx.hpp"
 #include "shaders/lines.hpp"
@@ -52,11 +45,11 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 }
 
 int main() {
-    // Get the initial number of birds
-    std::cout << std::endl << "How many birds to start ? ";
-    size_t initialNumberBirds(0);
-    std::cin >> initialNumberBirds;
-    std::cout << std::endl;
+    std::vector<vec2> centers;
+    std::vector<double> angles;
+    std::vector<double> velocities;
+
+    std::tie(centers, angles, velocities) = initialiazeAgents();
 
     glfwSetErrorCallback(error_callback);
 
@@ -101,25 +94,13 @@ int main() {
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::mt19937_64 rng;
 
-    std::vector<vec2> centers;
-    std::vector<double> orientations;
-
-    vec2 randomCenter;
     vec3 randomColor;
     double randomOrientation;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
-    for (size_t i = 0; i<initialNumberBirds; ++i) {
-
-        randomCenter = {(float)(ratio*((2*unif(rng))-1)), (float)((2*unif(rng))-1)};
+    for (size_t i = 0; i<centers.size(); ++i) {
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-        randomOrientation = 2*PI*unif(rng);
-
-        if ( (not overlap(randomCenter, centers)) and (not outsideWindow(randomCenter, ratio)) ) {
-            centers.push_back(randomCenter);
-            orientations.push_back(randomOrientation);
-            triangles.push_back(triangle::newTriangle(randomCenter, randomColor, randomOrientation));
-        }
+        triangles.push_back(triangle::newTriangle(centers[i], randomColor, angles[i]));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -136,7 +117,7 @@ int main() {
     // Global loop
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
-    vec2 center;
+    vec2 point;
 
     while (!glfwWindowShouldClose(window)) {
         glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -146,13 +127,13 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (add) { // Add new triangle to the window
-            center = scale(xpos, ypos, width, height, ratio);
-            if ( (not overlap(center, centers)) and (not outsideWindow(center, ratio)) ) {
-                centers.push_back(center);
+            point = scale(xpos, ypos, width, height, ratio);
+            if ( (not overlap(point, centers)) and (not outsideWindow(point, ratio)) ) {
+                centers.push_back(point);
                 randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
                 randomOrientation = 2 * PI * unif(rng);
-                orientations.push_back(randomOrientation);
-                triangles.push_back(triangle::newTriangle(center,
+                angles.push_back(randomOrientation);
+                triangles.push_back(triangle::newTriangle(point,
                                                           randomColor,
                                                           randomOrientation));
             }
