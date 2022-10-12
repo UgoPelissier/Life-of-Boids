@@ -1,6 +1,41 @@
+#define GLFW_INCLUDE_NONE
+
 #include "common.hpp"
-#include "display/display.hpp"
 #include "movement/law.hpp"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <array>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <random>
+#include "glx/glx.hpp"
+#include "shaders/lines.hpp"
+#include "shaders/triangle.hpp"
+
+double add;
+double xpos, ypos;
+
+void error_callback(int error, const char* description) {
+    std::cerr << "Error[" << error << "]: " << description << "\n";
+}
+
+void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        std::puts("Export current display");
+        char export_filename[] = "export.png";
+        saveImage(export_filename, window);
+    }
+    // Add a new bird by positioning the cursor at the desired location and pressing "b"
+    if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+        glfwGetCursorPos(window, &xpos, &ypos);
+        add = true;
+    }
+}
 
 int main() {
 

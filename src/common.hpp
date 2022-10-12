@@ -22,7 +22,7 @@ using mat4x4 = std::array<vec4, 4>;
 
 #define CLOSE 100 // Border parameter
 
-#define SPEED 1
+#define SPEED 2
 
 #define TRIANGLE_SIZE    0.05
 #define PI  3.14159265358979323846
