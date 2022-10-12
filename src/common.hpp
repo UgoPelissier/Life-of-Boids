@@ -42,5 +42,10 @@ private:
 public:
 	Agent(int x, int y, double angle, double velocity);
 	bool update_vector(int x, int y, double angle, double velocity);
+	int& X(); // get x by reference
+	int& Y(); // get y by reference
+	double& theta(); // get angle by reference
+	double& speed(); // get speed by reference
+	void move_next_pos()
 };
 

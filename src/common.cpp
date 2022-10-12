@@ -85,6 +85,22 @@ bool Agent::update_vector() {
 	this->vec.speed() = velocity;
 }
 
+int& Agent::X() {
+	return x;
+}
+
+int& Agent::Y() {
+	return y;
+}
+
+double& Agent::theta() {
+	return angle;
+}
+
+double& Agent::speed() {
+	return velocity;
+}
+
 
 //===============Agent class functions definitions end================
 
