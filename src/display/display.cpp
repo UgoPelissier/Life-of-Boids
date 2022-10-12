@@ -1,27 +1,10 @@
-#include <glad/glad.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <array>
-#include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <vector>
-#include <random>
+#include "display.hpp"
 
-#include "../common.hpp"
-#include "glx/glx.hpp"
-#include "shaders/lines.hpp"
-#include "shaders/points.hpp"
-#include "shaders/triangle.hpp"
-
-static bool add(false);
-static double xpos, ypos;
-
-static void error_callback(int error, const char* description) {
+void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";
 }
 
-static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) {
+void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     }
@@ -36,10 +19,10 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
         add = true;
     }
 }
-
+/*
 int main() {
 
-    std::vector<Agent> agents = initialiazeAgents();
+    std::vector<Agent> agents = initialiaze_agents();
 
     glfwSetErrorCallback(error_callback);
 
@@ -91,10 +74,10 @@ int main() {
     for (Agent agent : agents) {
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
 
-        x = 2*ratio*( ( (float)(agent.getX()) )/ (float)(WIDTH) ) - ratio;
-        y = 2*( ( (float)(agent.getY())) / (float)(HEIGHT) ) - 1;
+        x = 2*ratio*( ( (float)(agent.get_x()) )/ (float)(WIDTH) ) - ratio;
+        y = 2*( ( (float)(agent.get_y())) / (float)(HEIGHT) ) - 1;
 
-        triangles.push_back(triangle::newTriangle({x,y}, randomColor, agent.getAngle()));
+        triangles.push_back(triangle::newTriangle({x,y}, randomColor, agent.get_angle()));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -119,14 +102,14 @@ int main() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        updateAgents(agents);
+        update_agents(agents);
 
         for (size_t i(0); i<agents.size(); i++) {
 
-            x = 2*ratio*( ( (float)(agents[i].getX()) )/ (float)(WIDTH) ) - ratio;
-            y = 2*( ( (float)(agents[i].getY())) / (float)(HEIGHT) ) - 1;
+            x = 2*ratio*( ( (float)(agents[i].get_x()) )/ (float)(WIDTH) ) - ratio;
+            y = 2*( ( (float)(agents[i].get_x())) / (float)(HEIGHT) ) - 1;
 
-            triangles[i] = triangle::newTriangle({x,y}, triangles[i][0].col, agents[i].getAngle());
+            triangles[i] = triangle::newTriangle({x,y}, triangles[i][0].col, agents[i].get_angle());
         }
 
         if (add) { // Add new triangle to the window
@@ -170,3 +153,4 @@ int main() {
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
+*/

@@ -10,7 +10,7 @@ double distance(vec2 p1, vec2 p2) {
 }
 
 bool overlap(vec2 c, std::vector<vec2> centers) {
-    float h = triangleSize*std::sqrt(3)/2;
+    float h = TRIANGLE_SIZE * std::sqrt(3) / 2;
     float l = 2*h/3;
     for (auto& center : centers) {
         if (distance(c, center)<2*l) {
@@ -20,16 +20,13 @@ bool overlap(vec2 c, std::vector<vec2> centers) {
     return false;
 }
 
-bool outsideWindow(vec2 center, float ratio) {
-    float h = triangleSize*std::sqrt(3)/2;
-    float l = 2*h/3;
-    if ( std::abs(center[0])>ratio-l or std::abs(center[1])>1-l ) {
-        return true;
-    }
-    return false;
+bool outside_window(vec2 center, float ratio) {
+    float h = TRIANGLE_SIZE * std::sqrt(3) / 2;
+    float l = 2* h / 3;
+    return (bool)(std::abs(center[0]) > ratio - l || std::abs(center[1]) > 1 - l);
 }
 
-std::vector<Agent> initialiazeAgents() {
+std::vector<Agent> initialiaze_agents() {
 
     std::vector<Agent> agents;
 
@@ -56,15 +53,19 @@ std::vector<Agent> initialiazeAgents() {
     return agents;
 }
 
-void updateAgents(std::vector<Agent>& agents) {
+void update_agents(std::vector<Agent>& agents) {
+    
+    int x, y;
     for (Agent& agent : agents) {
-        agent.update();
+        // update x y here
+        agent.update(x, y);
     }
 }
 
 //====================USEFUL FUNCTIONS END============================
 
 //===============Agent class functions definitions================
+
 Agent::Agent(int x, int y, double angle, double velocity) {
     m_x = x;
     m_y = y;
@@ -72,20 +73,19 @@ Agent::Agent(int x, int y, double angle, double velocity) {
     m_angle = angle;
 }
 
-int& Agent::getX() {
+int& Agent::get_x() {
     return m_x;
 }
 
-int& Agent::getY() {
+int& Agent::get_y() {
     return m_y;
 }
 
-double& Agent::getAngle() {
+double& Agent::get_angle() {
     return m_angle;
 }
 
-void Agent::update() {
-    m_x += 1;
-    m_y += 1;
-    m_angle += 1e-1;
+void Agent::update(int x, int y) {
+    m_x = x;
+    m_y = y;
 }

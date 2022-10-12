@@ -104,7 +104,7 @@ inline vec2 center(std::array<Vertex, 3> triangle) {
 }
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orientation) {
-    float h = triangleSize*std::sqrt(3)/2;
+    float h = TRIANGLE_SIZE*std::sqrt(3)/2;
     float l = 2*h/3;
 
     float x0 = center[0];
@@ -113,10 +113,10 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orienta
     float y1 = y0;
 
     float x2 = x0-l/2;
-    float y2 = y0+triangleSize/2;
+    float y2 = y0+TRIANGLE_SIZE/2;
 
     float x3 = x0-l/2;
-    float y3 = y0-triangleSize/2;
+    float y3 = y0-TRIANGLE_SIZE/2;
 
     std::array<Vertex, 3> triangle = {{
         // (position 2d + color 3d pack)

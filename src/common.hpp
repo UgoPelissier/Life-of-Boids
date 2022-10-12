@@ -29,7 +29,7 @@ using mat4x4 = std::array<vec4, 4>;
 #define WIDTH 1200
 #define HEIGHT 1000 // Window size parameter
 
-#define triangleSize    0.025
+#define TRIANGLE_SIZE    0.025
 #define PI  3.14159265358979323846
 //====================DEFAULT PARAMETERS DEFINED END==================
 
@@ -37,7 +37,7 @@ using mat4x4 = std::array<vec4, 4>;
 
 double distance(vec2 p1, vec2 p2);
 bool overlap(vec2 c, std::vector<vec2> centers);
-bool outsideWindow(vec2 center, float ratio);
+bool outside_window(vec2 center, float ratio);
 //====================USEFUL FUNCTIONS END============================
 
 class Agent {
@@ -49,13 +49,13 @@ private:
 public:
 	Agent(int x, int y, double angle, double velocity);
 
-    int& getX();
-    int& getY();
-    double& getAngle();
+    int& get_x();
+    int& get_y();
+    double& get_angle();
 
-    void update();
+    void update(int x, int y);
 };
 
-std::vector<Agent> initialiazeAgents();
+std::vector<Agent> initialiaze_agents();
 
-void updateAgents(std::vector<Agent>& agents);
+void update_agents(std::vector<Agent>& agents);
