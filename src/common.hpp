@@ -17,29 +17,17 @@ using mat4x4 = std::array<vec4, 4>;
 //====================DEFAULT PARAMETERS DEFINED==================
 #define DEFAULT_NUM_AGENTS 20
 
-#define ANGLE_MIN -135
-#define ANGLE_MAX 135
-
-#define SPEED_MIN 0
-#define SPEED_MAX 1
-
-#define DEFAULT_COHESION_WEIGHT 0.5
-#define DEFAULT_SEPARATION_WEIGHT 0.5 // replace with (1 - DEFAULT_COHESION_WEIGHT)
-
 #define WIDTH 1200
 #define HEIGHT 1000 // Window size parameter
 
-#define TRIANGLE_SIZE    0.025
+#define CLOSE 100 // Border parameter
+
+#define SPEED 1
+
+#define TRIANGLE_SIZE    0.05
 #define PI  3.14159265358979323846
-//====================DEFAULT PARAMETERS DEFINED END==================
 
-//====================USEFUL FUNCTIONS================================
-
-double distance(vec2 p1, vec2 p2);
-bool overlap(vec2 c, std::vector<vec2> centers);
-bool outside_window(vec2 center, float ratio);
-//====================USEFUL FUNCTIONS END============================
-
+//====================AGENT CLASS============================
 class Agent {
 private:
     int m_x;
@@ -53,9 +41,24 @@ public:
     int& get_y();
     double& get_angle();
 
+    std::pair<bool, double> borders();
+
+    void borderUpdate(double opp);
     void update(int x, int y, double angle);
 };
 
-std::vector<Agent> initialiaze_agents();
+inline double modulo(double a, double b)
+{
+    double mod(a);
+    if (a < 0) {
+        while (mod < 0)
+            mod += b;
+    }
+    else {
+        while (mod >= b)
+            mod -= b;
+    }
+    return mod;
+}
 
-void update_agents(std::vector<Agent>& agents);
+std::vector<Agent> initialiaze_agents();
