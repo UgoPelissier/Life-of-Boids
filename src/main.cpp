@@ -132,8 +132,6 @@ int main() {
         if (add) { // Add new triangle to the window
             randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
 
-            std::cout << (int)xpos << " " << HEIGHT - (int)ypos << std::endl;
-
             agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng)));
 
             triangles.push_back(triangle::newTriangle({ 2 * ratio * (((float)((float)xpos)) / (float)(WIDTH)) - ratio , 2 * (((float)(HEIGHT - (int)ypos)) / (float)(HEIGHT)) - 1 },
