@@ -1,13 +1,12 @@
-
+#pragma once
+#include "../../common.hpp"
 namespace points {
 struct Point {
   vec2 position;
   vec2 velocity;
 };
 
-mat3x3 vertex_transform_2d(float width, float height) {
-  return mat3x3{{{{2.f / width, 0.f, 0.f}}, {{0.f, -2.f / height, 0.f}}, {{-1.f, 1.f, 1.f}}}};
-}
+mat3x3 vertex_transform_2d(float width, float height);
 
 // Shader sources
 static const char* const vertex_shader_text = R"#(
