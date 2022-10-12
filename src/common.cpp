@@ -1,90 +1,91 @@
 #include "common.hpp"
 
-//===============Vec class functions definitions================
+//====================USEFUL FUNCTIONS================================
+using vec2 = std::array<float, 2>;
 
-Vec::Vec() {
-	this->x = 0;
-	this->y = 0;
-	this->angle = 0;
-	this->velocity = 0;
+double distance(vec2 p1, vec2 p2) {
+    double d(0);
+    d = std::sqrt( (p2[0]-p1[0])*(p2[0]-p1[0]) +  (p2[1]-p1[1])*(p2[1]-p1[1]) );
+    return d;
 }
 
-Vec::Vec(int x, int y, double angle, double velocity) {
-	this->x = x;
-	this->y = y;
-	this->angle = angle;
-	this->velocity = velocity;
-}
-int& Vec::X() {
-	return x;
-}
-
-int& Vec::Y() {
-	return y;
+bool overlap(vec2 c, std::vector<vec2> centers) {
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
+    for (auto& center : centers) {
+        if (distance(c, center)<2*l) {
+            return true;
+        }
+    }
+    return false;
 }
 
-double& Vec::theta() {
-	return angle;
+bool outsideWindow(vec2 center, float ratio) {
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
+    if ( std::abs(center[0])>ratio-l or std::abs(center[1])>1-l ) {
+        return true;
+    }
+    return false;
 }
 
-double& Vec::speed() {
-	return velocity;
+std::vector<Agent> initialiazeAgents() {
+
+    std::vector<Agent> agents;
+
+    int randomX;
+    int randomY;
+    double randomAngle;
+    double randomVelocity;
+
+    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_int_distribution uniX(0, WIDTH);
+    std::uniform_int_distribution uniY(0, HEIGHT);
+    std::mt19937_64 rng;
+
+    for (size_t i = 0; i<DEFAULT_NUM_AGENTS; ++i) {
+
+        randomX = uniX(rng);
+        randomY = uniY(rng);
+        randomAngle = 2*PI*unif(rng);
+        randomVelocity = unif(rng);
+
+        agents.push_back(Agent(randomX,randomY,randomAngle, randomVelocity));
+    }
+
+    return agents;
 }
 
-Vec::operator+(Vec b) {
-	Vec result = Vec(this->X() + b.X(),
-		this->Y() + b.Y(),
-		this->theta() + b.theta(),
-		this->speed() + b.speed());
-
-
-	return result;
+void updateAgents(std::vector<Agent>& agents) {
+    for (Agent& agent : agents) {
+        agent.update();
+    }
 }
 
-Vec::operator-(Vec b) {
-	Vec result = Vec(this->X() - b.X(),
-		this->Y() - b.Y(),
-		this->theta() - b.theta(),
-		this->speed() - b.speed());
-
-	return result;
-}
-
-Vec::operator*(Vec b) {
-	Vec result = Vec(this->X() * b.X(),
-		this->Y() * b.Y(),
-		this->theta() * b.theta(),
-		this->speed() * b.speed());
-
-	return result;
-}
-
-Vec::Vec operator*(double b) {
-	Vec result = Vec(this->X() * b,
-		this->Y() * b,
-		this->theta() * b,
-		this->speed() * b);
-
-	return result;
-}
-//===============Vec class functions definitions end================
-
+//====================USEFUL FUNCTIONS END============================
 
 //===============Agent class functions definitions================
-
 Agent::Agent(int x, int y, double angle, double velocity) {
-	
-	this->vec = Vec(x, y, angle, velocity);
+    m_x = x;
+    m_y = y;
+    m_velocity = velocity;
+    m_angle = angle;
 }
 
-bool Agent::update_vector() {
-
-	this->vec.X() = x;
-	this->vec.Y() = y;
-	this->vec.theta() = angle;
-	this->vec.speed() = velocity;
+int& Agent::getX() {
+    return m_x;
 }
 
+int& Agent::getY() {
+    return m_y;
+}
 
-//===============Agent class functions definitions end================
+double& Agent::getAngle() {
+    return m_angle;
+}
 
+void Agent::update() {
+    m_x += 1;
+    m_y += 1;
+    m_angle += 1e-1;
+}

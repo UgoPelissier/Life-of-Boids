@@ -8,13 +8,7 @@
 #include <vector>
 #include <random>
 
-using vec2 = std::array<float, 2>;
-using vec3 = std::array<float, 3>;
-using vec4 = std::array<float, 4>;
-using mat2x2 = std::array<vec2, 2>;
-using mat3x3 = std::array<vec3, 3>;
-using mat4x4 = std::array<vec4, 4>;
-
+#include "../common.hpp"
 #include "glx/glx.hpp"
 #include "shaders/lines.hpp"
 #include "shaders/points.hpp"
@@ -22,13 +16,6 @@ using mat4x4 = std::array<vec4, 4>;
 
 static bool add(false);
 static double xpos, ypos;
-
-static vec2 scale(double xPos, double yPos, int Width, int Height, float Ratio) {
-    float x(0), y(0);
-    x = (float)(2*Ratio*(xPos/(Width/2))-Ratio);
-    y = (float)(2*((-yPos)/(Height/2))+1);
-    return {x,y};
-}
 
 static void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";
@@ -51,11 +38,8 @@ static void key_callback(GLFWwindow* window, int key, int /*scancode*/, int acti
 }
 
 int main() {
-    // Get the initial number of birds
-    std::cout << std::endl << "How many birds to start ? ";
-    size_t initialNumberBirds(0);
-    std::cin >> initialNumberBirds;
-    std::cout << std::endl;
+
+    std::vector<Agent> agents = initialiazeAgents();
 
     glfwSetErrorCallback(error_callback);
 
@@ -81,6 +65,10 @@ int main() {
     gladLoadGL();
     glfwSwapInterval(1);
 
+    int width{}, height{};
+    glfwGetFramebufferSize(window, &width, &height); // Get window size
+    float ratio = (float)width / (float)height;
+
     // Triangle
     // New
     ShaderProgram triangle_shaderProgram
@@ -96,23 +84,17 @@ int main() {
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::mt19937_64 rng;
 
-    std::vector<vec2> centers;
-    std::vector<double> orientations;
-
-    vec2 randomCenter;
+    float x, y;
     vec3 randomColor;
-    double randomOrientation;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
-    for (size_t i = 0; i<initialNumberBirds; ++i) {
-
-        randomCenter = {(float)((2*unif(rng))-1), (float)((2*unif(rng))-1)};
+    for (Agent agent : agents) {
         randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-        randomOrientation = 2*PI*unif(rng);
 
-        centers.push_back(randomCenter);
-        orientations.push_back(randomOrientation);
-        triangles.push_back(triangle::newTriangle(randomCenter,randomColor,randomOrientation));
+        x = 2*ratio*( ( (float)(agent.getX()) )/ (float)(WIDTH) ) - ratio;
+        y = 2*( ( (float)(agent.getY())) / (float)(HEIGHT) ) - 1;
+
+        triangles.push_back(triangle::newTriangle({x,y}, randomColor, agent.getAngle()));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -129,37 +111,41 @@ int main() {
     // Global loop
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
-    vec2 center;
-
     while (!glfwWindowShouldClose(window)) {
-        int width{}, height{};
+
         glfwGetFramebufferSize(window, &width, &height); // Get window size
-        const float ratio = (float)width / (float)height;
+        ratio = (float)width / (float)height;
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (add) { // Add new triangle to the window
-            center = scale(xpos, ypos, width, height, ratio);
-            centers.push_back(center);
-            randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
-            randomOrientation = 2*PI*unif(rng);
-            orientations.push_back(randomOrientation);
-            triangles.push_back(triangle::newTriangle(center,
-                                                      randomColor,
-                                                      randomOrientation));
-            add = false;
+        updateAgents(agents);
+
+        for (size_t i(0); i<agents.size(); i++) {
+
+            x = 2*ratio*( ( (float)(agents[i].getX()) )/ (float)(WIDTH) ) - ratio;
+            y = 2*( ( (float)(agents[i].getY())) / (float)(HEIGHT) ) - 1;
+
+            triangles[i] = triangle::newTriangle({x,y}, triangles[i][0].col, agents[i].getAngle());
         }
+
+        if (add) { // Add new triangle to the window
+            randomColor = {float(unif(rng)), float(unif(rng)), float(unif(rng))};
+
+            std::cout << (int)xpos << " " << HEIGHT-(int)ypos << std::endl;
+
+            agents.push_back(Agent((int)xpos, HEIGHT-(int)ypos, 2 * PI * unif(rng), unif(rng)));
+
+            triangles.push_back(triangle::newTriangle({ 2*ratio*( ( (float)( (float)xpos) )/ (float)(WIDTH) ) - ratio , 2*( ( (float)(HEIGHT-(int)ypos)) / (float)(HEIGHT) ) - 1 },
+                                                      randomColor,
+                                                      2 * PI * unif(rng)));
+            }
+            add = false;
 
         {  // Triangle
             mat4x4 m = triangle::mat4x4_identity();
             mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
             mat4x4 mvp = triangle::mat4x4_mul(p, m); // MVP = Projection (* View) * Model (= Translation * Rotation)
-
-/*            for (auto& triangle : triangles) {
-                    triangle = triangle::rotate(triangle, angle, origin);
-                triangle = triangle::translate(triangle, X, Y);
-            }*/
 
             VertexArray_bind(triangle_vertexArray);
             Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
