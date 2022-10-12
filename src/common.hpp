@@ -15,7 +15,7 @@ using mat3x3 = std::array<vec3, 3>;
 using mat4x4 = std::array<vec4, 4>;
 
 //====================DEFAULT PARAMETERS DEFINED==================
-#define DEFAULT_NUM_AGENTS 10
+#define DEFAULT_NUM_AGENTS 2
 
 #define ANGLE_MIN -135
 #define ANGLE_MAX 135

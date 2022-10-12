@@ -11,4 +11,4 @@ add_subdirectory(movement)
 
 add_executable(life-of-boids main.cpp)
 target_include_directories(life-of-boids PUBLIC display/ movement/)
-target_link_libraries(life-of-boids PUBLIC display common)
+target_link_libraries(life-of-boids PUBLIC display common law)

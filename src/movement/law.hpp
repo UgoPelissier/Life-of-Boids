@@ -8,10 +8,7 @@
 #define RANGE_COHESION_LOW 100
 #define RANGE_COHESION_HIGH 150
 
-void law_function(std::vector<Agent>& vect_agent);
-
-void pilot(Agent agent, std::vector<Agent> vec_separation, std::vector<Agent> vec_cohesion, std::vector<Agent> vec_aligment);
-
 double distance_agent(Agent agent1, Agent agent2);
-
-void next_pos(Agent agent, double angle, int corr_x, int corr_y);
+void next_pos(Agent& agent, double angle, int corr_x, int corr_y);
+void pilot(Agent& agent, std::vector<Agent> vec_separation, std::vector<Agent> vec_cohesion, std::vector<Agent> vec_aligment);
+void law_function(std::vector<Agent>& vect_agent);
