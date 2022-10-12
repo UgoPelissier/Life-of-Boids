@@ -1,5 +1,4 @@
-#define triangleSize    0.025
-#define PI  3.14159265358979323846
+#include "../../common.hpp"
 
 namespace triangle {
 
@@ -105,17 +104,18 @@ inline vec2 center(std::array<Vertex, 3> triangle) {
 }
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orientation) {
-    float l = triangleSize*std::sqrt(3)/2;
+    float h = triangleSize*std::sqrt(3)/2;
+    float l = 2*h/3;
 
     float x0 = center[0];
     float y0 = center[1];
-    float x1 = x0+(2*l/3);
+    float x1 = x0+l;
     float y1 = y0;
 
-    float x2 = x0-l/3;
+    float x2 = x0-l/2;
     float y2 = y0+triangleSize/2;
 
-    float x3 = x0-l/3;
+    float x3 = x0-l/2;
     float y3 = y0-triangleSize/2;
 
     std::array<Vertex, 3> triangle = {{
