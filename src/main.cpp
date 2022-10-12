@@ -76,21 +76,21 @@ int main() {
     // Global loop
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
-   // while (!glfwWindowShouldClose(window)) {
-    int i = 0;
-    while (i++ < 50){
+   while (!glfwWindowShouldClose(window)) {
+    //int i = 0;
+    //while (i++ < 50){
 
-       /* glfwGetFramebufferSize(window, &width, &height); // Get window size
+        glfwGetFramebufferSize(window, &width, &height); // Get window size
         ratio = (float)width / (float)height;
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
-        */
+        
         //update_agents(agents);
         law_function(agents);
         std::cout << agents[0].get_x() << std::endl;
         std::cout << agents[1].get_x() << std::endl;
-        /*
+        
         for (size_t i(0); i < agents.size(); i++) {
 
             x = 2 * ratio * (((float)(agents[i].get_x())) / (float)(WIDTH)) - ratio;
@@ -132,7 +132,7 @@ int main() {
         glfwSetWindowTitle(window, "Life of boids"); // Set window title
 
         glfwSwapBuffers(window);
-        glfwPollEvents(); */
+        glfwPollEvents(); 
     }
 
     glfwDestroyWindow(window);
