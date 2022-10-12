@@ -52,7 +52,7 @@ std::vector<Agent> initialiaze_agents() {
 
     return agents;
 }
-
+/*
 void update_agents(std::vector<Agent>& agents) {
     
     int x, y;
@@ -61,7 +61,7 @@ void update_agents(std::vector<Agent>& agents) {
         agent.update(x, y);
     }
 }
-
+*/
 //====================USEFUL FUNCTIONS END============================
 
 //===============Agent class functions definitions================
@@ -77,38 +77,16 @@ int& Agent::get_x() {
     return m_x;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-int& Agent::X() {
-	return x;
-}
-
-int& Agent::Y() {
-	return y;
-}
-
-double& Agent::theta() {
-	return angle;
-}
-
-double& Agent::speed() {
-	return velocity;
-}
-
-=======
-int& Agent::getY() {
-=======
 int& Agent::get_y() {
->>>>>>> d4937db52f7e71e81891a858a2fd228dcbf8c4e1
     return m_y;
 }
->>>>>>> thomas2
 
 double& Agent::get_angle() {
     return m_angle;
 }
 
-void Agent::update(int x, int y) {
+void Agent::update(int x, int y, double angle) {
     m_x = x;
     m_y = y;
+    m_angle = angle;
 }

@@ -84,7 +84,8 @@ int main() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        update_agents(agents);
+        //update_agents(agents);
+        law_function(agents);
 
         for (size_t i(0); i < agents.size(); i++) {
 

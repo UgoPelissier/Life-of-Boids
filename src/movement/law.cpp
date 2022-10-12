@@ -8,8 +8,9 @@
 #define RANGE_ALIGMENT_HIGH 100
 #define RANGE_COHESION_LOW 80
 #define RANGE_COHESION_HIGH 150
+#define SPEED 5
 
-void law_function(std::vector<Agent> vect_agent) {
+void law_function(std::vector<Agent>& vect_agent) {
 	for each (Agent agent in vect_agent) {
 		std::vector<Agent> vec_separation;
 		std::vector<Agent> vec_cohesion;
@@ -38,7 +39,7 @@ void law_function(std::vector<Agent> vect_agent) {
 void pilot(Agent agent, std::vector<Agent> vec_separation, std::vector<Agent> vec_cohesion, std::vector<Agent> vec_aligment) {
 	double angle = .0;
 	for each (Agent agent1 in vec_aligment) {
-		angle = angle + agent1.theta();
+		angle = angle + agent1.get_angle();
 	}
 	angle = angle / vec_aligment.size();
 
@@ -48,43 +49,39 @@ void pilot(Agent agent, std::vector<Agent> vec_separation, std::vector<Agent> ve
 	int correction_y = 0;
 
 	for each (Agent agent2 in vec_cohesion){
-		x = x + agent2.X();
-		y = y + agent2.Y();
+		x = x + agent2.get_x();
+		y = y + agent2.get_y();
 	}
 	x = (int) x / vec_cohesion.size();
 	y = (int) y / vec_cohesion.size();
 
-	correction_x = (int) (x - agent.X()) * 0.1;
-	correction_y = (int) (y - agent.Y()) * 0.1;
+	correction_x = (int) (x - agent.get_x()) * 0.1;
+	correction_y = (int) (y - agent.get_y()) * 0.1;
 
 	int x = 0;
 	int y = 0;
 
 	for each (Agent agent3 in vec_separation) {
-		x = x + agent3.X();
-		y = y + agent3.Y();
+		x = x + agent3.get_x();
+		y = y + agent3.get_y();
 	}
 	x = (int) x / vec_cohesion.size();
 	y = (int) y / vec_cohesion.size();
 
-	correction_x = correction_x + (int)(-(x - agent.X()) * 0.3);
-	correction_y = correction_y + (int)(-(y - agent.Y()) * 0.3);
+	correction_x = correction_x + (int)(-(x - agent.get_x()) * 0.3);
+	correction_y = correction_y + (int)(-(y - agent.get_y()) * 0.3);
 
 	next_pos(agent, angle, correction_x, correction_y);
 }
 
 double distance_agent(Agent agent1, Agent agent2) {
-	return std::sqrt((agent1.X() - agent2.X()) * (agent1.X() - agent2.X()) +
-					(agent1.Y() - agent2.Y()) * (agent1.Y() - agent2.Y()));
+	return std::sqrt((agent1.get_x() - agent2.get_x()) * (agent1.get_x() - agent2.get_x()) +
+					(agent1.get_y() - agent2.get_y()) * (agent1.get_y() - agent2.get_y()));
 }
 
 void next_pos(Agent agent, double angle, int corr_x, int corr_y) {
-	agent.update_vector(agent.X() + corr_x + (int)agent.speed() * cos(angle),
-						agent.Y() + corr_y + (int)agent.speed() * sin(angle),
-						angle,
-						agent.speed());
-}
-
-
+	agent.update(agent.get_x() + corr_x + (int)SPEED * cos(angle),
+		agent.get_y() + corr_y + (int)SPEED * sin(angle),
+		angle);
 
 

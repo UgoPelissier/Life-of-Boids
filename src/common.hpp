@@ -48,25 +48,12 @@ private:
     double m_velocity;
 public:
 	Agent(int x, int y, double angle, double velocity);
-<<<<<<< HEAD
-	bool update_vector(int x, int y, double angle, double velocity);
-	int& X(); // get x by reference
-	int& Y(); // get y by reference
-	double& theta(); // get angle by reference
-	double& speed(); // get speed by reference
-	void move_next_pos()
-=======
 
     int& get_x();
     int& get_y();
     double& get_angle();
 
-<<<<<<< HEAD
-    void update();
->>>>>>> thomas2
-=======
-    void update(int x, int y);
->>>>>>> d4937db52f7e71e81891a858a2fd228dcbf8c4e1
+    void update(int x, int y, double angle);
 };
 
 std::vector<Agent> initialiaze_agents();

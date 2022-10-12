@@ -8,7 +8,7 @@
 #define RANGE_COHESION_LOW 100
 #define RANGE_COHESION_HIGH 150
 
-void law_function(std::vector<Agent> vect_agent);
+void law_function(std::vector<Agent>& vect_agent);
 
 void pilot(Agent agent, std::vector<Agent> vec_separation, std::vector<Agent> vec_cohesion, std::vector<Agent> vec_aligment);
 
