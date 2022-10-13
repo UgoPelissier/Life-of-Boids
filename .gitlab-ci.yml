@@ -24,9 +24,9 @@ build:
     - cd build2
     - conan install ..
     - cmake \
-    -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    ..
+      -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \
+      -DCMAKE_BUILD_TYPE=Release \
+      ..
     - cmake --build .
     - ctest 
 
