@@ -82,7 +82,7 @@ bool verify_angle(Agent& agent_current, Agent& agent_neighbour) {
 		return true;
 	}
 	if ((distance_x == 0 || distance_y == 0)) {
-		if (distance_agent(agent_current, agent_neighbour) > distance_agent(agent_current, agent_neighbour) )
+		// if (distance_agent(agent_current, agent_neighbour) > distance_agent(agent_current, agent_neighbour) )
 		return false;
 	}
 	double angle = abs(asin(distance_y / distance_x)) + agent_current.get_angle();

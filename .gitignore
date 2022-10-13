@@ -1,6 +1,6 @@
 .vs
 venv
 out
-build
+build*
 */*.exe
 CMakeSettings.json
