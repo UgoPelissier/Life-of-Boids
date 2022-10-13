@@ -59,6 +59,36 @@ std::vector<std::vector<size_t>> Agent::neighbours(size_t index, std::vector<Age
     return {predators, separation, alignment, cohesion};
 }
 
+std::vector<size_t> Agent::predatorNeighbours(size_t index, std::vector<Agent> agents) {
+    std::vector<size_t> predators;
+    for (size_t i(0); i < agents.size(); i++) {
+        if ( index!=i ) {
+            if ( agents[i].get_predator() ) {
+                if ( this->distance(agents[i]) < PREDATOR ) {
+                    predators.push_back(i);
+                }
+            }
+        }
+    }
+    return predators;
+}
+
+size_t Agent::closerAgent(size_t index, std::vector<Agent> agents) {
+    double d = WIDTH;
+    size_t closer;
+    for (size_t i(0); i < agents.size(); i++) {
+        if (index!=i) {
+            if ( !agents[i].get_predator() ) {
+                if (this->distance(agents[i]) < d) {
+                    d = distance(agents[i]);
+                    closer = i;
+                }
+            }
+        }
+    }
+    return closer;
+}
+
 bool Agent::equal(Agent a) {
     if (m_x==a.get_x() && m_y==a.get_y() && m_angle==a.get_angle()) {
         return true;
@@ -123,12 +153,6 @@ void Agent::constantUpdate() {
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::update(int x, int y, double angle) {
-    m_x = x;
-    m_y = y;
-    m_angle = angle;
-}
-
 vec3 Agent::center(std::vector<Agent> agents, std::vector<size_t> neighbours) {
     size_t n(neighbours.size());
     double x(m_x), y(m_y), angle(m_angle);
@@ -173,6 +197,14 @@ void Agent::separationLaw(std::vector<Agent> agents, std::vector<size_t> neighbo
     m_angle = atan2(separation[1],separation[0]);
 }
 
+void Agent::predatorLaw(size_t index, std::vector<Agent> agents) {
+    size_t closer = this->closerAgent(index, agents);
+    vec2 target = normVector({(float)(agents[closer].get_x() - m_x),(float)(agents[closer].get_y() - m_y)});
+    m_x += (SPEED/2) * target[0];
+    m_y += (SPEED/2) * target[1];
+    m_angle = atan2(target[1],target[0]);
+}
+
 void Agent::updateAgent(size_t index, std::vector<Agent> agents) {
 
     std::vector<std::vector<size_t>> v;
@@ -184,13 +216,21 @@ void Agent::updateAgent(size_t index, std::vector<Agent> agents) {
     std::tie(tooClose,opp) = this->borders();
 
     v = this->neighbours(index, agents);
-    predators = v[0];
+
+    if (m_predator)
+        predators = this->predatorNeighbours(index, agents);
+    else
+        predators = v[0];
+
     separation = v[1];
     alignment = v[2];
     cohesion = v[3];
 
     if (m_predator) {
-        this->constantUpdate();
+        if (!predators.empty())
+            this->separationLaw(agents, predators);
+        else
+            this->predatorLaw(index, agents);
     }
     else {
         if (false) {
@@ -198,8 +238,7 @@ void Agent::updateAgent(size_t index, std::vector<Agent> agents) {
         } else {
             if (!predators.empty()) {
                 this->separationLaw(agents, predators);
-            }
-            else if (!separation.empty()) {
+            } else if (!separation.empty()) {
                 this->separationLaw(agents, separation);
             } else if (!alignment.empty()) {
                 this->alignmentLaw(agents, alignment);

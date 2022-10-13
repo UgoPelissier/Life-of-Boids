@@ -15,7 +15,7 @@ using mat4x4 = std::array<vec4, 4>;
 
 //====================DEFAULT PARAMETERS==================
 // Agent parameters
-#define DEFAULT_NUM_AGENTS 200
+#define DEFAULT_NUM_AGENTS 10
 #define DEFAULT_NUM_PREDATORS 1
 #define CLOSE 100
 #define SPEED 2
@@ -34,12 +34,6 @@ static double const ALIGNMENT = 2*SEPARATION;
 
 #define SMOOTH_ALIGNMENT 0.25
 #define SMOOTH_COHESION 0.5
-
-#define RANGE_SEPARATION 25
-#define RANGE_ALIGMENT_LOW 25
-#define RANGE_ALIGMENT_HIGH 50
-#define RANGE_COHESION_LOW 50
-#define RANGE_COHESION_HIGH 100
 
 inline double modulo(double a, double b)
 {
@@ -80,6 +74,7 @@ public:
 
     double distance(Agent a);
     std::vector<std::vector<size_t>> neighbours(size_t index, std::vector<Agent> agents);
+    std::vector<size_t> predatorNeighbours(size_t index, std::vector<Agent> agents);
     size_t closerAgent(size_t index, std::vector<Agent> agents);
 
     bool equal(Agent a);
@@ -91,13 +86,13 @@ public:
     void borderUpdate(double opp);
     void windowUpdate();
     void constantUpdate();
-    void update(int x, int y, double angle);
 
     vec3 center(std::vector<Agent> agents, std::vector<size_t> neighbours);
     vec3 centerSeparation(std::vector<Agent> agents, std::vector<size_t> neighbours);
     void cohesionLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
     void alignmentLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
     void separationLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
+    void predatorLaw(size_t index, std::vector<Agent> agents);
 
     void updateAgent(size_t index, std::vector<Agent> agents);
 
