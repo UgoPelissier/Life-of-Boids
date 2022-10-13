@@ -1,4 +1,3 @@
-
 #include "../common.hpp"
 #include "law.hpp"
 #include <iostream>
@@ -7,25 +6,35 @@
 #include <chrono>
 #include <thread>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 double distance_agent(Agent agent1, Agent agent2) {
 	return std::sqrt((agent1.get_x() - agent2.get_x()) * (agent1.get_x() - agent2.get_x()) +
 		(agent1.get_y() - agent2.get_y()) * (agent1.get_y() - agent2.get_y()));
 }
 
 void next_pos(int index, double angle, int corr_x, int corr_y, std::vector<Agent>& vect_agent) {
+<<<<<<< HEAD
 
 	vect_agent[index].update(vect_agent[index].get_x() + corr_x + round(vect_agent[index].get_speed() * cos(angle)),
 		vect_agent[index].get_y() + corr_y + round(vect_agent[index].get_speed() * sin(angle)),
 		angle);
+=======
+	vect_agent[index].update(
+            vect_agent[index].get_x() + corr_x + round(SPEED * cos(angle)),
+            vect_agent[index].get_y() + corr_y + round(SPEED * sin(angle)),
+            angle);
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 }
 
 void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohesion, std::vector<int> vec_aligment, std::vector<Agent>& vect_agent) {
 	double angle = .0;
 	double correction_angle = .0;
 	if (!vec_aligment.empty()) {
-		for each (int i in vec_aligment) {
+		for (int i : vec_aligment) {
 			angle = angle + vect_agent[i].get_angle();
 		}
 		angle = angle / vec_aligment.size();
@@ -39,7 +48,7 @@ void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohe
 	int correction_x = 0;
 	int correction_y = 0;
 	if (!vec_cohesion.empty()) {
-		for each (int j in vec_cohesion) {
+		for (int j : vec_cohesion) {
 			x = x + vect_agent[j].get_x();
 			y = y + vect_agent[j].get_y();
 		}
@@ -52,7 +61,7 @@ void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohe
 	x = 0;
 	y = 0;
 	if (!vec_separation.empty()) {
-		for each (int k in vec_separation) {
+		for (int k : vec_separation) {
 			x = x + vect_agent[k].get_x();
 			y = y + vect_agent[k].get_y();
 		}
@@ -62,6 +71,7 @@ void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohe
 		correction_x = correction_x + (int)(-(x - vect_agent[index].get_x()) * RELAXATION*WEIGHT_SEPARATION);
 		correction_y = correction_y + (int)(-(y - vect_agent[index].get_y()) * RELAXATION*WEIGHT_SEPARATION);
 	}
+<<<<<<< HEAD
 
 	next_pos(index, correction_angle, correction_x, correction_y, vect_agent);
 }
@@ -144,4 +154,40 @@ void law_function(std::vector<Agent>& vect_agent) {
 		pilot(i, vec_separation, vec_cohesion, vec_aligment, vect_agent);
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+=======
+	next_pos(index, angle, correction_x, correction_y, vect_agent);
+}
+
+void law_function(std::vector<Agent>& vect_agent) {
+    bool close;
+    double opp;
+	for (size_t i = 0; i < vect_agent.size(); i++) {
+
+        std::tie(close, opp) = vect_agent[i].borders();
+        if (close) {
+            vect_agent[i].borderUpdate(opp);
+        }
+        else {
+            std::vector<int> vec_separation;
+            std::vector<int> vec_cohesion;
+            std::vector<int> vec_aligment;
+            vec_separation = {};
+            vec_cohesion = {};
+            vec_aligment = {};
+            for (size_t j = 0; j < vect_agent.size(); j++) {
+                double distance = distance_agent(vect_agent[i], vect_agent[j]);
+                if (distance < RANGE_SEPARATION) {
+                    vec_separation.push_back(j);
+                }
+                if (distance < RANGE_COHESION_HIGH && distance > RANGE_COHESION_LOW) {
+                    vec_cohesion.push_back(j);
+                }
+                if (distance < RANGE_ALIGMENT_HIGH && distance > RANGE_ALIGMENT_LOW) {
+                    vec_aligment.push_back(j);
+                }
+            }
+            pilot(i, vec_separation, vec_cohesion, vec_aligment, vect_agent);
+        }
+	}
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 }

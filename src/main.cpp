@@ -1,6 +1,41 @@
+#define GLFW_INCLUDE_NONE
+
 #include "common.hpp"
-#include "display/display.hpp"
 #include "movement/law.hpp"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <array>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <random>
+#include "glx/glx.hpp"
+#include "shaders/lines.hpp"
+#include "shaders/triangle.hpp"
+
+double add;
+double xpos, ypos;
+
+void error_callback(int error, const char* description) {
+    std::cerr << "Error[" << error << "]: " << description << "\n";
+}
+
+void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        std::puts("Export current display");
+        char export_filename[] = "export.png";
+        saveImage(export_filename, window);
+    }
+    // Add a new bird by positioning the cursor at the desired location and pressing "b"
+    if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+        glfwGetCursorPos(window, &xpos, &ypos);
+        add = true;
+    }
+}
 
 int main() {
 
@@ -17,7 +52,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL
 
     // Open a window and create its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(1200, 1000, "OpenGL Triangle", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL Triangle", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -91,7 +126,11 @@ int main() {
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
         law_function(agents);
         
         for (size_t i(0); i < agents.size(); i++) {
@@ -105,9 +144,13 @@ int main() {
         if (add) { // Add new triangle to the window
             randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
 
+<<<<<<< HEAD
             std::cout << (int)xpos << " " << HEIGHT - (int)ypos << std::endl;
 
             agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng), 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, SPEED));
+=======
+            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng)));
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 
             triangles.push_back(triangle::newTriangle({ 2 * ratio * (((float)((float)xpos)) / (float)(WIDTH)) - ratio , 2 * (((float)(HEIGHT - (int)ypos)) / (float)(HEIGHT)) - 1 },
                 randomColor,

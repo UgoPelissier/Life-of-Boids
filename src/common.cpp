@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+<<<<<<< HEAD
 //====================USEFUL FUNCTIONS================================
 using vec2 = std::array<float, 2>;
 
@@ -74,10 +75,14 @@ void update_agents(std::vector<Agent>& agents) {
 //===============Agent class functions definitions================
 
 Agent::Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, float speed) {
+=======
+//====================AGENT CLASS============================
+Agent::Agent(int x, int y, double angle, double velocity) {
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
     m_x = x;
     m_y = y;
-    m_velocity = velocity;
     m_angle = angle;
+<<<<<<< HEAD
     m_type = type;
     m_cohesion_high = cohesion_high;
     m_cohesion_low = cohesion_low;
@@ -85,6 +90,9 @@ Agent::Agent(int x, int y, double angle, double velocity, int type, int cohesion
     m_aligment_high = aligment_high;
     m_aligment_low = aligment_low;
     m_speed = speed;
+=======
+    m_velocity = velocity;
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 }
 
 int& Agent::get_x() {
@@ -99,6 +107,7 @@ double& Agent::get_angle() {
     return m_angle;
 }
 
+<<<<<<< HEAD
 int& Agent::get_type() {
     return m_type;
 }
@@ -125,10 +134,73 @@ int& Agent::get_aligment_low() {
 
 float& Agent::get_speed() {
     return m_speed;
+=======
+std::pair<bool, double> Agent::borders(){
+    bool tooClose(false);
+    double opp(0);
+    if ( m_x<CLOSE ) {
+        tooClose = true;
+        opp = 0;
+    }
+    if ( (WIDTH-CLOSE<m_x) && (m_x<WIDTH) ) {
+        tooClose = true;
+        opp = PI;
+    }
+    if ( m_y<CLOSE ) {
+        tooClose = true;
+        opp = PI/2;
+    }
+    if ( (HEIGHT-CLOSE<m_y) && (m_y<HEIGHT) ) {
+        tooClose = true;
+        opp = -PI/2;
+    }
+    return std::make_pair(tooClose, opp);
+}
+
+void Agent::borderUpdate(double opp) {
+    if ( std::abs( opp - m_angle ) > PI/10 ) {
+        m_angle = modulo(m_angle+PI-PI/25, 2*PI)-PI;
+    }
+    m_x += (int)round(m_velocity * cos(m_angle));
+    m_y += (int)round(m_velocity * sin(m_angle));
+>>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 }
 
 void Agent::update(int x, int y, double angle) {
     m_x = x;
     m_y = y;
     m_angle = angle;
+}
+
+std::vector<Agent> initialiaze_agents() {
+
+    std::vector<Agent> agents;
+    Agent agent(0,0,0,0);
+
+    int randomX;
+    int randomY;
+    double randomAngle;
+
+    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_int_distribution uniX(0, WIDTH);
+    std::uniform_int_distribution uniY(0, HEIGHT);
+    std::mt19937_64 rng;
+
+    for (size_t i = 0; i<DEFAULT_NUM_AGENTS; ++i) {
+
+        randomX = uniX(rng);
+        randomY = uniY(rng);
+        randomAngle = 2*PI*unif(rng)-PI;
+
+        agent = Agent(randomX,randomY,randomAngle, SPEED);
+        while (agent.borders().first) {
+            randomX = uniX(rng);
+            randomY = uniY(rng);
+            randomAngle = 2*PI*unif(rng)-PI;
+
+            agent = Agent(randomX,randomY,randomAngle, SPEED);
+        }
+        agents.push_back(agent);
+    }
+    return agents;
 }

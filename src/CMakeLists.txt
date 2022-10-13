@@ -3,8 +3,6 @@ FIND_PACKAGE(glad REQUIRED)
 FIND_PACKAGE(OpenCV REQUIRED)
 
 add_library(common common.cpp common.hpp)
-#add_library(display display/display.cpp display/display.hpp)
-#add_library(libGLX display/glx/glx.cpp display/glx/glx.hpp)
 
 add_subdirectory(display)
 add_subdirectory(movement)
