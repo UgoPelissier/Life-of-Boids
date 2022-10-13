@@ -43,9 +43,20 @@ std::vector<Agent> initialiaze_agents() {
     for (size_t i = 0; i<DEFAULT_NUM_AGENTS; ++i) {
 
         randomX = uniX(rng);
-        randomY = uniY(rng);
-        randomAngle = 2*PI*unif(rng);
+        randomY = uniY(rng); 
+        randomAngle = 2 * PI * unif(rng);
         randomVelocity = unif(rng);
+        if (i == 0) {
+            randomX = (int) WIDTH / 2;
+            randomY = (int) HEIGHT / 2;
+            randomAngle = 0;
+        }
+        else {
+            randomX = (int) WIDTH / 2 + 300;
+            randomY = (int) HEIGHT / 2 ;
+            randomAngle = 3.2;
+
+        } 
 
         agents.push_back(Agent(randomX,randomY,randomAngle, randomVelocity));
     }

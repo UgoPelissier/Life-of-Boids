@@ -86,10 +86,10 @@ int main() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
         
+        std::cout << agents[0].get_angle() << std::endl;
+        std::cout << agents[1].get_angle() << std::endl;
         //update_agents(agents);
         law_function(agents);
-        std::cout << agents[0].get_x() << std::endl;
-        std::cout << agents[1].get_x() << std::endl;
         
         for (size_t i(0); i < agents.size(); i++) {
 

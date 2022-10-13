@@ -6,13 +6,11 @@
 #include <cassert>
 #include <chrono>
 #include <thread>
+#include <cmath>
 
-#define RANGE_SEPARATION 50
-#define RANGE_ALIGMENT_LOW 50
-#define RANGE_ALIGMENT_HIGH 100
-#define RANGE_COHESION_LOW 80
-#define RANGE_COHESION_HIGH 150
-#define SPEED 1
+inline double degree2radian(double degree) {
+	return degree * PI / 180;
+}
 
 double distance_agent(Agent agent1, Agent agent2) {
 	return std::sqrt((agent1.get_x() - agent2.get_x()) * (agent1.get_x() - agent2.get_x()) +
@@ -28,9 +26,9 @@ void next_pos(int index, double angle, int corr_x, int corr_y, std::vector<Agent
 }
 
 void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohesion, std::vector<int> vec_aligment, std::vector<Agent>& vect_agent) {
-	double angle = .0;
+	double angle = 0.0;
 	if (!vec_aligment.empty()) {
-		for each (int i in vec_aligment) {
+		for (int i : vec_aligment) {
 			angle = angle + vect_agent[i].get_angle();
 		}
 		angle = angle / vec_aligment.size();
@@ -41,38 +39,61 @@ void pilot(int index, std::vector<int> vec_separation, std::vector<int> vec_cohe
 	int correction_x = 0;
 	int correction_y = 0;
 	if (!vec_cohesion.empty()) {
-		for each (int j in vec_cohesion) {
+		for (int j : vec_cohesion) {
 			x = x + vect_agent[j].get_x();
 			y = y + vect_agent[j].get_y();
 		}
 		x = (int)x / vec_cohesion.size();
 		y = (int)y / vec_cohesion.size();
 
-		correction_x = (int)(x - vect_agent[index].get_x()) * 0.1;
-		correction_y = (int)(y - vect_agent[index].get_y()) * 0.1;
+		correction_x = (int)(x - vect_agent[index].get_x()) * WEIGHT_COHESION;
+		correction_y = (int)(y - vect_agent[index].get_y()) * WEIGHT_COHESION;
 	}
 	x = 0;
 	y = 0;
 	if (!vec_separation.empty()) {
-		for each (int k in vec_separation) {
+		for (int k : vec_separation) {
 			x = x + vect_agent[k].get_x();
 			y = y + vect_agent[k].get_y();
 		}
 		x = (int)x / vec_separation.size();
 		y = (int)y / vec_separation.size();
 
-		correction_x = correction_x + (int)(-(x - vect_agent[index].get_x()) * 0.15);
-		correction_y = correction_y + (int)(-(y - vect_agent[index].get_y()) * 0.15);
+		correction_x = correction_x + (int)(-(x - vect_agent[index].get_x()) * WEIGHT_SEPARATION);
+		correction_y = correction_y + (int)(-(y - vect_agent[index].get_y()) * WEIGHT_SEPARATION);
 	}
 	//std::cout << "pilot " << angle << " " << correction_x << " " << correction_y << std::endl;
-
+	if (angle == 0.0) {
+		angle = vect_agent[index].get_angle();
+	}
 	next_pos(index, angle, correction_x, correction_y, vect_agent);
+}
+
+bool verify_angle(Agent& agent_current, Agent& agent_neighbour) {
+	int distance_y = agent_current.get_y() - agent_neighbour.get_y();
+	int distance_x = agent_current.get_x() - agent_neighbour.get_x();
+	/*if ((distance_x == 0 || distance_y == 0) && agent_current.get_angle() == agent_neighbour.get_angle()) {
+		return false;
+	}*/
+	bool satisfied_x = distance_x == 0 && distance_y < 0;
+	bool satisfied_y = distance_y == 0 && distance_x < 0;
+	bool same_angle = agent_current.get_angle() == agent_neighbour.get_angle();
+	if ((satisfied_x || satisfied_y) && same_angle) {
+		return true;
+	}
+	if ((distance_x == 0 || distance_y == 0)) {
+		if (distance_agent(agent_current, agent_neighbour) > distance_agent(agent_current, agent_neighbour) )
+		return false;
+	}
+	double angle = abs(asin(distance_y / distance_x)) + agent_current.get_angle();
+	std::cout << "angle " << angle << std::endl;
+	return angle < degree2radian(ANGLE_MAX);
 }
 
 void law_function(std::vector<Agent>& vect_agent) {
 	//assert(vect_agent.size() > 0);
 
-	for (int i = 0; i < vect_agent.size(); i++) {
+	for (size_t i = 0; i < vect_agent.size(); i++) {
 		std::vector<int> vec_separation;
 		std::vector<int> vec_cohesion;
 		std::vector<int> vec_aligment;
@@ -80,18 +101,22 @@ void law_function(std::vector<Agent>& vect_agent) {
 		vec_cohesion = {};
 		vec_aligment = {};
 		for (int j = 0; j < vect_agent.size(); j++) {
-			double distance = distance_agent(vect_agent[i], vect_agent[j]);
-			if (distance < RANGE_SEPARATION) {
-				vec_separation.push_back(j);
-			}
-			if (distance < RANGE_COHESION_HIGH && distance > RANGE_COHESION_LOW) {
-				vec_cohesion.push_back(j);
-			}
-			if (distance < RANGE_ALIGMENT_HIGH && distance > RANGE_ALIGMENT_LOW) {
-				vec_aligment.push_back(j);
+			//if (true) {
+			if (verify_angle(vect_agent[i], vect_agent[j])) {
+				double distance = distance_agent(vect_agent[i], vect_agent[j]);
+				if (distance < RANGE_SEPARATION) {
+					vec_separation.push_back(j);
+				}
+				if (distance < RANGE_COHESION_HIGH && distance > RANGE_COHESION_LOW) {
+					vec_cohesion.push_back(j);
+				}
+				if (distance < RANGE_ALIGMENT_HIGH && distance > RANGE_ALIGMENT_LOW) {
+					vec_aligment.push_back(j);
+				}
 			}
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		pilot(i, vec_separation, vec_cohesion, vec_aligment, vect_agent);
 	}
-	//std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
