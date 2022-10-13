@@ -9,8 +9,8 @@ The output was:
 Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
 Copyright (C) Microsoft Corporation. Tous droits réservés.
 
-La génération a démarré 11/10/2022 11:43:56.
-Projet "C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.vcxproj" sur le nœud 1 (cibles par défaut).
+La génération a démarré 12/10/2022 15:22:47.
+Projet "C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.vcxproj" sur le nœud 1 (cibles par défaut).
 PrepareForBuild:
   Création du répertoire "Debug\".
   Création du répertoire "Debug\CompilerIdC.tlog\".
@@ -21,7 +21,7 @@ ClCompile:
   CMakeCCompilerId.c
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X64 Debug\CMakeCCompilerId.obj
-  CompilerIdC.vcxproj -> C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.exe
+  CompilerIdC.vcxproj -> C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.exe
 PostBuildEvent:
   for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
   :VCEnd
@@ -29,20 +29,20 @@ PostBuildEvent:
 FinalizeBuildStatus:
   Suppression du fichier "Debug\CompilerIdC.tlog\unsuccessfulbuild".
   Mise à jour de l'horodatage "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
-Génération du projet "C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.vcxproj" terminée (cibles par défaut).
+Génération du projet "C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdC\CompilerIdC.vcxproj" terminée (cibles par défaut).
 
 La génération a réussi.
     0 Avertissement(s)
     0 Erreur(s)
 
-Temps écoulé 00:00:02.38
+Temps écoulé 00:00:02.26
 
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
 
-The C compiler identification is MSVC, found in "C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/CMakeFiles/3.23.2/CompilerIdC/CompilerIdC.exe"
+The C compiler identification is MSVC, found in "C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/CMakeFiles/3.23.2/CompilerIdC/CompilerIdC.exe"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler:  
@@ -54,8 +54,8 @@ The output was:
 Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
 Copyright (C) Microsoft Corporation. Tous droits réservés.
 
-La génération a démarré 11/10/2022 11:43:59.
-Projet "C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.vcxproj" sur le nœud 1 (cibles par défaut).
+La génération a démarré 12/10/2022 15:22:50.
+Projet "C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.vcxproj" sur le nœud 1 (cibles par défaut).
 PrepareForBuild:
   Création du répertoire "Debug\".
   Création du répertoire "Debug\CompilerIdCXX.tlog\".
@@ -66,7 +66,7 @@ ClCompile:
   CMakeCXXCompilerId.cpp
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X64 Debug\CMakeCXXCompilerId.obj
-  CompilerIdCXX.vcxproj -> C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.exe
+  CompilerIdCXX.vcxproj -> C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.exe
 PostBuildEvent:
   for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
   :VCEnd
@@ -74,46 +74,46 @@ PostBuildEvent:
 FinalizeBuildStatus:
   Suppression du fichier "Debug\CompilerIdCXX.tlog\unsuccessfulbuild".
   Mise à jour de l'horodatage "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
-Génération du projet "C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.vcxproj" terminée (cibles par défaut).
+Génération du projet "C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\3.23.2\CompilerIdCXX\CompilerIdCXX.vcxproj" terminée (cibles par défaut).
 
 La génération a réussi.
     0 Avertissement(s)
     0 Erreur(s)
 
-Temps écoulé 00:00:01.21
+Temps écoulé 00:00:00.92
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
 
-The CXX compiler identification is MSVC, found in "C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/CMakeFiles/3.23.2/CompilerIdCXX/CompilerIdCXX.exe"
+The CXX compiler identification is MSVC, found in "C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/CMakeFiles/3.23.2/CompilerIdCXX/CompilerIdCXX.exe"
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe cmTC_76d57.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:m && Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
+Run Build Command(s):C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe cmTC_9b1de.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:m && Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
 Copyright (C) Microsoft Corporation. Tous droits réservés.
 
   Compilateur d'optimisation Microsoft (R) C/C++ version 19.29.30146 pour x64
   Copyright (C) Microsoft Corporation. Tous droits réservés.
   CMakeCCompilerABI.c
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_76d57.dir\Debug\\" /Fd"cmTC_76d57.dir\Debug\vc142.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
-  cmTC_76d57.vcxproj -> C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\CMakeTmp\Debug\cmTC_76d57.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_9b1de.dir\Debug\\" /Fd"cmTC_9b1de.dir\Debug\vc142.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
+  cmTC_9b1de.vcxproj -> C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\CMakeTmp\Debug\cmTC_9b1de.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe cmTC_b3855.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:m && Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
+Run Build Command(s):C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe cmTC_84e26.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=16.0 /v:m && Microsoft (R) Build Engine version 16.11.2+f32259642 pour .NET Framework
 Copyright (C) Microsoft Corporation. Tous droits réservés.
 
   Compilateur d'optimisation Microsoft (R) C/C++ version 19.29.30146 pour x64
   Copyright (C) Microsoft Corporation. Tous droits réservés.
   CMakeCXXCompilerABI.cpp
-  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++17 /Fo"cmTC_b3855.dir\Debug\\" /Fd"cmTC_b3855.dir\Debug\vc142.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
-  cmTC_b3855.vcxproj -> C:\Users\thomas.bancel\documents\1_software_dev\1_project_cpp\software-engineering-project\build\CMakeFiles\CMakeTmp\Debug\cmTC_b3855.exe
+  cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++17 /Fo"cmTC_84e26.dir\Debug\\" /Fd"cmTC_84e26.dir\Debug\vc142.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
+  cmTC_84e26.vcxproj -> C:\Users\maxime.naillon\Documents\Software_Engineering\Projet\software-engineering-project\build\CMakeFiles\CMakeTmp\Debug\cmTC_84e26.exe
 
 
 

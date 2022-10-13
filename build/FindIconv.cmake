@@ -80,9 +80,9 @@ find_package_handle_standard_args(Iconv REQUIRED_VARS
 mark_as_advanced(Iconv_FOUND Iconv_VERSION)
 
 
-set(Iconv_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Iconv_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Iconv_INCLUDES "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Iconv_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Iconv_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Iconv_INCLUDES "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(Iconv_RES_DIRS )
 set(Iconv_DEFINITIONS )
 set(Iconv_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(Iconv_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Iconv_LIBS and Iconv_LIBRARY_LIST
 set(Iconv_LIBRARY_LIST iconv charset)
-set(Iconv_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(Iconv_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Iconv_DEPENDENCIES "${Iconv_FRAMEWORKS_FOUND} ${Iconv_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(Iconv_LIBRARIES_TARGETS "${Iconv_LIBRARIES_TARGETS};")
 set(Iconv_LIBRARIES "${Iconv_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libiconv/1.17/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

@@ -54,7 +54,15 @@ int main() {
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
     for (Agent agent : agents) {
-        randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
+        if (agent.get_type() == 1) {
+            //randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
+            randomColor = { 0, 100, 0 };
+        }
+        else {
+            randomColor = { 100, 0, 0 };
+
+        }
+        
 
         x = 2 * ratio * (((float)(agent.get_x())) / (float)(WIDTH)) - ratio;
         y = 2 * (((float)(agent.get_y())) / (float)(HEIGHT)) - 1;
@@ -77,8 +85,6 @@ int main() {
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
 
    while (!glfwWindowShouldClose(window)) {
-    //int i = 0;
-    //while (i++ < 50){
 
         glfwGetFramebufferSize(window, &width, &height); // Get window size
         ratio = (float)width / (float)height;
@@ -86,10 +92,7 @@ int main() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        //update_agents(agents);
         law_function(agents);
-        std::cout << agents[0].get_x() << std::endl;
-        std::cout << agents[1].get_x() << std::endl;
         
         for (size_t i(0); i < agents.size(); i++) {
 
@@ -104,7 +107,7 @@ int main() {
 
             std::cout << (int)xpos << " " << HEIGHT - (int)ypos << std::endl;
 
-            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng)));
+            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng), 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, SPEED));
 
             triangles.push_back(triangle::newTriangle({ 2 * ratio * (((float)((float)xpos)) / (float)(WIDTH)) - ratio , 2 * (((float)(HEIGHT - (int)ypos)) / (float)(HEIGHT)) - 1 },
                 randomColor,

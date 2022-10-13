@@ -80,9 +80,9 @@ find_package_handle_standard_args(jbig REQUIRED_VARS
 mark_as_advanced(jbig_FOUND jbig_VERSION)
 
 
-set(jbig_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
-set(jbig_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
-set(jbig_INCLUDES "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
+set(jbig_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
+set(jbig_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
+set(jbig_INCLUDES "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/include")
 set(jbig_RES_DIRS )
 set(jbig_DEFINITIONS )
 set(jbig_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(jbig_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to jbig_LIBS and jbig_LIBRARY_LIST
 set(jbig_LIBRARY_LIST jbig)
-set(jbig_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/lib")
+set(jbig_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_jbig_DEPENDENCIES "${jbig_FRAMEWORKS_FOUND} ${jbig_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(jbig_LIBRARIES_TARGETS "${jbig_LIBRARIES_TARGETS};")
 set(jbig_LIBRARIES "${jbig_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/jbig/20160605/_/_/package/1c06f8aa5b65435590877732bd94377a1ed95260/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

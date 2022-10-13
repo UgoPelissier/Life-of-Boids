@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/src/display
+# Install script for directory: C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/src/display
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files/life-of-boids")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/life-of-boids")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

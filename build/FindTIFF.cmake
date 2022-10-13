@@ -80,9 +80,9 @@ find_package_handle_standard_args(TIFF REQUIRED_VARS
 mark_as_advanced(TIFF_FOUND TIFF_VERSION)
 
 
-set(TIFF_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
-set(TIFF_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
-set(TIFF_INCLUDES "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
+set(TIFF_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
+set(TIFF_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
+set(TIFF_INCLUDES "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/include")
 set(TIFF_RES_DIRS )
 set(TIFF_DEFINITIONS )
 set(TIFF_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(TIFF_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to TIFF_LIBS and TIFF_LIBRARY_LIST
 set(TIFF_LIBRARY_LIST tiffxx tiff)
-set(TIFF_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/lib")
+set(TIFF_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_TIFF_DEPENDENCIES "${TIFF_FRAMEWORKS_FOUND} ${TIFF_SYSTEM_LIBS} ZLIB::ZLIB;libdeflate::libdeflate;LibLZMA::LibLZMA;JPEG::JPEG;jbig::jbig;zstd::zstd;WebP::WebP")
@@ -147,8 +147,8 @@ endforeach()
 set(TIFF_LIBRARIES_TARGETS "${TIFF_LIBRARIES_TARGETS};ZLIB::ZLIB;libdeflate::libdeflate;LibLZMA::LibLZMA;JPEG::JPEG;jbig::jbig;zstd::zstd;WebP::WebP")
 set(TIFF_LIBRARIES "${TIFF_LIBRARIES};ZLIB::ZLIB;libdeflate::libdeflate;LibLZMA::LibLZMA;JPEG::JPEG;jbig::jbig;zstd::zstd;WebP::WebP")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libtiff/4.3.0/_/_/package/a08a8e56550da57f6f3d93bb076a90cc6c19cfa2/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

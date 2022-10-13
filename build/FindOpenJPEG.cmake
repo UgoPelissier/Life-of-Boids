@@ -80,11 +80,11 @@ find_package_handle_standard_args(OpenJPEG REQUIRED_VARS
 mark_as_advanced(OpenJPEG_FOUND OpenJPEG_VERSION)
 
 
-set(OpenJPEG_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
-set(OpenJPEG_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
-set(OpenJPEG_INCLUDES "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
+set(OpenJPEG_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
+set(OpenJPEG_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
+set(OpenJPEG_INCLUDES "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/openjpeg-2.5")
 set(OpenJPEG_RES_DIRS )
 set(OpenJPEG_DEFINITIONS "-DOPJ_STATIC")
 set(OpenJPEG_LINKER_FLAGS_LIST
@@ -103,7 +103,7 @@ set(OpenJPEG_SYSTEM_LIBS )
 set(OpenJPEG_FRAMEWORK_DIRS )
 set(OpenJPEG_FRAMEWORKS )
 set(OpenJPEG_FRAMEWORKS_FOUND "") # Will be filled later
-set(OpenJPEG_BUILD_MODULES_PATHS "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-openjpeg-targets.cmake")
+set(OpenJPEG_BUILD_MODULES_PATHS "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-openjpeg-targets.cmake")
 
 conan_find_apple_frameworks(OpenJPEG_FRAMEWORKS_FOUND "${OpenJPEG_FRAMEWORKS}" "${OpenJPEG_FRAMEWORK_DIRS}")
 
@@ -120,7 +120,7 @@ mark_as_advanced(OpenJPEG_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to OpenJPEG_LIBS and OpenJPEG_LIBRARY_LIST
 set(OpenJPEG_LIBRARY_LIST openjp2)
-set(OpenJPEG_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(OpenJPEG_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_OpenJPEG_DEPENDENCIES "${OpenJPEG_FRAMEWORKS_FOUND} ${OpenJPEG_SYSTEM_LIBS} ")
@@ -149,8 +149,8 @@ endforeach()
 set(OpenJPEG_LIBRARIES_TARGETS "${OpenJPEG_LIBRARIES_TARGETS};")
 set(OpenJPEG_LIBRARIES "${OpenJPEG_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/openjpeg/2.5.0/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

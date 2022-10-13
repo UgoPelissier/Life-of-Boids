@@ -80,12 +80,12 @@ find_package_handle_standard_args(Freetype REQUIRED_VARS
 mark_as_advanced(Freetype_FOUND Freetype_VERSION)
 
 
-set(Freetype_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include"
-			"C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
-set(Freetype_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include;C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
-set(Freetype_INCLUDES "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include"
-			"C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
-set(Freetype_RES_DIRS "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/res")
+set(Freetype_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include"
+			"C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
+set(Freetype_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include;C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
+set(Freetype_INCLUDES "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include"
+			"C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/include/freetype2")
+set(Freetype_RES_DIRS "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/res")
 set(Freetype_DEFINITIONS )
 set(Freetype_LINKER_FLAGS_LIST
         "$<$<STREQUAL:$<TARGET_PROPERTY:TYPE>,SHARED_LIBRARY>:>"
@@ -103,7 +103,7 @@ set(Freetype_SYSTEM_LIBS )
 set(Freetype_FRAMEWORK_DIRS )
 set(Freetype_FRAMEWORKS )
 set(Freetype_FRAMEWORKS_FOUND "") # Will be filled later
-set(Freetype_BUILD_MODULES_PATHS "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake/conan-official-freetype-variables.cmake")
+set(Freetype_BUILD_MODULES_PATHS "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake/conan-official-freetype-variables.cmake")
 
 conan_find_apple_frameworks(Freetype_FRAMEWORKS_FOUND "${Freetype_FRAMEWORKS}" "${Freetype_FRAMEWORK_DIRS}")
 
@@ -120,7 +120,7 @@ mark_as_advanced(Freetype_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Freetype_LIBS and Freetype_LIBRARY_LIST
 set(Freetype_LIBRARY_LIST freetype)
-set(Freetype_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib")
+set(Freetype_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Freetype_DEPENDENCIES "${Freetype_FRAMEWORKS_FOUND} ${Freetype_SYSTEM_LIBS} PNG::PNG;ZLIB::ZLIB;BZip2::BZip2;Brotli::Brotli")
@@ -149,10 +149,10 @@ endforeach()
 set(Freetype_LIBRARIES_TARGETS "${Freetype_LIBRARIES_TARGETS};PNG::PNG;ZLIB::ZLIB;BZip2::BZip2;Brotli::Brotli")
 set(Freetype_LIBRARIES "${Freetype_LIBRARIES};PNG::PNG;ZLIB::ZLIB;BZip2::BZip2;Brotli::Brotli")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/"
-			"C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/"
-			"C:/Users/thomas.bancel/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/"
+			"C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/"
+			"C:/Users/maxime.naillon/.conan/data/freetype/2.12.1/_/_/package/27b2733304cef577b19f699fec3a5bdbefb36d16/lib/cmake" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

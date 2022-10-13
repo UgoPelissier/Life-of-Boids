@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project
+# Install script for directory: C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files/life-of-boids")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/life-of-boids")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/src/cmake_install.cmake")
+  include("C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/src/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/thomas.bancel/documents/1_software_dev/1_project_cpp/software-engineering-project/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/maxime.naillon/Documents/Software_Engineering/Projet/software-engineering-project/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

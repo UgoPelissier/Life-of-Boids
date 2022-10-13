@@ -80,9 +80,9 @@ find_package_handle_standard_args(ade REQUIRED_VARS
 mark_as_advanced(ade_FOUND ade_VERSION)
 
 
-set(ade_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(ade_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(ade_INCLUDES "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(ade_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(ade_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(ade_INCLUDES "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(ade_RES_DIRS )
 set(ade_DEFINITIONS )
 set(ade_LINKER_FLAGS_LIST
@@ -101,7 +101,7 @@ set(ade_SYSTEM_LIBS )
 set(ade_FRAMEWORK_DIRS )
 set(ade_FRAMEWORKS )
 set(ade_FRAMEWORKS_FOUND "") # Will be filled later
-set(ade_BUILD_MODULES_PATHS "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-ade-targets.cmake")
+set(ade_BUILD_MODULES_PATHS "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-ade-targets.cmake")
 
 conan_find_apple_frameworks(ade_FRAMEWORKS_FOUND "${ade_FRAMEWORKS}" "${ade_FRAMEWORK_DIRS}")
 
@@ -118,7 +118,7 @@ mark_as_advanced(ade_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to ade_LIBS and ade_LIBRARY_LIST
 set(ade_LIBRARY_LIST ade)
-set(ade_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(ade_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_ade_DEPENDENCIES "${ade_FRAMEWORKS_FOUND} ${ade_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(ade_LIBRARIES_TARGETS "${ade_LIBRARIES_TARGETS};")
 set(ade_LIBRARIES "${ade_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/ade/0.1.1f/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

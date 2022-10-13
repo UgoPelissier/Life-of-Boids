@@ -80,9 +80,9 @@ find_package_handle_standard_args(libmp3lame REQUIRED_VARS
 mark_as_advanced(libmp3lame_FOUND libmp3lame_VERSION)
 
 
-set(libmp3lame_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(libmp3lame_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(libmp3lame_INCLUDES "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libmp3lame_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libmp3lame_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libmp3lame_INCLUDES "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(libmp3lame_RES_DIRS )
 set(libmp3lame_DEFINITIONS )
 set(libmp3lame_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(libmp3lame_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to libmp3lame_LIBS and libmp3lame_LIBRARY_LIST
 set(libmp3lame_LIBRARY_LIST mp3lame)
-set(libmp3lame_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(libmp3lame_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_libmp3lame_DEPENDENCIES "${libmp3lame_FRAMEWORKS_FOUND} ${libmp3lame_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(libmp3lame_LIBRARIES_TARGETS "${libmp3lame_LIBRARIES_TARGETS};")
 set(libmp3lame_LIBRARIES "${libmp3lame_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libmp3lame/3.100/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

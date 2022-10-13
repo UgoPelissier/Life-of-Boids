@@ -80,9 +80,9 @@ find_package_handle_standard_args(Jasper REQUIRED_VARS
 mark_as_advanced(Jasper_FOUND Jasper_VERSION)
 
 
-set(Jasper_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
-set(Jasper_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
-set(Jasper_INCLUDES "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
+set(Jasper_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
+set(Jasper_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
+set(Jasper_INCLUDES "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/include")
 set(Jasper_RES_DIRS )
 set(Jasper_DEFINITIONS )
 set(Jasper_LINKER_FLAGS_LIST
@@ -101,7 +101,7 @@ set(Jasper_SYSTEM_LIBS )
 set(Jasper_FRAMEWORK_DIRS )
 set(Jasper_FRAMEWORKS )
 set(Jasper_FRAMEWORKS_FOUND "") # Will be filled later
-set(Jasper_BUILD_MODULES_PATHS "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/lib/cmake/conan-official-jasper-variables.cmake")
+set(Jasper_BUILD_MODULES_PATHS "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/lib/cmake/conan-official-jasper-variables.cmake")
 
 conan_find_apple_frameworks(Jasper_FRAMEWORKS_FOUND "${Jasper_FRAMEWORKS}" "${Jasper_FRAMEWORK_DIRS}")
 
@@ -118,7 +118,7 @@ mark_as_advanced(Jasper_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Jasper_LIBS and Jasper_LIBRARY_LIST
 set(Jasper_LIBRARY_LIST jasper)
-set(Jasper_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/lib")
+set(Jasper_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Jasper_DEPENDENCIES "${Jasper_FRAMEWORKS_FOUND} ${Jasper_SYSTEM_LIBS} JPEG::JPEG")
@@ -147,8 +147,8 @@ endforeach()
 set(Jasper_LIBRARIES_TARGETS "${Jasper_LIBRARIES_TARGETS};JPEG::JPEG")
 set(Jasper_LIBRARIES "${Jasper_LIBRARIES};JPEG::JPEG")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/jasper/2.0.33/_/_/package/264d5d4a0e3e283cd524e2a58344075802f4577c/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

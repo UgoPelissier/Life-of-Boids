@@ -99,9 +99,9 @@ endif()
 #############################################################################################
 
 
-set(Vorbis_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
 set(Vorbis_RES_DIRS )
 set(Vorbis_DEFINITIONS )
 set(Vorbis_LINKER_FLAGS_LIST
@@ -137,7 +137,7 @@ mark_as_advanced(Vorbis_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Vorbis_LIBS and Vorbis_LIBRARY_LIST
 set(Vorbis_LIBRARY_LIST vorbisenc vorbisfile vorbis)
-set(Vorbis_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Vorbis_DEPENDENCIES "${Vorbis_FRAMEWORKS_FOUND} ${Vorbis_SYSTEM_LIBS} Ogg::Ogg")
@@ -172,10 +172,10 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT vorbis VARIABLES #############################################
 
-set(Vorbis_vorbis_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbis_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbis_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbis_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_vorbis_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbis_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbis_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbis_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 set(Vorbis_vorbis_RES_DIRS )
 set(Vorbis_vorbis_DEFINITIONS )
 set(Vorbis_vorbis_COMPILE_DEFINITIONS )
@@ -195,10 +195,10 @@ set(Vorbis_vorbis_LINKER_FLAGS_LIST
 
 ########### COMPONENT vorbisfile VARIABLES #############################################
 
-set(Vorbis_vorbisfile_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisfile_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisfile_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisfile_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_vorbisfile_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisfile_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisfile_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisfile_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 set(Vorbis_vorbisfile_RES_DIRS )
 set(Vorbis_vorbisfile_DEFINITIONS )
 set(Vorbis_vorbisfile_COMPILE_DEFINITIONS )
@@ -218,10 +218,10 @@ set(Vorbis_vorbisfile_LINKER_FLAGS_LIST
 
 ########### COMPONENT File VARIABLES #############################################
 
-set(Vorbis_File_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_File_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_File_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_File_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_File_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_File_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_File_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_File_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 set(Vorbis_File_RES_DIRS )
 set(Vorbis_File_DEFINITIONS )
 set(Vorbis_File_COMPILE_DEFINITIONS )
@@ -241,10 +241,10 @@ set(Vorbis_File_LINKER_FLAGS_LIST
 
 ########### COMPONENT vorbisenc VARIABLES #############################################
 
-set(Vorbis_vorbisenc_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisenc_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisenc_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_vorbisenc_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_vorbisenc_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisenc_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisenc_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_vorbisenc_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 set(Vorbis_vorbisenc_RES_DIRS )
 set(Vorbis_vorbisenc_DEFINITIONS )
 set(Vorbis_vorbisenc_COMPILE_DEFINITIONS )
@@ -264,10 +264,10 @@ set(Vorbis_vorbisenc_LINKER_FLAGS_LIST
 
 ########### COMPONENT Enc VARIABLES #############################################
 
-set(Vorbis_Enc_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_Enc_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_Enc_INCLUDES "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
-set(Vorbis_Enc_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
+set(Vorbis_Enc_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_Enc_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_Enc_INCLUDES "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/include")
+set(Vorbis_Enc_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/vorbis/1.3.7/_/_/package/becff00909fb3d957c6b4ca60fa64d4e6a32a540/lib")
 set(Vorbis_Enc_RES_DIRS )
 set(Vorbis_Enc_DEFINITIONS )
 set(Vorbis_Enc_COMPILE_DEFINITIONS )

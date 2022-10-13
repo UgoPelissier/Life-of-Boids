@@ -99,11 +99,11 @@ endif()
 #############################################################################################
 
 
-set(Brotli_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_INCLUDES "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_INCLUDES "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
 set(Brotli_RES_DIRS )
 set(Brotli_DEFINITIONS )
 set(Brotli_LINKER_FLAGS_LIST
@@ -139,7 +139,7 @@ mark_as_advanced(Brotli_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Brotli_LIBS and Brotli_LIBRARY_LIST
 set(Brotli_LIBRARY_LIST brotlidec-static brotlienc-static brotlicommon-static)
-set(Brotli_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
+set(Brotli_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Brotli_DEPENDENCIES "${Brotli_FRAMEWORKS_FOUND} ${Brotli_SYSTEM_LIBS} ")
@@ -174,12 +174,12 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT brotlicommon VARIABLES #############################################
 
-set(Brotli_brotlicommon_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlicommon_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlicommon_INCLUDES "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlicommon_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
+set(Brotli_brotlicommon_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlicommon_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlicommon_INCLUDES "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlicommon_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
 set(Brotli_brotlicommon_RES_DIRS )
 set(Brotli_brotlicommon_DEFINITIONS )
 set(Brotli_brotlicommon_COMPILE_DEFINITIONS )
@@ -199,12 +199,12 @@ set(Brotli_brotlicommon_LINKER_FLAGS_LIST
 
 ########### COMPONENT brotlienc VARIABLES #############################################
 
-set(Brotli_brotlienc_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlienc_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlienc_INCLUDES "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlienc_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
+set(Brotli_brotlienc_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlienc_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlienc_INCLUDES "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlienc_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
 set(Brotli_brotlienc_RES_DIRS )
 set(Brotli_brotlienc_DEFINITIONS )
 set(Brotli_brotlienc_COMPILE_DEFINITIONS )
@@ -224,12 +224,12 @@ set(Brotli_brotlienc_LINKER_FLAGS_LIST
 
 ########### COMPONENT brotlidec VARIABLES #############################################
 
-set(Brotli_brotlidec_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlidec_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlidec_INCLUDES "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
-			"C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
-set(Brotli_brotlidec_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
+set(Brotli_brotlidec_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlidec_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include;C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlidec_INCLUDES "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include"
+			"C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/include/brotli")
+set(Brotli_brotlidec_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/brotli/1.0.9/_/_/package/7e52046413f1e13a5fa19e3d410c5b50df627c3f/lib")
 set(Brotli_brotlidec_RES_DIRS )
 set(Brotli_brotlidec_DEFINITIONS )
 set(Brotli_brotlidec_COMPILE_DEFINITIONS )

@@ -80,9 +80,9 @@ find_package_handle_standard_args(libdeflate REQUIRED_VARS
 mark_as_advanced(libdeflate_FOUND libdeflate_VERSION)
 
 
-set(libdeflate_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(libdeflate_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(libdeflate_INCLUDES "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libdeflate_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libdeflate_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(libdeflate_INCLUDES "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(libdeflate_RES_DIRS )
 set(libdeflate_DEFINITIONS )
 set(libdeflate_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(libdeflate_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to libdeflate_LIBS and libdeflate_LIBRARY_LIST
 set(libdeflate_LIBRARY_LIST libdeflatestatic)
-set(libdeflate_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(libdeflate_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_libdeflate_DEPENDENCIES "${libdeflate_FRAMEWORKS_FOUND} ${libdeflate_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(libdeflate_LIBRARIES_TARGETS "${libdeflate_LIBRARIES_TARGETS};")
 set(libdeflate_LIBRARIES "${libdeflate_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libdeflate/1.12/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

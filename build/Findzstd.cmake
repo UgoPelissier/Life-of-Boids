@@ -99,9 +99,9 @@ endif()
 #############################################################################################
 
 
-set(zstd_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
-set(zstd_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
-set(zstd_INCLUDES "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_INCLUDES "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
 set(zstd_RES_DIRS )
 set(zstd_DEFINITIONS )
 set(zstd_LINKER_FLAGS_LIST
@@ -137,7 +137,7 @@ mark_as_advanced(zstd_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to zstd_LIBS and zstd_LIBRARY_LIST
 set(zstd_LIBRARY_LIST zstd_static)
-set(zstd_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/lib")
+set(zstd_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_zstd_DEPENDENCIES "${zstd_FRAMEWORKS_FOUND} ${zstd_SYSTEM_LIBS} ")
@@ -172,10 +172,10 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT libzstd_static VARIABLES #############################################
 
-set(zstd_libzstd_static_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
-set(zstd_libzstd_static_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
-set(zstd_libzstd_static_INCLUDES "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
-set(zstd_libzstd_static_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/lib")
+set(zstd_libzstd_static_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_libzstd_static_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_libzstd_static_INCLUDES "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/include")
+set(zstd_libzstd_static_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/zstd/1.5.2/_/_/package/72381fc5a05da7a9f5e4d254cd58aa074c20b053/lib")
 set(zstd_libzstd_static_RES_DIRS )
 set(zstd_libzstd_static_DEFINITIONS )
 set(zstd_libzstd_static_COMPILE_DEFINITIONS )

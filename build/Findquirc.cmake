@@ -80,9 +80,9 @@ find_package_handle_standard_args(quirc REQUIRED_VARS
 mark_as_advanced(quirc_FOUND quirc_VERSION)
 
 
-set(quirc_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
-set(quirc_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
-set(quirc_INCLUDES "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
+set(quirc_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
+set(quirc_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
+set(quirc_INCLUDES "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/include")
 set(quirc_RES_DIRS )
 set(quirc_DEFINITIONS )
 set(quirc_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(quirc_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to quirc_LIBS and quirc_LIBRARY_LIST
 set(quirc_LIBRARY_LIST quirc)
-set(quirc_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/lib")
+set(quirc_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_quirc_DEPENDENCIES "${quirc_FRAMEWORKS_FOUND} ${quirc_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(quirc_LIBRARIES_TARGETS "${quirc_LIBRARIES_TARGETS};")
 set(quirc_LIBRARIES "${quirc_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/quirc/1.1/_/_/package/8e7d69ac1d5596196386f046159aacd9644a7227/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

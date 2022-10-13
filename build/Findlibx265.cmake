@@ -80,9 +80,9 @@ find_package_handle_standard_args(libx265 REQUIRED_VARS
 mark_as_advanced(libx265_FOUND libx265_VERSION)
 
 
-set(libx265_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
-set(libx265_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
-set(libx265_INCLUDES "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
+set(libx265_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
+set(libx265_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
+set(libx265_INCLUDES "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/include")
 set(libx265_RES_DIRS )
 set(libx265_DEFINITIONS )
 set(libx265_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(libx265_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to libx265_LIBS and libx265_LIBRARY_LIST
 set(libx265_LIBRARY_LIST x265)
-set(libx265_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/lib")
+set(libx265_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_libx265_DEPENDENCIES "${libx265_FRAMEWORKS_FOUND} ${libx265_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(libx265_LIBRARIES_TARGETS "${libx265_LIBRARIES_TARGETS};")
 set(libx265_LIBRARIES "${libx265_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libx265/3.4/_/_/package/2ca72a585dd183f359ae9a3a2ce113138e4cf427/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

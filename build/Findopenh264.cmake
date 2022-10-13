@@ -80,9 +80,9 @@ find_package_handle_standard_args(openh264 REQUIRED_VARS
 mark_as_advanced(openh264_FOUND openh264_VERSION)
 
 
-set(openh264_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(openh264_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(openh264_INCLUDES "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(openh264_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(openh264_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(openh264_INCLUDES "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(openh264_RES_DIRS )
 set(openh264_DEFINITIONS )
 set(openh264_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(openh264_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to openh264_LIBS and openh264_LIBRARY_LIST
 set(openh264_LIBRARY_LIST openh264)
-set(openh264_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(openh264_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_openh264_DEPENDENCIES "${openh264_FRAMEWORKS_FOUND} ${openh264_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(openh264_LIBRARIES_TARGETS "${openh264_LIBRARIES_TARGETS};")
 set(openh264_LIBRARIES "${openh264_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/openh264/2.1.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

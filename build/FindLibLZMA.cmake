@@ -80,9 +80,9 @@ find_package_handle_standard_args(LibLZMA REQUIRED_VARS
 mark_as_advanced(LibLZMA_FOUND LibLZMA_VERSION)
 
 
-set(LibLZMA_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(LibLZMA_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(LibLZMA_INCLUDES "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(LibLZMA_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(LibLZMA_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(LibLZMA_INCLUDES "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(LibLZMA_RES_DIRS )
 set(LibLZMA_DEFINITIONS "-DLZMA_API_STATIC")
 set(LibLZMA_LINKER_FLAGS_LIST
@@ -101,7 +101,7 @@ set(LibLZMA_SYSTEM_LIBS )
 set(LibLZMA_FRAMEWORK_DIRS )
 set(LibLZMA_FRAMEWORKS )
 set(LibLZMA_FRAMEWORKS_FOUND "") # Will be filled later
-set(LibLZMA_BUILD_MODULES_PATHS "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-xz_utils-variables.cmake")
+set(LibLZMA_BUILD_MODULES_PATHS "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib/cmake/conan-official-xz_utils-variables.cmake")
 
 conan_find_apple_frameworks(LibLZMA_FRAMEWORKS_FOUND "${LibLZMA_FRAMEWORKS}" "${LibLZMA_FRAMEWORK_DIRS}")
 
@@ -118,7 +118,7 @@ mark_as_advanced(LibLZMA_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to LibLZMA_LIBS and LibLZMA_LIBRARY_LIST
 set(LibLZMA_LIBRARY_LIST lzma)
-set(LibLZMA_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(LibLZMA_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_LibLZMA_DEPENDENCIES "${LibLZMA_FRAMEWORKS_FOUND} ${LibLZMA_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(LibLZMA_LIBRARIES_TARGETS "${LibLZMA_LIBRARIES_TARGETS};")
 set(LibLZMA_LIBRARIES "${LibLZMA_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/xz_utils/5.2.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

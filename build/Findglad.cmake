@@ -80,9 +80,9 @@ find_package_handle_standard_args(glad REQUIRED_VARS
 mark_as_advanced(glad_FOUND glad_VERSION)
 
 
-set(glad_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
-set(glad_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
-set(glad_INCLUDES "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
+set(glad_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
+set(glad_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
+set(glad_INCLUDES "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/include")
 set(glad_RES_DIRS )
 set(glad_DEFINITIONS )
 set(glad_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(glad_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to glad_LIBS and glad_LIBRARY_LIST
 set(glad_LIBRARY_LIST glad)
-set(glad_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/lib")
+set(glad_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_glad_DEPENDENCIES "${glad_FRAMEWORKS_FOUND} ${glad_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(glad_LIBRARIES_TARGETS "${glad_LIBRARIES_TARGETS};")
 set(glad_LIBRARIES "${glad_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/glad/0.1.34/_/_/package/473c24ae8996a862e6a24597d141497cb708b730/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

@@ -80,9 +80,9 @@ find_package_handle_standard_args(libx264 REQUIRED_VARS
 mark_as_advanced(libx264_FOUND libx264_VERSION)
 
 
-set(libx264_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
-set(libx264_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
-set(libx264_INCLUDES "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
+set(libx264_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
+set(libx264_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
+set(libx264_INCLUDES "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/include")
 set(libx264_RES_DIRS )
 set(libx264_DEFINITIONS )
 set(libx264_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(libx264_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to libx264_LIBS and libx264_LIBRARY_LIST
 set(libx264_LIBRARY_LIST x264)
-set(libx264_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/lib")
+set(libx264_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_libx264_DEPENDENCIES "${libx264_FRAMEWORKS_FOUND} ${libx264_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(libx264_LIBRARIES_TARGETS "${libx264_LIBRARIES_TARGETS};")
 set(libx264_LIBRARIES "${libx264_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libx264/20191217/_/_/package/1d690fdf83d82fb1eeea5656f775e7981b344e5e/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

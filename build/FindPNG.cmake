@@ -80,9 +80,9 @@ find_package_handle_standard_args(PNG REQUIRED_VARS
 mark_as_advanced(PNG_FOUND PNG_VERSION)
 
 
-set(PNG_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
-set(PNG_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
-set(PNG_INCLUDES "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
+set(PNG_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
+set(PNG_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
+set(PNG_INCLUDES "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/include")
 set(PNG_RES_DIRS )
 set(PNG_DEFINITIONS )
 set(PNG_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(PNG_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to PNG_LIBS and PNG_LIBRARY_LIST
 set(PNG_LIBRARY_LIST libpng16)
-set(PNG_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/lib")
+set(PNG_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_PNG_DEPENDENCIES "${PNG_FRAMEWORKS_FOUND} ${PNG_SYSTEM_LIBS} ZLIB::ZLIB")
@@ -147,8 +147,8 @@ endforeach()
 set(PNG_LIBRARIES_TARGETS "${PNG_LIBRARIES_TARGETS};ZLIB::ZLIB")
 set(PNG_LIBRARIES "${PNG_LIBRARIES};ZLIB::ZLIB")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libpng/1.6.37/_/_/package/ce650d9f1f1c1c0839cf0694a55c1351ddbed859/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

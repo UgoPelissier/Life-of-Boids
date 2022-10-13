@@ -99,9 +99,9 @@ endif()
 #############################################################################################
 
 
-set(WebP_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_INCLUDES "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_INCLUDES "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
 set(WebP_RES_DIRS )
 set(WebP_DEFINITIONS )
 set(WebP_LINKER_FLAGS_LIST
@@ -137,7 +137,7 @@ mark_as_advanced(WebP_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to WebP_LIBS and WebP_LIBRARY_LIST
 set(WebP_LIBRARY_LIST webpdecoder webpdemux webpmux webp)
-set(WebP_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
+set(WebP_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_WebP_DEPENDENCIES "${WebP_FRAMEWORKS_FOUND} ${WebP_SYSTEM_LIBS} ")
@@ -172,10 +172,10 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT webp VARIABLES #############################################
 
-set(WebP_webp_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webp_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webp_INCLUDES "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webp_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
+set(WebP_webp_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webp_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webp_INCLUDES "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webp_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
 set(WebP_webp_RES_DIRS )
 set(WebP_webp_DEFINITIONS )
 set(WebP_webp_COMPILE_DEFINITIONS )
@@ -195,10 +195,10 @@ set(WebP_webp_LINKER_FLAGS_LIST
 
 ########### COMPONENT libwebpmux VARIABLES #############################################
 
-set(WebP_libwebpmux_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_libwebpmux_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_libwebpmux_INCLUDES "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_libwebpmux_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
+set(WebP_libwebpmux_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_libwebpmux_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_libwebpmux_INCLUDES "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_libwebpmux_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
 set(WebP_libwebpmux_RES_DIRS )
 set(WebP_libwebpmux_DEFINITIONS )
 set(WebP_libwebpmux_COMPILE_DEFINITIONS )
@@ -218,10 +218,10 @@ set(WebP_libwebpmux_LINKER_FLAGS_LIST
 
 ########### COMPONENT webpdemux VARIABLES #############################################
 
-set(WebP_webpdemux_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdemux_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdemux_INCLUDES "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdemux_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
+set(WebP_webpdemux_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdemux_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdemux_INCLUDES "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdemux_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
 set(WebP_webpdemux_RES_DIRS )
 set(WebP_webpdemux_DEFINITIONS )
 set(WebP_webpdemux_COMPILE_DEFINITIONS )
@@ -241,10 +241,10 @@ set(WebP_webpdemux_LINKER_FLAGS_LIST
 
 ########### COMPONENT webpdecoder VARIABLES #############################################
 
-set(WebP_webpdecoder_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdecoder_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdecoder_INCLUDES "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
-set(WebP_webpdecoder_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
+set(WebP_webpdecoder_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdecoder_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdecoder_INCLUDES "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/include")
+set(WebP_webpdecoder_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libwebp/1.2.2/_/_/package/638042d3fd356128c913f5e725646a0c2af264c7/lib")
 set(WebP_webpdecoder_RES_DIRS )
 set(WebP_webpdecoder_DEFINITIONS )
 set(WebP_webpdecoder_COMPILE_DEFINITIONS )

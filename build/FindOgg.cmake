@@ -99,9 +99,9 @@ endif()
 #############################################################################################
 
 
-set(Ogg_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Ogg_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Ogg_INCLUDES "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_INCLUDES "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
 set(Ogg_RES_DIRS )
 set(Ogg_DEFINITIONS )
 set(Ogg_LINKER_FLAGS_LIST
@@ -137,7 +137,7 @@ mark_as_advanced(Ogg_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Ogg_LIBS and Ogg_LIBRARY_LIST
 set(Ogg_LIBRARY_LIST ogg)
-set(Ogg_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(Ogg_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Ogg_DEPENDENCIES "${Ogg_FRAMEWORKS_FOUND} ${Ogg_SYSTEM_LIBS} ")
@@ -172,10 +172,10 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT ogg VARIABLES #############################################
 
-set(Ogg_ogg_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Ogg_ogg_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Ogg_ogg_INCLUDES "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(Ogg_ogg_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(Ogg_ogg_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_ogg_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_ogg_INCLUDES "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(Ogg_ogg_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/ogg/1.3.5/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 set(Ogg_ogg_RES_DIRS )
 set(Ogg_ogg_DEFINITIONS )
 set(Ogg_ogg_COMPILE_DEFINITIONS )

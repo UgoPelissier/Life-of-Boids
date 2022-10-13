@@ -15,22 +15,31 @@ using mat3x3 = std::array<vec3, 3>;
 using mat4x4 = std::array<vec4, 4>;
 
 //====================DEFAULT PARAMETERS DEFINED==================
-#define DEFAULT_NUM_AGENTS 20
+#define DEFAULT_NUM_AGENTS 150
+#define DEFAULT_TYPE_AGENTS 2
 
 #define ANGLE_MIN -135
 #define ANGLE_MAX 135
 
 #define SPEED_MIN 0
-#define SPEED_MAX 1
+#define SPEED_MAX 3
 
-#define DEFAULT_COHESION_WEIGHT 0.5
-#define DEFAULT_SEPARATION_WEIGHT 0.5 // replace with (1 - DEFAULT_COHESION_WEIGHT)
-
-#define WIDTH 1200
-#define HEIGHT 1000 // Window size parameter
+#define WIDTH 2500
+#define HEIGHT 2000 // Window size parameter
 
 #define TRIANGLE_SIZE    0.025
 #define PI  3.14159265358979323846
+
+#define RANGE_SEPARATION 50
+#define RANGE_ALIGMENT_LOW 50
+#define RANGE_ALIGMENT_HIGH 100
+#define RANGE_COHESION_LOW 80
+#define RANGE_COHESION_HIGH 150
+#define SPEED 1
+#define WEIGHT_COHESION 0.25
+#define WEIGHT_SEPARATION 0.5
+#define WEIGHT_ALIGMENT 0.25
+#define RELAXATION 0.1
 //====================DEFAULT PARAMETERS DEFINED END==================
 
 //====================USEFUL FUNCTIONS================================
@@ -46,12 +55,27 @@ private:
     int m_y;
     double m_angle;
     double m_velocity;
+    int m_type; //type of the agent (agent 1 or agent 2 with different behavior)
+    int m_cohesion_high;
+    int m_cohesion_low;
+    int m_separation;
+    int m_aligment_high;
+    int m_aligment_low;
+    float m_speed;
+
 public:
-	Agent(int x, int y, double angle, double velocity);
+	Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, float speed);
 
     int& get_x();
     int& get_y();
     double& get_angle();
+    int& get_type();
+    int& get_cohesion_high();
+    int& get_cohesion_low();
+    int& get_separation();
+    int& get_aligment_high();
+    int& get_aligment_low();
+    float& get_speed();
 
     void update(int x, int y, double angle);
 };

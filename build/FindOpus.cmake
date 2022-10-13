@@ -99,11 +99,11 @@ endif()
 #############################################################################################
 
 
-set(Opus_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
-set(Opus_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
-set(Opus_INCLUDES "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_INCLUDES "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
 set(Opus_RES_DIRS )
 set(Opus_DEFINITIONS )
 set(Opus_LINKER_FLAGS_LIST
@@ -139,7 +139,7 @@ mark_as_advanced(Opus_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to Opus_LIBS and Opus_LIBRARY_LIST
 set(Opus_LIBRARY_LIST opus)
-set(Opus_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(Opus_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_Opus_DEPENDENCIES "${Opus_FRAMEWORKS_FOUND} ${Opus_SYSTEM_LIBS} ")
@@ -174,12 +174,12 @@ set(CMAKE_PREFIX_PATH  ${CMAKE_PREFIX_PATH})
 
 ########### COMPONENT opus VARIABLES #############################################
 
-set(Opus_opus_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
-set(Opus_opus_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
-set(Opus_opus_INCLUDES "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
-			"C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
-set(Opus_opus_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(Opus_opus_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_opus_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include;C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_opus_INCLUDES "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include"
+			"C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include/opus")
+set(Opus_opus_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/opus/1.3.1/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 set(Opus_opus_RES_DIRS )
 set(Opus_opus_DEFINITIONS )
 set(Opus_opus_COMPILE_DEFINITIONS )

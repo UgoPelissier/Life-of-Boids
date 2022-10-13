@@ -80,10 +80,10 @@ find_package_handle_standard_args(JPEG REQUIRED_VARS
 mark_as_advanced(JPEG_FOUND JPEG_VERSION)
 
 
-set(JPEG_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(JPEG_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(JPEG_INCLUDES "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
-set(JPEG_RES_DIRS "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/res")
+set(JPEG_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(JPEG_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(JPEG_INCLUDES "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/include")
+set(JPEG_RES_DIRS "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/res")
 set(JPEG_DEFINITIONS "-DLIBJPEG_STATIC")
 set(JPEG_LINKER_FLAGS_LIST
         "$<$<STREQUAL:$<TARGET_PROPERTY:TYPE>,SHARED_LIBRARY>:>"
@@ -118,7 +118,7 @@ mark_as_advanced(JPEG_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to JPEG_LIBS and JPEG_LIBRARY_LIST
 set(JPEG_LIBRARY_LIST libjpeg)
-set(JPEG_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
+set(JPEG_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_JPEG_DEPENDENCIES "${JPEG_FRAMEWORKS_FOUND} ${JPEG_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(JPEG_LIBRARIES_TARGETS "${JPEG_LIBRARIES_TARGETS};")
 set(JPEG_LIBRARIES "${JPEG_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libjpeg/9d/_/_/package/3fb49604f9c2f729b85ba3115852006824e72cab/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach

@@ -80,9 +80,9 @@ find_package_handle_standard_args(libvpx REQUIRED_VARS
 mark_as_advanced(libvpx_FOUND libvpx_VERSION)
 
 
-set(libvpx_INCLUDE_DIRS "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
-set(libvpx_INCLUDE_DIR "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
-set(libvpx_INCLUDES "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
+set(libvpx_INCLUDE_DIRS "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
+set(libvpx_INCLUDE_DIR "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
+set(libvpx_INCLUDES "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/include")
 set(libvpx_RES_DIRS )
 set(libvpx_DEFINITIONS )
 set(libvpx_LINKER_FLAGS_LIST
@@ -118,7 +118,7 @@ mark_as_advanced(libvpx_INCLUDE_DIRS
 
 # Find the real .lib/.a and add them to libvpx_LIBS and libvpx_LIBRARY_LIST
 set(libvpx_LIBRARY_LIST vpxmd)
-set(libvpx_LIB_DIRS "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/lib")
+set(libvpx_LIB_DIRS "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/lib")
 
 # Gather all the libraries that should be linked to the targets (do not touch existing variables):
 set(_libvpx_DEPENDENCIES "${libvpx_FRAMEWORKS_FOUND} ${libvpx_SYSTEM_LIBS} ")
@@ -147,8 +147,8 @@ endforeach()
 set(libvpx_LIBRARIES_TARGETS "${libvpx_LIBRARIES_TARGETS};")
 set(libvpx_LIBRARIES "${libvpx_LIBRARIES};")
 
-set(CMAKE_MODULE_PATH "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/" ${CMAKE_MODULE_PATH})
-set(CMAKE_PREFIX_PATH "C:/Users/thomas.bancel/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/" ${CMAKE_PREFIX_PATH})
+set(CMAKE_MODULE_PATH "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/" ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH "C:/Users/maxime.naillon/.conan/data/libvpx/1.11.0/_/_/package/1891f371c45ee62bcbf1bca10591761a8074bc39/" ${CMAKE_PREFIX_PATH})
 
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.0")
     # Target approach
