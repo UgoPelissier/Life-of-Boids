@@ -5,6 +5,9 @@ Agent::Agent() {
     m_x = 0;
     m_y = 0;
     m_angle = 0;
+    m_predator = false;
+    m_border = false;
+    m_opp = 0;
 }
 
 Agent::Agent(double x, double y, double angle, bool predator) {
@@ -12,6 +15,8 @@ Agent::Agent(double x, double y, double angle, bool predator) {
     m_y = y;
     m_angle = angle;
     m_predator = predator;
+    m_border = false;
+    m_opp = 0;
 }
 
 double& Agent::get_x() {
@@ -30,6 +35,14 @@ bool& Agent::get_predator() {
     return m_predator;
 }
 
+bool& Agent::get_border() {
+    return m_border;
+}
+
+double& Agent::get_opp() {
+    return m_opp;
+}
+
 double Agent::distance(Agent a) {
     return std::sqrt((m_x - a.get_x()) * (m_x - a.get_x()) + (m_y - a.get_y()) * (m_y - a.get_y()));
 }
@@ -46,8 +59,8 @@ std::vector<std::vector<size_t>> Agent::neighbours(size_t index, std::vector<Age
                     alignment.push_back(i);
                 }
                 else if (this->distance(agents[i]) > ALIGNMENT && this->distance(agents[i]) < COHESION) {
-                    cohesion.push_back(i);
-                }
+                        cohesion.push_back(i);
+                    }
             }
             else {
                 if (this->distance(agents[i]) < PREDATOR) {
@@ -113,26 +126,41 @@ bool Agent::overlap(std::vector<Agent> agents) {
     return false;
 }
 
-std::pair<bool, double> Agent::borders(){
-    bool tooClose(false);
-    double opp(0);
+void Agent::borders(){
     if ( m_x<CLOSE ) {
-        tooClose = true;
-        opp = 0;
+        m_border = true;
+        m_opp = 0;
     }
-    if ( (WIDTH-CLOSE<m_x) && (m_x<WIDTH) ) {
-        tooClose = true;
-        opp = PI;
+    else if ( (WIDTH-CLOSE<m_x) && (m_x<WIDTH) ) {
+        m_border = true;
+        m_opp = PI;
     }
-    if ( m_y<CLOSE ) {
-        tooClose = true;
-        opp = PI/2;
+    else if ( m_y<CLOSE ) {
+        m_border = true;
+        m_opp = PI/2;
     }
-    if ( (HEIGHT-CLOSE<m_y) && (m_y<HEIGHT) ) {
-        tooClose = true;
-        opp = -PI/2;
+    else if ( (HEIGHT-CLOSE<m_y) && (m_y<HEIGHT) ) {
+        m_border = true;
+        m_opp = -PI/2;
     }
-    return std::make_pair(tooClose, opp);
+    else
+        m_border = false;
+}
+
+void Agent::borderNeighbour(size_t index, std::vector<Agent> agents) {
+    for (size_t i(0); i < agents.size(); i++) {
+        if (index != i) {
+            if (!agents[i].get_predator()) {
+                if ( this->distance(agents[i]) < ALIGNMENT ) {
+                    if( agents[i].get_border()) {
+                        m_border = true;
+                        m_opp = agents[i].get_opp();
+                    }
+                }
+            }
+        }
+    }
+    m_border = false;
 }
 
 void Agent::borderUpdate(double opp) {
@@ -210,10 +238,8 @@ void Agent::updateAgent(size_t index, std::vector<Agent> agents) {
     std::vector<std::vector<size_t>> v;
     std::vector<size_t> predators, separation, alignment, cohesion;
 
-    bool tooClose;
-    double opp;
-
-    std::tie(tooClose,opp) = this->borders();
+    if ( !TURN_AROUND )
+        m_border = false;
 
     v = this->neighbours(index, agents);
 
@@ -227,14 +253,18 @@ void Agent::updateAgent(size_t index, std::vector<Agent> agents) {
     cohesion = v[3];
 
     if (m_predator) {
-        if (!predators.empty())
-            this->separationLaw(agents, predators);
-        else
-            this->predatorLaw(index, agents);
+        if (m_border) {
+            this->borderUpdate(m_opp);
+        } else {
+            if (!predators.empty())
+                this->separationLaw(agents, predators);
+            else
+                this->predatorLaw(index, agents);
+        }
     }
     else {
-        if (false) {
-            this->borderUpdate(opp);
+        if (m_border) {
+            this->borderUpdate(m_opp);
         } else {
             if (!predators.empty()) {
                 this->separationLaw(agents, predators);
@@ -274,12 +304,14 @@ std::vector<Agent> initialiaze_agents() {
         randomAngle = 2*PI*unif(rng)-PI;
 
         agent = Agent(randomX,randomY,randomAngle,false);
-        while (agent.borders().first || agent.overlap(agents)) {
+        agent.borders();
+        while (agent.get_border() || agent.overlap(agents)) {
             randomX = uniX(rng);
             randomY = uniY(rng);
             randomAngle = 2*PI*unif(rng)-PI;
 
             agent = Agent(randomX,randomY,randomAngle,false);
+            agent.borders();
         }
         agents.push_back(agent);
     }
@@ -290,19 +322,32 @@ std::vector<Agent> initialiaze_agents() {
         randomAngle = 2*PI*unif(rng)-PI;
 
         agent = Agent(randomX,randomY,randomAngle,true);
-        while (agent.borders().first || agent.overlap(agents)) {
+        agent.borders();
+        while (agent.get_border() || agent.overlap(agents)) {
             randomX = uniX(rng);
             randomY = uniY(rng);
             randomAngle = 2*PI*unif(rng)-PI;
 
             agent = Agent(randomX,randomY,randomAngle,true);
+            agent.borders();
         }
         agents.push_back(agent);
     }
     return agents;
 }
 
+void checkBorders(std::vector<Agent>& agents) {
+    for (size_t i(0); i < agents.size(); i++) {
+        agents[i].borders();
+        if ( !agents[i].get_border() ) {
+            agents[i].borderNeighbour(i, agents);
+        }
+    }
+}
+
 void updateAgents(std::vector<Agent>& agents) {
+    if ( TURN_AROUND )
+        checkBorders(agents);
     for (size_t i(0); i < agents.size(); i++) {
         agents[i].updateAgent(i, agents);
     }

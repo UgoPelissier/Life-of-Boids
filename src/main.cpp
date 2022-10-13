@@ -88,19 +88,24 @@ int main() {
     std::mt19937_64 rng;
 
     float x, y;
+    double size;
     vec3 color;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
     for (Agent agent : agents) {
-        if (agent.get_predator())
+        if (agent.get_predator()) {
             color = {1., 0., 0.};
-        else
+            size = 2 * TRIANGLE_SIZE;
+        }
+        else {
             color = {1., 1., 1.};
+            size = TRIANGLE_SIZE;
+        }
 
         x = 2 * ratio * (((float)(agent.get_x())) / (float)(WIDTH)) - ratio;
         y = 2 * (((float)(agent.get_y())) / (float)(HEIGHT)) - 1;
 
-        triangles.push_back(triangle::newTriangle({ x,y }, color, agent.get_angle()));
+        triangles.push_back(triangle::newTriangle({ x,y }, color, agent.get_angle(), size));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -133,15 +138,23 @@ int main() {
             x = 2 * ratio * (((float)(agents[i].get_x())) / (float)(WIDTH)) - ratio;
             y = 2 * (((float)(agents[i].get_y())) / (float)(HEIGHT)) - 1;
 
-            triangles[i] = triangle::newTriangle({ x,y }, triangles[i][0].col, agents[i].get_angle());
+            if (agents[i].get_predator()) {
+                size = 2 * TRIANGLE_SIZE;
+            }
+            else {
+                size = TRIANGLE_SIZE;
+            }
+
+            triangles[i] = triangle::newTriangle({ x,y }, triangles[i][0].col, agents[i].get_angle(), size);
         }
 
         if (addBird) { // Add new bird to the window
             color = {1., 1., 1.};
 
             newAgent = Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), false);
+            newAgent.borders();
 
-            if (not newAgent.overlap(agents)) {
+            if ( !newAgent.get_border() && !newAgent.overlap(agents) ) {
 
                 agents.push_back(Agent((int) xpos, HEIGHT - (int) ypos, 2 * PI * unif(rng), false));
 
@@ -149,7 +162,8 @@ int main() {
                         {2 * ratio * (((float) ((float) xpos)) / (float) (WIDTH)) - ratio,
                          2 * (((float) (HEIGHT - (int) ypos)) / (float) (HEIGHT)) - 1},
                         color,
-                        2 * PI * unif(rng)));
+                        2 * PI * unif(rng),
+                        TRIANGLE_SIZE));
             }
             addBird = false;
         }
@@ -158,8 +172,9 @@ int main() {
             color = {1., 0., 0.};
 
             newAgent = Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), true);
+            newAgent.borders();
 
-            if (not newAgent.overlap(agents)) {
+            if ( !newAgent.get_border() && !newAgent.overlap(agents) ) {
 
                 agents.push_back(Agent((int) xpos, HEIGHT - (int) ypos, 2 * PI * unif(rng), true));
 
@@ -167,7 +182,8 @@ int main() {
                         {2 * ratio * (((float) ((float) xpos)) / (float) (WIDTH)) - ratio,
                          2 * (((float) (HEIGHT - (int) ypos)) / (float) (HEIGHT)) - 1},
                         color,
-                        2 * PI * unif(rng)));
+                        2 * PI * unif(rng),
+                        2 * TRIANGLE_SIZE));
             }
             addPredator = false;
         }
