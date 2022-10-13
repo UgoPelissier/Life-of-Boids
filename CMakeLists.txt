@@ -13,7 +13,7 @@ message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 project(life-of-boids
         VERSION "0.0.0")
 
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+#include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 
 #------------------------------------------------------
 
