@@ -1,6 +1,1 @@
-# add_subdirectory()
-
-# add_executable()
-
-add_library(law law.cpp law.hpp)
-
+add_library(agent agent.cpp agent.hpp)

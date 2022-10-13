@@ -1,7 +1,6 @@
 #define GLFW_INCLUDE_NONE
 
-#include "common.hpp"
-#include "movement/law.hpp"
+#include "agent.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <array>
@@ -10,11 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "glx/glx.hpp"
-#include "shaders/lines.hpp"
-#include "shaders/triangle.hpp"
+#include "glx.hpp"
+#include "triangle.hpp"
 
-double add;
+bool addBird, addPredator;
 double xpos, ypos;
 
 void error_callback(int error, const char* description) {
@@ -33,7 +31,12 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
     // Add a new bird by positioning the cursor at the desired location and pressing "b"
     if (key == GLFW_KEY_B && action == GLFW_PRESS) {
         glfwGetCursorPos(window, &xpos, &ypos);
-        add = true;
+        addBird = true;
+    }
+    // Add a new predator by positioning the cursor at the desired location and pressing "p"
+    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        glfwGetCursorPos(window, &xpos, &ypos);
+        addPredator = true;
     }
 }
 
@@ -85,16 +88,19 @@ int main() {
     std::mt19937_64 rng;
 
     float x, y;
-    vec3 randomColor;
+    vec3 color;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
 
     for (Agent agent : agents) {
-        randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
+        if (agent.get_predator())
+            color = {1., 0., 0.};
+        else
+            color = {1., 1., 1.};
 
         x = 2 * ratio * (((float)(agent.get_x())) / (float)(WIDTH)) - ratio;
         y = 2 * (((float)(agent.get_y())) / (float)(HEIGHT)) - 1;
 
-        triangles.push_back(triangle::newTriangle({ x,y }, randomColor, agent.get_angle()));
+        triangles.push_back(triangle::newTriangle({ x,y }, color, agent.get_angle()));
     }
 
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
@@ -109,9 +115,10 @@ int main() {
     glEnableVertexAttribArray(vcol_location);
 
     // Global loop
-    std::cout << "To add a new agent: move the mouse to the desired location and press 'b'" << std::endl;
+    std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
+    Agent newAgent;
 
-   while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window)) {
 
         glfwGetFramebufferSize(window, &width, &height); // Get window size
         ratio = (float)width / (float)height;
@@ -119,9 +126,9 @@ int main() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        law_function(agents);
+       updateAgents(agents);
         
-        for (size_t i(0); i < agents.size(); i++) {
+        for (size_t i(0); i<agents.size(); i++) { // Convert positions from [0:WIDTH]*[0:HEIGHT] to [-1:1]*[-1:1]
 
             x = 2 * ratio * (((float)(agents[i].get_x())) / (float)(WIDTH)) - ratio;
             y = 2 * (((float)(agents[i].get_y())) / (float)(HEIGHT)) - 1;
@@ -129,27 +136,51 @@ int main() {
             triangles[i] = triangle::newTriangle({ x,y }, triangles[i][0].col, agents[i].get_angle());
         }
 
-        if (add) { // Add new triangle to the window
-            randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
+        if (addBird) { // Add new bird to the window
+            color = {1., 1., 1.};
 
-            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng)));
+            newAgent = Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), false);
 
-            triangles.push_back(triangle::newTriangle({ 2 * ratio * (((float)((float)xpos)) / (float)(WIDTH)) - ratio , 2 * (((float)(HEIGHT - (int)ypos)) / (float)(HEIGHT)) - 1 },
-                randomColor,
-                2 * PI * unif(rng)));
+            if (not newAgent.overlap(agents)) {
+
+                agents.push_back(Agent((int) xpos, HEIGHT - (int) ypos, 2 * PI * unif(rng), false));
+
+                triangles.push_back(triangle::newTriangle(
+                        {2 * ratio * (((float) ((float) xpos)) / (float) (WIDTH)) - ratio,
+                         2 * (((float) (HEIGHT - (int) ypos)) / (float) (HEIGHT)) - 1},
+                        color,
+                        2 * PI * unif(rng)));
+            }
+            addBird = false;
         }
-        add = false;
 
-        {  // Triangle
-            mat4x4 m = triangle::mat4x4_identity();
+        if (addPredator) { // Add new predator to the window
+            color = {1., 0., 0.};
+
+            newAgent = Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), true);
+
+            if (not newAgent.overlap(agents)) {
+
+                agents.push_back(Agent((int) xpos, HEIGHT - (int) ypos, 2 * PI * unif(rng), true));
+
+                triangles.push_back(triangle::newTriangle(
+                        {2 * ratio * (((float) ((float) xpos)) / (float) (WIDTH)) - ratio,
+                         2 * (((float) (HEIGHT - (int) ypos)) / (float) (HEIGHT)) - 1},
+                        color,
+                        2 * PI * unif(rng)));
+            }
+            addPredator = false;
+        }
+
+
+        {  // Drawing
             mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
-            mat4x4 mvp = triangle::mat4x4_mul(p, m); // MVP = Projection (* View) * Model (= Translation * Rotation)
 
             VertexArray_bind(triangle_vertexArray);
             Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
             ShaderProgram_activate(triangle_shaderProgram);
 
-            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&mvp);
+            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
             glBindVertexArray(triangle_vertexArray.vertex_array);
 
             glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);

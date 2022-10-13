@@ -1,4 +1,10 @@
-#include "../../common.hpp"
+#pragma once
+
+using vec2 = std::array<float, 2>;
+using vec3 = std::array<float, 3>;
+using vec4 = std::array<float, 4>;
+using mat2x2 = std::array<vec2, 2>;
+using mat4x4 = std::array<vec4, 4>;
 
 namespace triangle {
 
