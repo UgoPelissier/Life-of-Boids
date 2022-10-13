@@ -23,10 +23,7 @@ build:
     - mkdir build
     - cd build
     - conan install ..
-    - cmake \
-    -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \
-    -DCMAKE_BUILD_TYPE="${MODE}" \
-    ..
+    - cmake \ -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \ -DCMAKE_BUILD_TYPE="${MODE}" \ ..
     - cmake --build .
     - ctest 
 
