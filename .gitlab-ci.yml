@@ -41,3 +41,4 @@ test:
   stage: test
   script:
     - test -f build2/src/life-of-boids
+    - whoami
