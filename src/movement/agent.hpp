@@ -10,31 +10,6 @@
 #include "../constants/constant.h"
 #include "obstacle.h"
 
-using vec2 = std::array<float, 2>;
-using vec3 = std::array<float, 3>;
-using vec4 = std::array<float, 4>;
-using mat2x2 = std::array<vec2, 2>;
-using mat4x4 = std::array<vec4, 4>;
-
-inline double modulo(double const& a, double const& b)
-{
-    double mod(a);
-    if (a < 0) {
-        while (mod < 0)
-            mod += b;
-    }
-    else {
-        while (mod >= b)
-            mod -= b;
-    }
-    return mod;
-}
-
-inline vec2 normVector(vec2 const& v) {
-    float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
-    return {v[0]/norm,v[1]/norm};
-}
-
 //====================AGENT CLASS============================
 class Agent {
 private:
@@ -83,6 +58,25 @@ public:
 };
 
 //====================AGENT VECTORS FOR GLOBAL MOTION============================
+inline double modulo(double const& a, double const& b)
+{
+    double mod(a);
+    if (a < 0) {
+        while (mod < 0)
+            mod += b;
+    }
+    else {
+        while (mod >= b)
+            mod -= b;
+    }
+    return mod;
+}
+
+inline vec2 normVector(vec2 const& v) {
+    float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
+    return {v[0]/norm,v[1]/norm};
+}
+
 std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
 void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);

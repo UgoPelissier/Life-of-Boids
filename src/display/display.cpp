@@ -26,6 +26,34 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
     }
 }
 
+vec2 scale(Agent& agent) {
+    return {
+            2 * RATIO * (((Real)(agent.get_x())) / (Real)(WIDTH)) - RATIO,
+            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
+vec2 scale(Agent& agent, Real ratio) {
+    return {
+            2 * ratio * (((Real)(agent.get_x())) / (Real)(WIDTH)) - ratio,
+            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
+vec2 scale(Obstacle& obstacle) {
+    return {
+            2 * RATIO * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - RATIO,
+            2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
+vec2 scale(Obstacle& obstacle, Real ratio) {
+    return {
+            2 * ratio * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - ratio,
+            2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
 std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
     glfwSetErrorCallback(error_callback);
 
@@ -108,65 +136,37 @@ std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<tri
     std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
     std::vector<std::array<triangle::Vertex, 3>> obstacle;
 
-    float x, y;
-    double size;
-    vec3 color;
-
     for (Agent agent : agents) {
-        if (agent.get_predator()) {
-            color = {1., 0., 0.};
-            size = 2 * TRIANGLE_SIZE;
-        }
-        else {
-            color = {1., 1., 1.};
-            size = TRIANGLE_SIZE;
-        }
-
-        x = 2 * RATIO * (((float)(agent.get_x())) / (float)(WIDTH)) - RATIO;
-        y = 2 * (((float)(agent.get_y())) / (float)(HEIGHT)) - 1;
-
-        triangles.push_back(triangle::newTriangle({ x,y }, color, agent.get_angle(), size));
+        if ( agent.get_predator() )
+            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * TRIANGLE_SIZE));
+        else
+            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), TRIANGLE_SIZE));
     }
-
     for (Obstacle obs : obstacles) {
-
-        x = 2 * RATIO * (((float)(obs.get_x())) / (float)(WIDTH)) - RATIO;
-        y = 2 * (((float)(obs.get_y())) / (float)(HEIGHT)) - 1;
-
-        obstacle = triangle::newObstacle({ x,y }, {0., 0., 1.}, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
+        obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
         trianglesObs.push_back(obstacle[0]);
         trianglesObs.push_back(obstacle[1]);
     }
-
     return std::make_tuple(agents, obstacles,triangles, trianglesObs);
 }
 
 void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
-    float ratio = (float)width / (float)height;
+    Real ratio = (Real)width / (Real)height;
 
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    float x, y;
-    double size;
-
     updateAgents(agents, obstacles);
 
-    for (size_t i(0); i<agents.size(); i++) { // Convert positions from [0:WIDTH]*[0:HEIGHT] to [-1:1]*[-1:1]
-
-        x = 2 * ratio * (((float)(agents[i].get_x())) / (float)(WIDTH)) - ratio;
-        y = 2 * (((float)(agents[i].get_y())) / (float)(HEIGHT)) - 1;
-
+    for (size_t i(0); i<agents.size(); i++) {
         if (agents[i].get_predator()) {
-            size = 2 * TRIANGLE_SIZE;
+            triangles[i] = triangle::newTriangle(scale(agents[i], ratio), triangles[i][0].col, agents[i].get_angle(), 2 * TRIANGLE_SIZE);
         }
         else {
-            size = TRIANGLE_SIZE;
+            triangles[i] = triangle::newTriangle(scale(agents[i], ratio), triangles[i][0].col, agents[i].get_angle(), TRIANGLE_SIZE);
         }
-
-        triangles[i] = triangle::newTriangle({ x,y }, triangles[i][0].col, agents[i].get_angle(), size);
     }
 
 }
@@ -174,7 +174,7 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
 void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
-    float ratio = (float)width / (float)height;
+    Real ratio = (Real)width / (Real)height;
 
     Agent newAgent;
     vec3 color;
@@ -193,8 +193,8 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
             agents.push_back(Agent((int) cursorX, HEIGHT - (int) cursorY, 2 * PI * unif(rng), false));
 
             triangles.push_back(triangle::newTriangle(
-                    {2 * ratio * (((float) ((float) cursorX)) / (float) (WIDTH)) - ratio,
-                     2 * (((float) (HEIGHT - (int) cursorY)) / (float) (HEIGHT)) - 1},
+                    {2 * ratio * (((Real) ((Real) cursorX)) / (Real) (WIDTH)) - ratio,
+                     2 * (((Real) (HEIGHT - (int) cursorY)) / (Real) (HEIGHT)) - 1},
                     color,
                     2 * PI * unif(rng),
                     TRIANGLE_SIZE));
@@ -213,8 +213,8 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
             agents.push_back(newAgent);
 
             triangles.push_back(triangle::newTriangle(
-                    {2 * ratio * (((float) ((float) cursorX)) / (float) (WIDTH)) - ratio,
-                     2 * (((float) (HEIGHT - (int) cursorY)) / (float) (HEIGHT)) - 1},
+                    {2 * ratio * (((Real) ((Real) cursorX)) / (Real) (WIDTH)) - ratio,
+                     2 * (((Real) (HEIGHT - (int) cursorY)) / (Real) (HEIGHT)) - 1},
                     color,
                     2 * PI * unif(rng),
                     2 * TRIANGLE_SIZE));
@@ -234,7 +234,7 @@ void updateWindow(GLFWwindow* window,
 
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
-    float ratio = (float)width / (float)height;
+    Real ratio = (Real)width / (Real)height;
 
     mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
 
