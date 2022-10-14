@@ -11,6 +11,7 @@ extern double const PI;
 // Display parameters
 extern const int WIDTH;
 extern const int HEIGHT;
+extern const int MAX_OBSTACLE_SIZE;
 extern const float RATIO;
 extern const double TRIANGLE_SIZE;
 

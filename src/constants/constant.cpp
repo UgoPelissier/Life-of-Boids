@@ -9,6 +9,7 @@ double const PI  = 3.14159265358979323846;
 // Display parameters
 const int WIDTH = 1800;
 const int HEIGHT = 1200;
+const int MAX_OBSTACLE_SIZE = 200;
 const float RATIO = (float)WIDTH / (float)HEIGHT;
 const double TRIANGLE_SIZE = 0.015;
 
