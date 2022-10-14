@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-<<<<<<< HEAD
+
 //====================USEFUL FUNCTIONS================================
 using vec2 = std::array<float, 2>;
 
@@ -30,6 +30,7 @@ bool outside_window(vec2 center, float ratio) {
 std::vector<Agent> initialiaze_agents() {
 
     std::vector<Agent> agents;
+    Agent agent(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0);
 
     int randomX;
     int randomY;
@@ -47,52 +48,45 @@ std::vector<Agent> initialiaze_agents() {
         randomY = uniY(rng);
         randomAngle = 2*PI*unif(rng);
         randomVelocity = unif(rng);
+        agent = Agent(randomX, randomY, randomAngle, SPEED, 1, 0, 0, 0, 0, 0, 0, 0);
+        while (agent.borders().first) {
+            randomX = uniX(rng);
+            randomY = uniY(rng);
+            randomAngle = 2 * PI * unif(rng) - PI;
+
+            agent = Agent(randomX, randomY, randomAngle, SPEED, 1, 0, 0, 0, 0, 0, 0, 0);
+        }
 
         if (i % 5 == 0) {
-            agents.push_back(Agent(randomX, randomY, randomAngle, randomVelocity, 2, RANGE_COHESION_HIGH+50, RANGE_COHESION_LOW-50, RANGE_SEPARATION-20, RANGE_ALIGMENT_HIGH-50, RANGE_ALIGMENT_LOW-30, SPEED*2));
+            agents.push_back(Agent(randomX, randomY, randomAngle, SPEED*2, 2, RANGE_COHESION_HIGH+50, RANGE_COHESION_LOW-50, RANGE_SEPARATION-20, RANGE_ALIGMENT_HIGH-50, RANGE_ALIGMENT_LOW-30, 0, 0));
         }
         else {
-            agents.push_back(Agent(randomX, randomY, randomAngle, randomVelocity, 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, SPEED));
+            agents.push_back(Agent(randomX, randomY, randomAngle, randomVelocity, 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, 0, 0));
         }
 
         
     }
-
     return agents;
 }
-/*
-void update_agents(std::vector<Agent>& agents) {
-    
-    int x, y;
-    for (Agent& agent : agents) {
-        // update x y here
-        agent.update(x, y);
-    }
-}
-*/
+
 //====================USEFUL FUNCTIONS END============================
 
 //===============Agent class functions definitions================
 
-Agent::Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, float speed) {
-=======
-//====================AGENT CLASS============================
-Agent::Agent(int x, int y, double angle, double velocity) {
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
-    m_x = x;
-    m_y = y;
-    m_angle = angle;
-<<<<<<< HEAD
+Agent::Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, std::time_t time, int prey) {
     m_type = type;
     m_cohesion_high = cohesion_high;
     m_cohesion_low = cohesion_low;
     m_separation = separation;
     m_aligment_high = aligment_high;
     m_aligment_low = aligment_low;
-    m_speed = speed;
-=======
     m_velocity = velocity;
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
+    m_angle = angle;
+    m_x = x;
+    m_y = y;
+    m_time = time;
+    m_prey = prey;
+
 }
 
 int& Agent::get_x() {
@@ -107,7 +101,6 @@ double& Agent::get_angle() {
     return m_angle;
 }
 
-<<<<<<< HEAD
 int& Agent::get_type() {
     return m_type;
 }
@@ -132,9 +125,18 @@ int& Agent::get_aligment_low() {
     return m_aligment_low;
 }
 
-float& Agent::get_speed() {
-    return m_speed;
-=======
+double& Agent::get_velocity() {
+    return m_velocity;
+}
+
+std::time_t& Agent::get_time() {
+    return m_time;
+}
+
+int& Agent::get_prey() {
+    return m_prey;
+}
+
 std::pair<bool, double> Agent::borders(){
     bool tooClose(false);
     double opp(0);
@@ -163,7 +165,6 @@ void Agent::borderUpdate(double opp) {
     }
     m_x += (int)round(m_velocity * cos(m_angle));
     m_y += (int)round(m_velocity * sin(m_angle));
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 }
 
 void Agent::update(int x, int y, double angle) {
@@ -171,7 +172,7 @@ void Agent::update(int x, int y, double angle) {
     m_y = y;
     m_angle = angle;
 }
-
+/*
 std::vector<Agent> initialiaze_agents() {
 
     std::vector<Agent> agents;
@@ -204,3 +205,4 @@ std::vector<Agent> initialiaze_agents() {
     }
     return agents;
 }
+*/

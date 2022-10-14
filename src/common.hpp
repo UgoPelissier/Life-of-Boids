@@ -18,7 +18,6 @@ using mat4x4 = std::array<vec4, 4>;
 #define DEFAULT_NUM_AGENTS 150
 #define DEFAULT_TYPE_AGENTS 2
 
-<<<<<<< HEAD
 #define ANGLE_MIN -135
 #define ANGLE_MAX 135
 
@@ -27,10 +26,6 @@ using mat4x4 = std::array<vec4, 4>;
 
 #define WIDTH 2500
 #define HEIGHT 2000 // Window size parameter
-=======
-#define WIDTH 1200
-#define HEIGHT 1000 // Window size parameter
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
 
 #define CLOSE 100 // Border parameter
 
@@ -38,7 +33,6 @@ using mat4x4 = std::array<vec4, 4>;
 
 #define TRIANGLE_SIZE    0.05
 #define PI  3.14159265358979323846
-<<<<<<< HEAD
 
 #define RANGE_SEPARATION 50
 #define RANGE_ALIGMENT_LOW 50
@@ -58,8 +52,7 @@ double distance(vec2 p1, vec2 p2);
 bool overlap(vec2 c, std::vector<vec2> centers);
 bool outside_window(vec2 center, float ratio);
 //====================USEFUL FUNCTIONS END============================
-=======
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
+
 
 //====================AGENT CLASS============================
 class Agent {
@@ -74,21 +67,24 @@ private:
     int m_separation;
     int m_aligment_high;
     int m_aligment_low;
-    float m_speed;
+    time_t m_time;
+    int m_prey;
 
 public:
-	Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, float speed);
+	Agent(int x, int y, double angle, double velocity, int type, int cohesion_high, int cohesion_low, int separation, int aligment_high, int aligment_low, std::time_t time, int prey);
 
     int& get_x();
     int& get_y();
     double& get_angle();
+    double& get_velocity();
     int& get_type();
     int& get_cohesion_high();
     int& get_cohesion_low();
     int& get_separation();
     int& get_aligment_high();
     int& get_aligment_low();
-    float& get_speed();
+    std::time_t& get_time();
+    int& get_prey();
 
     std::pair<bool, double> borders();
 

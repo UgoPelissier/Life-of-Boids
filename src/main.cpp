@@ -126,11 +126,7 @@ int main() {
 
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
         law_function(agents);
         
         for (size_t i(0); i < agents.size(); i++) {
@@ -144,13 +140,9 @@ int main() {
         if (add) { // Add new triangle to the window
             randomColor = { float(unif(rng)), float(unif(rng)), float(unif(rng)) };
 
-<<<<<<< HEAD
             std::cout << (int)xpos << " " << HEIGHT - (int)ypos << std::endl;
 
-            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng), 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, SPEED));
-=======
-            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng)));
->>>>>>> 374bdf403c9c81a9ca21cffbfdc1f4bf4de6270e
+            agents.push_back(Agent((int)xpos, HEIGHT - (int)ypos, 2 * PI * unif(rng), unif(rng), 1, RANGE_COHESION_HIGH, RANGE_COHESION_LOW, RANGE_SEPARATION, RANGE_ALIGMENT_HIGH, RANGE_ALIGMENT_LOW, 0, 0));
 
             triangles.push_back(triangle::newTriangle({ 2 * ratio * (((float)((float)xpos)) / (float)(WIDTH)) - ratio , 2 * (((float)(HEIGHT - (int)ypos)) / (float)(HEIGHT)) - 1 },
                 randomColor,
