@@ -151,6 +151,8 @@ std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<tri
 }
 
 void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+    triangles = {};
+
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     Real ratio = (Real)width / (Real)height;
@@ -158,14 +160,14 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    updateAgents(agents, obstacles);
+    agents = updateAgents(agents, obstacles);
 
     for (size_t i(0); i<agents.size(); i++) {
         if (agents[i].get_predator()) {
-            triangles[i] = triangle::newTriangle(scale(agents[i], ratio), triangles[i][0].col, agents[i].get_angle(), 2 * TRIANGLE_SIZE);
+            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), PRED_COLOR, agents[i].get_angle(), 2 * TRIANGLE_SIZE));
         }
         else {
-            triangles[i] = triangle::newTriangle(scale(agents[i], ratio), triangles[i][0].col, agents[i].get_angle(), TRIANGLE_SIZE);
+            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), BIRD_COLOR, agents[i].get_angle(), TRIANGLE_SIZE));
         }
     }
 
@@ -175,48 +177,33 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     Real ratio = (Real)width / (Real)height;
-
     Agent newAgent;
-    vec3 color;
-
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::mt19937_64 rng;
 
     if (addBird) { // Add new bird to the window
-        color = {1., 1., 1.};
-
-        newAgent = Agent((int)cursorX, HEIGHT - (int)cursorY, 2 * PI * unif(rng), false);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(rng), false);
         newAgent.obstacle(obstacles);
-
         if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-
-            agents.push_back(Agent((int) cursorX, HEIGHT - (int) cursorY, 2 * PI * unif(rng), false));
-
+            agents.push_back(newAgent);
             triangles.push_back(triangle::newTriangle(
-                    {2 * ratio * (((Real) ((Real) cursorX)) / (Real) (WIDTH)) - ratio,
-                     2 * (((Real) (HEIGHT - (int) cursorY)) / (Real) (HEIGHT)) - 1},
-                    color,
-                    2 * PI * unif(rng),
+                    scale(newAgent, ratio),
+                    BIRD_COLOR,
+                    newAgent.get_angle(),
                     TRIANGLE_SIZE));
         }
         addBird = false;
     }
 
     if (addPredator) { // Add new predator to the window
-        color = {1., 0., 0.};
-
-        newAgent = Agent((int)cursorX, HEIGHT - (int)cursorY, 2 * PI * unif(rng), true);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(rng), true);
         newAgent.obstacle(obstacles);
-
         if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-
             agents.push_back(newAgent);
-
             triangles.push_back(triangle::newTriangle(
-                    {2 * ratio * (((Real) ((Real) cursorX)) / (Real) (WIDTH)) - ratio,
-                     2 * (((Real) (HEIGHT - (int) cursorY)) / (Real) (HEIGHT)) - 1},
-                    color,
-                    2 * PI * unif(rng),
+                    scale(newAgent, ratio),
+                    PRED_COLOR,
+                    newAgent.get_angle(),
                     2 * TRIANGLE_SIZE));
         }
         addPredator = false;

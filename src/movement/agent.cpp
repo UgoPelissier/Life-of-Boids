@@ -7,6 +7,7 @@ Agent::Agent() {
     m_angle = 0;
     m_predator = false;
     m_obstacle = false;
+    m_alive = true;
 }
 
 Agent::Agent(double const& x, double const& y) {
@@ -15,6 +16,7 @@ Agent::Agent(double const& x, double const& y) {
     m_angle = 0;
     m_predator = false;
     m_obstacle = false;
+    m_alive = true;
 }
 
 Agent::Agent(double const& x, double const& y, double const& angle, bool const& predator) {
@@ -23,6 +25,7 @@ Agent::Agent(double const& x, double const& y, double const& angle, bool const& 
     m_angle = angle;
     m_predator = predator;
     m_obstacle = false;
+    m_alive = true;
 }
 
 double& Agent::get_x() {
@@ -43,6 +46,10 @@ bool& Agent::get_predator() {
 
 bool& Agent::get_obstacle() {
     return m_obstacle;
+}
+
+bool& Agent::get_alive() {
+    return m_alive;
 }
 
 double Agent::distance(Agent a) {
@@ -67,6 +74,9 @@ std::vector<std::vector<size_t>> Agent::neighbours(size_t const& index, std::vec
             else {
                 if (this->distance(agents[i]) < PREDATOR) {
                     predators.push_back(i);
+                    if (this->distance(agents[i]) < DEAD) {
+                        m_alive = false;
+                    }
                 }
             }
         }
@@ -132,7 +142,7 @@ std::vector<size_t> Agent::obstacle(std::vector<Obstacle>& obstacles) {
     m_obstacle = false;
     std::vector<size_t> neighboursObstacles;
     for (size_t i(0); i < obstacles.size(); i++) {
-        if ( this->distance(Agent(obstacles[i].get_x(),obstacles[i].get_y())) < std::max(obstacles[i].get_height()/1.5,obstacles[i].get_width()/1.5) ) {
+        if ( this->distance(Agent(obstacles[i].get_x(),obstacles[i].get_y())) < std::max(obstacles[i].get_height()/1.25,obstacles[i].get_width()/1.25) ) {
             m_obstacle = true;
             neighboursObstacles.push_back(i);
         }
@@ -204,8 +214,8 @@ void Agent::predatorLaw(size_t& index, std::vector<Agent>& agents) {
 
     m_angle = (1-SMOOTH_PREDATOR)*atan2(target[1],target[0]) + SMOOTH_PREDATOR*m_angle;
 
-    m_x += (2*SPEED/3) * cos(m_angle);
-    m_y += (2*SPEED/3) * sin(m_angle);
+    m_x += PRED_SPEED * cos(m_angle);
+    m_y += PRED_SPEED * sin(m_angle);
 }
 
 void Agent::obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles) {
@@ -331,9 +341,15 @@ void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles
     }
 }
 
-void updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
+std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
+    std::vector<Agent> newAgents;
     checkObstacles(agents, obstacles);
     for (size_t i(0); i < agents.size(); i++) {
         agents[i].updateAgent(i, agents, obstacles);
     }
+    for (Agent& agent : agents) {
+        if ( agent.get_predator() || agent.get_alive() )
+            newAgents.push_back(agent);
+    }
+    return newAgents;
 }

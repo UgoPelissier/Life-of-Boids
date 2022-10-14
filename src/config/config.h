@@ -17,10 +17,8 @@ extern const size_t  DEFAULT_NUM_PREDATORS;
 extern const size_t  DEFAULT_NUM_OBSTACLES;
 extern const Real CLOSE;
 extern const Real SPEED;
+extern const Real PRED_SPEED;
 extern const Real PI;
-extern const vec3 PRED_COLOR;
-extern const vec3 BIRD_COLOR;
-extern const vec3 OBSTACLE_COLOR;
 
 // Display parameters
 extern const int WIDTH;
@@ -28,9 +26,13 @@ extern const int HEIGHT;
 extern const int MAX_OBSTACLE_SIZE;
 extern const Real RATIO;
 extern const Real TRIANGLE_SIZE;
+extern const vec3 PRED_COLOR;
+extern const vec3 BIRD_COLOR;
+extern const vec3 OBSTACLE_COLOR;
 
 // Laws parameters
 extern const Real SEPARATION;
+extern const Real DEAD;
 extern const Real ALIGNMENT;
 extern const Real COHESION;
 extern const Real PREDATOR;

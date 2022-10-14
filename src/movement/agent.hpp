@@ -18,6 +18,7 @@ private:
     double m_angle;
     bool m_predator;
     bool m_obstacle;
+    bool m_alive;
 
 public:
     Agent();
@@ -29,6 +30,7 @@ public:
     double& get_angle();
     bool& get_predator();
     bool& get_obstacle();
+    bool& get_alive();
 
     double distance(Agent a);
     std::vector<std::vector<size_t>> neighbours(size_t const& index, std::vector<Agent>& agents);
@@ -52,6 +54,8 @@ public:
     void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void predatorLaw(size_t& index, std::vector<Agent>& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
+
+
 
     void updateAgent(size_t& index, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
@@ -81,4 +85,4 @@ std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
 void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
-void updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
