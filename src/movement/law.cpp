@@ -82,11 +82,19 @@ bool verify_angle(Agent& agent_current, Agent& agent_neighbour) {
 		return true;
 	}
 	if ((distance_x == 0 || distance_y == 0)) {
-		// if (distance_agent(agent_current, agent_neighbour) > distance_agent(agent_current, agent_neighbour) )
-		return false;
+		Agent next_current_agent(agent_current.get_x() + round(SPEED * cos(agent_current.get_angle())), 
+			agent_current.get_y() + round(SPEED * cos(agent_current.get_angle())), 0, 0);
+		Agent next_neighbour_agent(agent_neighbour.get_x() + round(SPEED * cos(agent_neighbour.get_angle())),
+			agent_neighbour.get_y() + round(SPEED * cos(agent_neighbour.get_angle())), 0, 0);
+		if (distance_agent(agent_current, agent_neighbour) > distance_agent(next_current_agent, next_neighbour_agent)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	double angle = abs(asin(distance_y / distance_x)) + agent_current.get_angle();
-	std::cout << "angle " << angle << std::endl;
+	//std::cout << "angle " << angle << std::endl;
 	return angle < degree2radian(ANGLE_MAX);
 }
 
@@ -101,9 +109,10 @@ void law_function(std::vector<Agent>& vect_agent) {
 		vec_cohesion = {};
 		vec_aligment = {};
 		for (int j = 0; j < vect_agent.size(); j++) {
+			double distance = distance_agent(vect_agent[i], vect_agent[j]);
 			//if (true) {
 			if (verify_angle(vect_agent[i], vect_agent[j])) {
-				double distance = distance_agent(vect_agent[i], vect_agent[j]);
+				
 				if (distance < RANGE_SEPARATION) {
 					vec_separation.push_back(j);
 				}
@@ -115,8 +124,8 @@ void law_function(std::vector<Agent>& vect_agent) {
 				}
 			}
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		pilot(i, vec_separation, vec_cohesion, vec_aligment, vect_agent);
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(20));
 }

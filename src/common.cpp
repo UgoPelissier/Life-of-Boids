@@ -49,14 +49,14 @@ std::vector<Agent> initialiaze_agents() {
         if (i == 0) {
             randomX = (int) WIDTH / 2;
             randomY = (int) HEIGHT / 2;
-            randomAngle = 0;
+            randomAngle = 2;
         }
         else {
-            randomX = (int) WIDTH / 2 + 300;
-            randomY = (int) HEIGHT / 2 ;
-            randomAngle = 3.2;
+            randomX = (int) WIDTH / 2 -200;
+            randomY = (int) HEIGHT / 2 +200;
+            randomAngle = 5.7;
 
-        } 
+        }  
 
         agents.push_back(Agent(randomX,randomY,randomAngle, randomVelocity));
     }
