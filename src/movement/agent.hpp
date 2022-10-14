@@ -7,7 +7,7 @@
 #include <iostream>
 #include <random>
 #include "../main.h"
-#include "../constants/constant.h"
+#include "../config/config.h"
 #include "obstacle.h"
 
 //====================AGENT CLASS============================

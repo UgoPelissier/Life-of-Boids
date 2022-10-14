@@ -1,4 +1,4 @@
-#include "constant.h"
+#include "config.h"
 
 const size_t DEFAULT_NUM_AGENTS = 500;
 const size_t DEFAULT_NUM_PREDATORS = 3;

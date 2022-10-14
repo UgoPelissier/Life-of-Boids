@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
-#include "../constants/constant.h"
+#include "../config/config.h"
 
 class Obstacle {
 private :

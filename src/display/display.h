@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../constants/constant.h"
+#include "../config/config.h"
 #include "../movement/agent.hpp"
 #include "../movement/obstacle.h"
 #include <glad/glad.h>
