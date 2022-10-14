@@ -115,6 +115,7 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orienta
 
     float x0 = center[0];
     float y0 = center[1];
+
     float x1 = x0+l;
     float y1 = y0;
 
@@ -134,6 +135,42 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, double orienta
     triangle = rotate(triangle, orientation, center);
 
     return triangle;
+}
+
+inline std::vector<std::array<Vertex, 3>> newObstacle(vec2 center, vec3 color, double h, double w) {
+
+    std::vector<std::array<Vertex, 3>> obs;
+
+    float x0 = center[0];
+    float y0 = center[1];
+
+    float x1 = x0-(w/2);
+    float y1 = y0+(h/2);
+
+    float x2 = x0-(w/2);
+    float y2 = y0-(h/2);
+
+    float x3 = x0+(w/2);
+    float y3 = y0-(h/2);
+
+    obs.push_back({{
+            // (position 2d + color 3d pack)
+            {{x1, y1}, color},  //
+            {{x2, y2}, color},  //
+            {{x3, y3}, color}   //
+        }});
+
+    x2 = x0+(w/2);
+    y2 = y0+(h/2);
+
+    obs.push_back({{
+                           // (position 2d + color 3d pack)
+                           {{x1, y1}, color},  //
+                           {{x2, y2}, color},  //
+                           {{x3, y3}, color}   //
+                   }});
+
+    return obs;
 }
 
 static const char* const vertex_shader_text

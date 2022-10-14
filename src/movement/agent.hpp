@@ -8,6 +8,7 @@
 #include <random>
 #include "../main.h"
 #include "../constants/constant.h"
+#include "obstacle.h"
 
 using vec2 = std::array<float, 2>;
 using vec3 = std::array<float, 3>;
@@ -41,50 +42,49 @@ private:
     double m_y;
     double m_angle;
     bool m_predator;
-    bool m_border;
-    double m_opp;
+    bool m_obstacle;
 
 public:
     Agent();
-	Agent(double x, double y, double angle, bool predator);
+    Agent(double const& x, double const& y);
+	Agent(double const& x, double const& y, double const& angle, bool const& predator);
 
     double& get_x();
     double& get_y();
     double& get_angle();
     bool& get_predator();
-    bool& get_border();
-    double& get_opp();
+    bool& get_obstacle();
 
     double distance(Agent a);
-    std::vector<std::vector<size_t>> neighbours(size_t& index, std::vector<Agent>& agents);
-    std::vector<size_t> predatorNeighbours(size_t& index, std::vector<Agent>& agents);
-    size_t closerAgent(size_t& index, std::vector<Agent>& agents);
+    std::vector<std::vector<size_t>> neighbours(size_t const& index, std::vector<Agent>& agents);
+    std::vector<size_t> predatorNeighbours(size_t const& index, std::vector<Agent>& agents);
+    size_t closerAgent(size_t const& index, std::vector<Agent>& agents);
 
     bool equal(Agent& a);
     bool overlap(Agent const& a);
     bool overlap(std::vector<Agent>& agents);
 
-    void borders();
-    void borderNeighbour(size_t  const& index, std::vector<Agent> agents);
+    std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
 
-    void borderUpdate(double const& opp);
     void windowUpdate();
     void constantUpdate();
 
-    vec3 center(std::vector<Agent> agents, std::vector<size_t> neighbours);
+    vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours);
     vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void predatorLaw(size_t& index, std::vector<Agent>& agents);
+    void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
 
-    void updateAgent(size_t& index, std::vector<Agent>& agents);
+    void updateAgent(size_t& index, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
 };
 
 //====================AGENT VECTORS FOR GLOBAL MOTION============================
-std::vector<Agent> initialiaze_agents();
+std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
-void checkBorders(std::vector<Agent>& agents);
+void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
-void updateAgents(std::vector<Agent>& agents);
+void updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);

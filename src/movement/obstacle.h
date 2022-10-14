@@ -24,7 +24,11 @@ public:
     double& get_height();
     double& get_width();
 
+    bool borders();
+
     bool equal(Obstacle& a);
 };
 
 Obstacle randomObstacle();
+
+std::vector<Obstacle> initObstacles();

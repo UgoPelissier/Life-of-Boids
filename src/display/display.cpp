@@ -26,7 +26,7 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
     }
 }
 
-std::tuple<GLFWwindow*, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
+std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
@@ -59,15 +59,18 @@ std::tuple<GLFWwindow*, VertexArray, Buffer, ShaderProgram, GLint> initWindow() 
     ShaderProgram triangle_shaderProgram
             = ShaderProgram_new(triangle::vertex_shader_text, triangle::fragment_shader_text);
     VertexArray triangle_vertexArray = VertexArray_new();
+
+    const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
+    const GLint vpos_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vPos");
+    const GLint vcol_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vCol");
+
+    // Agent triangle
+    //New
     Buffer triangle_buffer = Buffer_new();
     // Init
     VertexArray_bind(triangle_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
     ShaderProgram_activate(triangle_shaderProgram);
-
-    const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
-    const GLint vpos_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vPos");
-    const GLint vcol_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vCol");
 
     glVertexAttribPointer(
             vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, pos));
@@ -76,16 +79,35 @@ std::tuple<GLFWwindow*, VertexArray, Buffer, ShaderProgram, GLint> initWindow() 
     glEnableVertexAttribArray(vpos_location);
     glEnableVertexAttribArray(vcol_location);
 
-    return std::make_tuple(window, triangle_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
+    // Obstacle triangle
+    //New
+    VertexArray triangleObs_vertexArray = VertexArray_new();
+    // Init
+    VertexArray_bind(triangleObs_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glVertexAttribPointer(
+            vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, pos));
+    glVertexAttribPointer(
+            vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, col));
+    glEnableVertexAttribArray(vpos_location);
+    glEnableVertexAttribArray(vcol_location);
+
+    return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
 }
 
-std::tuple<std::vector<Agent>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
+std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
-    std::vector<Agent> agents = initialiaze_agents();
+    std::vector<Obstacle> obstacles = initObstacles();
+    std::vector<Agent> agents = initialiaze_agents(obstacles);
 
     std::vector<std::array<triangle::Vertex, 3>> triangles;
+    std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
+    std::vector<std::array<triangle::Vertex, 3>> obstacle;
+
     float x, y;
     double size;
     vec3 color;
@@ -105,10 +127,21 @@ std::tuple<std::vector<Agent>, std::vector<std::array<triangle::Vertex, 3>>> ini
 
         triangles.push_back(triangle::newTriangle({ x,y }, color, agent.get_angle(), size));
     }
-    return std::make_tuple(agents, triangles);
+
+    for (Obstacle obs : obstacles) {
+
+        x = 2 * RATIO * (((float)(obs.get_x())) / (float)(WIDTH)) - RATIO;
+        y = 2 * (((float)(obs.get_y())) / (float)(HEIGHT)) - 1;
+
+        obstacle = triangle::newObstacle({ x,y }, {0., 0., 1.}, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
+        trianglesObs.push_back(obstacle[0]);
+        trianglesObs.push_back(obstacle[1]);
+    }
+
+    return std::make_tuple(agents, obstacles,triangles, trianglesObs);
 }
 
-void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     float ratio = (float)width / (float)height;
@@ -119,7 +152,7 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
     float x, y;
     double size;
 
-    updateAgents(agents);
+    updateAgents(agents, obstacles);
 
     for (size_t i(0); i<agents.size(); i++) { // Convert positions from [0:WIDTH]*[0:HEIGHT] to [-1:1]*[-1:1]
 
@@ -138,7 +171,7 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
 
 }
 
-void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     float ratio = (float)width / (float)height;
@@ -153,9 +186,9 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
         color = {1., 1., 1.};
 
         newAgent = Agent((int)cursorX, HEIGHT - (int)cursorY, 2 * PI * unif(rng), false);
-        newAgent.borders();
+        newAgent.obstacle(obstacles);
 
-        if ( !newAgent.get_border() && !newAgent.overlap(agents) ) {
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
 
             agents.push_back(Agent((int) cursorX, HEIGHT - (int) cursorY, 2 * PI * unif(rng), false));
 
@@ -173,9 +206,9 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
         color = {1., 0., 0.};
 
         newAgent = Agent((int)cursorX, HEIGHT - (int)cursorY, 2 * PI * unif(rng), true);
-        newAgent.borders();
+        newAgent.obstacle(obstacles);
 
-        if ( !newAgent.get_border() && !newAgent.overlap(agents) ) {
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
 
             agents.push_back(newAgent);
 
@@ -192,7 +225,9 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
 
 void updateWindow(GLFWwindow* window,
                   std::vector<std::array<triangle::Vertex, 3>>& triangles,
+                  std::vector<std::array<triangle::Vertex, 3>>& trianglesObs,
                   VertexArray& triangle_vertexArray,
+                  VertexArray& triangleObs_vertexArray,
                   Buffer& triangle_buffer,
                   ShaderProgram& triangle_shaderProgram,
                   GLint& mvp_location) {
@@ -213,6 +248,17 @@ void updateWindow(GLFWwindow* window,
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
     glBufferData(GL_ARRAY_BUFFER, 3 * triangles.size() * sizeof(triangle::Vertex), triangles.data(), GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 3 * triangles.size());
+
+    VertexArray_bind(triangleObs_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangleObs_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesObs.size() * sizeof(triangle::Vertex), trianglesObs.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesObs.size());
 
     glfwSetWindowTitle(window, "Life of boids"); // Set window title
 
