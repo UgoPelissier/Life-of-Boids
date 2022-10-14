@@ -1,0 +1,1 @@
+add_library(constant constant.cpp constant.h)
