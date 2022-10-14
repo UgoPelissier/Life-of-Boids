@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include "../main.h"
 
 using vec2 = std::array<float, 2>;
 using vec3 = std::array<float, 3>;
@@ -15,29 +16,30 @@ using mat4x4 = std::array<vec4, 4>;
 
 //====================DEFAULT PARAMETERS==================
 // Agent parameters
-#define DEFAULT_NUM_AGENTS 200
-#define DEFAULT_NUM_PREDATORS 2
-#define CLOSE 50
-#define SPEED 2
-#define PI  3.14159265358979323846
+static size_t const DEFAULT_NUM_AGENTS = 200;
+static size_t const DEFAULT_NUM_PREDATORS = 2;
+static double const CLOSE = 50;
+static double const SPEED = 2;
+static double const PI  = 3.14159265358979323846;
 
 // Display parameters
-#define WIDTH 1800
-#define HEIGHT 1200
-#define TRIANGLE_SIZE   0.015
+static const int WIDTH = 1800;
+static const int HEIGHT = 1200;
+static const float RATIO = (float)WIDTH / (float)HEIGHT;
+static const double TRIANGLE_SIZE = 0.015;
 
 // Laws parameters
 static double const SEPARATION = TRIANGLE_SIZE*WIDTH;
 static double const ALIGNMENT = 2*SEPARATION;
-#define PREDATOR 50
-#define COHESION 200
+static double const PREDATOR = 50;
+static double const COHESION = 200;
 
-#define SMOOTH_ALIGNMENT 0.25
-#define SMOOTH_COHESION 0.5
+static double const SMOOTH_ALIGNMENT = 0.25;
+static double const SMOOTH_COHESION = 0.5;
 
-#define TURN_AROUND false
+static bool const TURN_AROUND = false;
 
-inline double modulo(double a, double b)
+inline double modulo(double const& a, double const& b)
 {
     double mod(a);
     if (a < 0) {
@@ -51,7 +53,7 @@ inline double modulo(double a, double b)
     return mod;
 }
 
-inline vec2 normVector(vec2 v) {
+inline vec2 normVector(vec2 const& v) {
     float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
     return {v[0]/norm,v[1]/norm};
 }
@@ -78,29 +80,29 @@ public:
     double& get_opp();
 
     double distance(Agent a);
-    std::vector<std::vector<size_t>> neighbours(size_t index, std::vector<Agent> agents);
-    std::vector<size_t> predatorNeighbours(size_t index, std::vector<Agent> agents);
-    size_t closerAgent(size_t index, std::vector<Agent> agents);
+    std::vector<std::vector<size_t>> neighbours(size_t& index, std::vector<Agent>& agents);
+    std::vector<size_t> predatorNeighbours(size_t& index, std::vector<Agent>& agents);
+    size_t closerAgent(size_t& index, std::vector<Agent>& agents);
 
-    bool equal(Agent a);
-    bool overlap(Agent a);
-    bool overlap(std::vector<Agent> agents);
+    bool equal(Agent& a);
+    bool overlap(Agent const& a);
+    bool overlap(std::vector<Agent>& agents);
 
     void borders();
-    void borderNeighbour(size_t index, std::vector<Agent> agents);
+    void borderNeighbour(size_t  const& index, std::vector<Agent> agents);
 
-    void borderUpdate(double opp);
+    void borderUpdate(double const& opp);
     void windowUpdate();
     void constantUpdate();
 
     vec3 center(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    vec3 centerSeparation(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void cohesionLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void alignmentLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void separationLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void predatorLaw(size_t index, std::vector<Agent> agents);
+    vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void predatorLaw(size_t& index, std::vector<Agent>& agents);
 
-    void updateAgent(size_t index, std::vector<Agent> agents);
+    void updateAgent(size_t& index, std::vector<Agent>& agents);
 
 };
 
