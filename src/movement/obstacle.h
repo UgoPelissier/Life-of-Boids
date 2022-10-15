@@ -10,19 +10,19 @@
 
 class Obstacle {
 private :
-    double m_x;
-    double m_y;
-    double m_height;
-    double m_width;
+    Real m_x;
+    Real m_y;
+    Real m_height;
+    Real m_width;
 
 public:
     Obstacle();
-    Obstacle(double const& x, double const& y, double const& height, double const& width);
+    Obstacle(Real const& x, Real const& y, Real const& height, Real const& width);
 
-    double& get_x();
-    double& get_y();
-    double& get_height();
-    double& get_width();
+    Real& get_x();
+    Real& get_y();
+    Real& get_height();
+    Real& get_width();
 
     bool borders();
 

@@ -13,32 +13,34 @@
 //====================AGENT CLASS============================
 class Agent {
 private:
-    double m_x;
-    double m_y;
-    double m_angle;
+    Real m_x;
+    Real m_y;
+    Real m_angle;
     bool m_predator;
     bool m_obstacle;
     bool m_alive;
 
 public:
     Agent();
-    Agent(double const& x, double const& y);
-	Agent(double const& x, double const& y, double const& angle, bool const& predator);
+    Agent(Real const& x, Real const& y);
+	Agent(Real const& x, Real const& y, Real const& angle, bool const& predator);
 
-    double& get_x();
-    double& get_y();
-    double& get_angle();
+    Real& get_x();
+    Real& get_y();
+    Real& get_angle();
     bool& get_predator();
     bool& get_obstacle();
     bool& get_alive();
 
-    double distance(Agent a);
+    Real distance(Agent a);
+    Real angle (Agent& a);
+    bool insideFieldView(Agent& a);
     std::vector<std::vector<size_t>> neighbours(size_t const& index, std::vector<Agent>& agents);
     std::vector<size_t> predatorNeighbours(size_t const& index, std::vector<Agent>& agents);
     size_t closerAgent(size_t const& index, std::vector<Agent>& agents);
 
     bool equal(Agent& a);
-    bool overlap(Agent const& a);
+    bool overlap(Agent& a);
     bool overlap(std::vector<Agent>& agents);
 
     std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
@@ -62,9 +64,9 @@ public:
 };
 
 //====================AGENT VECTORS FOR GLOBAL MOTION============================
-inline double modulo(double const& a, double const& b)
+inline Real modulo(Real const& a, Real const& b)
 {
-    double mod(a);
+    Real mod(a);
     if (a < 0) {
         while (mod < 0)
             mod += b;
@@ -79,6 +81,13 @@ inline double modulo(double const& a, double const& b)
 inline vec2 normVector(vec2 const& v) {
     float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
     return {v[0]/norm,v[1]/norm};
+}
+
+inline Real angleVector(vec2 v1, vec2 v2) {
+    Real dot = v1[0]*v2[0] + v1[1]*v2[1];
+    Real det = v1[0]*v2[1] - v1[1]*v2[0];
+    Real angle = atan2(det, dot);
+    return angle;
 }
 
 std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);

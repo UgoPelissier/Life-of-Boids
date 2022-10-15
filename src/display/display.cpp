@@ -138,9 +138,9 @@ std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<tri
 
     for (Agent agent : agents) {
         if ( agent.get_predator() )
-            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * TRIANGLE_SIZE));
+            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
         else
-            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), TRIANGLE_SIZE));
+            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
     }
     for (Obstacle obs : obstacles) {
         obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
@@ -164,10 +164,10 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
 
     for (size_t i(0); i<agents.size(); i++) {
         if (agents[i].get_predator()) {
-            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), PRED_COLOR, agents[i].get_angle(), 2 * TRIANGLE_SIZE));
+            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), PRED_COLOR, agents[i].get_angle(), 2 * BODY_SIZE));
         }
         else {
-            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), BIRD_COLOR, agents[i].get_angle(), TRIANGLE_SIZE));
+            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), BIRD_COLOR, agents[i].get_angle(), BODY_SIZE));
         }
     }
 
@@ -190,7 +190,7 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
                     scale(newAgent, ratio),
                     BIRD_COLOR,
                     newAgent.get_angle(),
-                    TRIANGLE_SIZE));
+                    BODY_SIZE));
         }
         addBird = false;
     }
@@ -204,7 +204,7 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
                     scale(newAgent, ratio),
                     PRED_COLOR,
                     newAgent.get_angle(),
-                    2 * TRIANGLE_SIZE));
+                    2 * BODY_SIZE));
         }
         addPredator = false;
     }

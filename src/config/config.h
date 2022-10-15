@@ -5,9 +5,9 @@
 #include <cmath>
 
 using Real = float;
-using vec2 = std::array<float, 2>;
-using vec3 = std::array<float, 3>;
-using vec4 = std::array<float, 4>;
+using vec2 = std::array<Real, 2>;
+using vec3 = std::array<Real, 3>;
+using vec4 = std::array<Real, 4>;
 using mat2x2 = std::array<vec2, 2>;
 using mat4x4 = std::array<vec4, 4>;
 
@@ -19,26 +19,27 @@ extern const Real CLOSE;
 extern const Real SPEED;
 extern const Real PRED_SPEED;
 extern const Real PI;
+extern const Real VIEW_RANGE;
 
 // Display parameters
 extern const int WIDTH;
 extern const int HEIGHT;
 extern const int MAX_OBSTACLE_SIZE;
 extern const Real RATIO;
-extern const Real TRIANGLE_SIZE;
+extern const Real BODY_SIZE;
 extern const vec3 PRED_COLOR;
 extern const vec3 BIRD_COLOR;
 extern const vec3 OBSTACLE_COLOR;
 
 // Laws parameters
-extern const Real SEPARATION;
-extern const Real DEAD;
-extern const Real ALIGNMENT;
-extern const Real COHESION;
-extern const Real PREDATOR;
+extern const Real SEPARATION_RANGE;
+extern const Real DEAD_RANGE;
+extern const Real ALIGNMENT_RANGE;
+extern const Real COHESION_RANGE;
+extern const Real PREDATOR_RANGE;
 
-extern const Real SMOOTH_SEPARATION;
-extern const Real SMOOTH_ALIGNMENT;
-extern const Real SMOOTH_COHESION;
-extern const Real SMOOTH_PREDATOR;
-extern const Real SMOOTH_OBSTACLE;
+extern const Real SEPARATION_RELAXATION;
+extern const Real ALIGNMENT_RELAXATION;
+extern const Real COHESION_RELAXATION;
+extern const Real PREDATOR_RELAXATION;
+extern const Real OBSTACLE_RELAXATION;
