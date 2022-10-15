@@ -57,7 +57,7 @@ Real Agent::distance(Agent a) {
 }
 
 Real Agent::angle(Agent& a) {
-    vec2 v1 = {cos(m_angle),sin(m_angle)};
+    vec2 v1 = {(Real)cos(m_angle),(Real)sin(m_angle)};
     vec2 v2 = normVector({a.get_x()-m_x,a.get_y()-m_y});
     Real angle = angleVector(v1,v2);
     return angle;
