@@ -54,7 +54,7 @@ cmake --build .
 - Save the changes.
 - Choose the .exe as the item of execution with green play button at the center top.
 - Et Voila!
-- 
+
 ### CLion (MacOS)
 - Open the project in CLion
 - Let the default parameters of the Open Project Wizard window and click Ok
@@ -63,3 +63,11 @@ cmake --build .
 
 
 **Note: Make sure to update .gitignore file to avoid pushing large or unecessary files on the repository.
+
+## Parameters
+The parameters of the project are defined in ```config/config.cpp``` and can be changed by the user.
+
+The 3 main parameters that the user can change are:
+- The number of birds const ```DEFAULT_NUM_AGENTS```
+- The number of predators ```DEFAULT_NUM_PREDATORS```
+- The number of obstacles ```DEFAULT_NUM_OBSTACLES```
