@@ -36,6 +36,13 @@ inline std::array<Vertex, 3> rotate(std::array<Vertex, 3> triangle, Real angle, 
     return triangle;
 }
 
+inline vec2 center(std::array<Vertex, 3> triangle) {
+    return {
+            (triangle[0].pos[0] + triangle[1].pos[0] + triangle[2].pos[0])/3,
+            (triangle[0].pos[1] + triangle[1].pos[1] + triangle[2].pos[1])/3,
+    };
+}
+
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientation, Real a) {
     Real b = a/2;
     Real h = a*std::sqrt(5)/3;
