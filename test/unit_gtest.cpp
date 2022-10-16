@@ -68,7 +68,7 @@ TEST(Initialization, Position) {
     vec2 center = scale(agents[i]);
 
     EXPECT_NEAR(center[0], triangle::center(triangles[i])[0],1e-6) << "Agent is not well located from the pixel grid [0:WIDTH]*[0:HEIGHT] to the OpenGL grid [-1:1]*[-1:1]";
-    EXPECT_NEAR(center[1], triangle::center(triangles[i])[1],1e-6) << "";
+    EXPECT_NEAR(center[1], triangle::center(triangles[i])[1],1e-6) << "Agent is not well located from the pixel grid [0:WIDTH]*[0:HEIGHT] to the OpenGL grid [-1:1]*[-1:1]";
 }
 
 }  // namespace
