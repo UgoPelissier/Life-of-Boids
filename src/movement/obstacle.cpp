@@ -30,51 +30,17 @@ Real& Obstacle::get_width() {
     return m_width;
 }
 
-bool Obstacle::borders(){
-    if ( m_x<CLOSE ) {
+bool Obstacle::borders() const{
+    if (m_x < CLOSE)
         return true;
-    }
-    else if ( (WIDTH-CLOSE<m_x) && (m_x<WIDTH) ) {
+    else if ((WIDTH - CLOSE < m_x) && (m_x < WIDTH)) {
         return true;
-    }
-    else if ( m_y<CLOSE ) {
+    } else if (m_y < CLOSE) {
         return true;
-    }
-    else if ( (HEIGHT-CLOSE<m_y) && (m_y<HEIGHT) ) {
+    } else if ((HEIGHT - CLOSE < m_y) && (m_y < HEIGHT)) {
         return true;
     }
     return false;
-}
-
-bool Obstacle::equal(Obstacle& a) {
-    if (m_x == a.get_x() && m_y == a.get_y() && m_height == a.get_height() && m_width == a.get_width()) {
-        return true;
-    }
-    return false;
-}
-
-Obstacle randomObstacle() {
-    Obstacle obstacle;
-
-    int randomX;
-    int randomY;
-    int randomHeight;
-    int randomWidth;
-
-    std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::uniform_int_distribution uniX(0, WIDTH);
-    std::uniform_int_distribution uniY(0, HEIGHT);
-    std::uniform_int_distribution uniSize(0, MAX_OBSTACLE_SIZE);
-    std::mt19937_64 rng;
-
-    randomX = uniX(rng);
-    randomY = uniY(rng);
-    randomHeight = uniSize(rng);
-    randomWidth = uniSize(rng);
-
-    obstacle = Obstacle(randomX, randomY, randomHeight, randomWidth);
-
-    return obstacle;
 }
 
 std::vector<Obstacle> initObstacles() {
@@ -90,20 +56,21 @@ std::vector<Obstacle> initObstacles() {
     std::uniform_int_distribution uniX(0, WIDTH);
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::uniform_int_distribution uniSize(0, MAX_OBSTACLE_SIZE);
-    std::mt19937_64 rng;
+    std::random_device dev;
+    std::mt19937 engine(dev());
 
     while (obstacles.size()<DEFAULT_NUM_OBSTACLES) {
-        randomX = uniX(rng);
-        randomY = uniY(rng);
-        randomHeight = uniSize(rng);
-        randomWidth = uniSize(rng);
+        randomX = uniX(engine);
+        randomY = uniY(engine);
+        randomHeight = uniSize(engine);
+        randomWidth = uniSize(engine);
         newObstacle = Obstacle(randomX, randomY, randomHeight, randomWidth);
 
         while ( newObstacle.borders() ) {
-            randomX = uniX(rng);
-            randomY = uniY(rng);
-            randomHeight = uniSize(rng);
-            randomWidth = uniSize(rng);
+            randomX = uniX(engine);
+            randomY = uniY(engine);
+            randomHeight = uniSize(engine);
+            randomWidth = uniSize(engine);
             newObstacle = Obstacle(randomX, randomY, randomHeight, randomWidth);
 
             obstacles.push_back(newObstacle);

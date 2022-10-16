@@ -24,11 +24,7 @@ public:
     Real& get_height();
     Real& get_width();
 
-    bool borders();
-
-    bool equal(Obstacle& a);
+    bool borders() const;
 };
-
-Obstacle randomObstacle();
 
 std::vector<Obstacle> initObstacles();

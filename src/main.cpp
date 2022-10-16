@@ -1,4 +1,3 @@
-#include "main.h"
 #include "agent.hpp"
 #include "display.h"
 
@@ -11,9 +10,9 @@ int main() {
 
     // Window initialization
     GLFWwindow* window;
-    VertexArray triangle_vertexArray, triangleObs_vertexArray;
-    Buffer triangle_buffer;
-    ShaderProgram triangle_shaderProgram;
+    VertexArray triangle_vertexArray = {}, triangleObs_vertexArray = {};
+    Buffer triangle_buffer = {0};
+    ShaderProgram triangle_shaderProgram = {0};
     GLint mvp_location;
     std::tie(window, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location) = initWindow();
 

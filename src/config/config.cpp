@@ -1,7 +1,7 @@
 #include "config.h"
 
-const size_t DEFAULT_NUM_AGENTS = 30;
-const size_t DEFAULT_NUM_PREDATORS = 8;
+const size_t DEFAULT_NUM_AGENTS = 200;
+const size_t DEFAULT_NUM_PREDATORS = 5;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
 const Real CLOSE = 50;
 const Real SPEED = 1;
@@ -12,7 +12,7 @@ const Real VIEW_RANGE = 3*PI/2;
 // Display parameters
 const int WIDTH = 2400;
 const int HEIGHT = 1300;
-const int MAX_OBSTACLE_SIZE = 200;
+const int MAX_OBSTACLE_SIZE = HEIGHT/5;
 const Real  RATIO = (float)WIDTH / (float)HEIGHT;
 const Real  BODY_SIZE = 0.02;
 const vec3 PRED_COLOR = { 1., 0., 0. };

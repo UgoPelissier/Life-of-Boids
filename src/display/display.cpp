@@ -1,5 +1,4 @@
 #include "display.h"
-#include "../main.h"
 
 void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";
@@ -43,13 +42,6 @@ vec2 scale(Agent& agent, Real ratio) {
 vec2 scale(Obstacle& obstacle) {
     return {
             2 * RATIO * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Obstacle& obstacle, Real ratio) {
-    return {
-            2 * ratio * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - ratio,
             2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
     };
 }
@@ -162,12 +154,12 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
 
     agents = updateAgents(agents, obstacles);
 
-    for (size_t i(0); i<agents.size(); i++) {
-        if (agents[i].get_predator()) {
-            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), PRED_COLOR, agents[i].get_angle(), 2 * BODY_SIZE));
+    for (auto & agent : agents) {
+        if (agent.get_predator()) {
+            triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
         }
         else {
-            triangles.push_back(triangle::newTriangle(scale(agents[i], ratio), BIRD_COLOR, agents[i].get_angle(), BODY_SIZE));
+            triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
         }
     }
 
@@ -180,10 +172,11 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
     Real ratio = (Real)width / (Real)height;
     Agent newAgent;
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::mt19937_64 rng;
+    std::random_device dev;
+    std::mt19937 engine(dev());
 
     if (addBird) { // Add new bird to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(rng) - PI, false,n);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false,n);
         newAgent.obstacle(obstacles);
         if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
             agents.push_back(newAgent);
@@ -198,7 +191,7 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
     }
 
     if (addPredator) { // Add new predator to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(rng) - PI, true,n);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true,n);
         newAgent.obstacle(obstacles);
         if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
             agents.push_back(newAgent);

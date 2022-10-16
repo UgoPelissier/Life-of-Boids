@@ -35,23 +35,24 @@ public:
     bool& get_alive();
     size_t& get_index();
 
-    Real distance(Agent a);
-    Real angle (Agent& a);
-    bool insideFieldView(Agent& a);
+    Real distance(Agent a) const;
+    Real distance(Obstacle obs) const;
+    Real angle (Agent& a) const;
+    bool insideFieldView(Agent& a) const;
     std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);
-    std::vector<size_t> predatorNeighbours(std::vector<Agent>& agents);
-    size_t closestAgent(std::vector<Agent>& agents);
+    std::vector<size_t> predatorNeighbours(std::vector<Agent>& agents) const;
+    size_t closestAgent(std::vector<Agent>& agents) const;
 
     bool operator==(Agent& a) const;
-    bool overlap(Agent& a);
-    bool overlap(std::vector<Agent>& agents);
+    bool overlap(Agent& a) const;
+    bool overlap(std::vector<Agent>& agents) const;
 
     std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
 
     void windowUpdate();
     void constantUpdate();
 
-    vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours);
+    vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours) const;
     vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
 
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);

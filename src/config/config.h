@@ -1,5 +1,5 @@
 #pragma once
-#include <stdio.h>
+#include <cstdio>
 
 #include <array>
 #include <cmath>
@@ -8,7 +8,6 @@ using Real = float;
 using vec2 = std::array<Real, 2>;
 using vec3 = std::array<Real, 3>;
 using vec4 = std::array<Real, 4>;
-using mat2x2 = std::array<vec2, 2>;
 using mat4x4 = std::array<vec4, 4>;
 
 // Agent parameters

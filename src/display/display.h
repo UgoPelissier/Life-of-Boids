@@ -24,8 +24,6 @@ vec2 scale(Agent& agent, Real ratio);
 
 vec2 scale(Obstacle& obstacle);
 
-vec2 scale(Obstacle& obstacle, Real ratio);
-
 std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow();
 
 std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow();

@@ -4,58 +4,6 @@
 
 namespace triangle {
 
-inline mat4x4 mat4x4_identity() {
-  mat4x4 M;
-  for (int i = 0; i < 4; ++i)
-    for (int j = 0; j < 4; ++j)
-      M[i][j] = i == j ? 1. : 0.;
-  return M;
-}
-
-inline mat2x2 mat2x2_mul(mat2x2 const& a, mat2x2 const& b) {
-    mat2x2 temp;
-    for (int c = 0; c < 2; ++c)
-        for (int r = 0; r < 2; ++r) {
-            temp[c][r] = 0;
-            for (int k = 0; k < 2; ++k)
-                temp[c][r] += a[k][r] * b[c][k];
-        }
-    return temp;
-}
-
-inline mat4x4 mat4x4_mul(mat4x4 const& a, mat4x4 const& b) {
-  mat4x4 temp;
-  for (int c = 0; c < 4; ++c)
-    for (int r = 0; r < 4; ++r) {
-      temp[c][r] = 0;
-      for (int k = 0; k < 4; ++k)
-        temp[c][r] += a[k][r] * b[c][k];
-    }
-  return temp;
-}
-
-inline mat4x4 mat4x4_translate_X_Y(mat4x4 const& M, Real X, Real Y) {
-    mat4x4 T = {{
-        {{1, 0, 0, 0}},   //
-        {{0, 1, 0, 0}},  //
-        {{0, 0, 1, 0}},   //
-        {{X, Y, 0, 1}}    //
-    }};
-    return mat4x4_mul(M, T);
-    }
-
-inline mat4x4 mat4x4_rotate_Z(mat4x4 const& M, Real angle) {
-  Real s = std::sin(angle);
-  Real c = std::cos(angle);
-  mat4x4 R = {{
-      {{c, s, 0, 0}},   //
-      {{-s, c, 0, 0}},  //
-      {{0, 0, 1, 0}},   //
-      {{0, 0, 0, 1}}    //
-  }};
-  return mat4x4_mul(M, R);
-}
-
 inline mat4x4 mat4x4_ortho(Real l, Real r, Real b, Real t, Real n, Real f) {
   mat4x4 M{};
   M[0][0] = 2 / (r - l);
@@ -73,36 +21,19 @@ struct Vertex {
   vec3 col;
 };
 
-inline std::array<Vertex, 3> translate(std::array<Vertex, 3> triangle, Real X, Real Y) {
-    for (size_t i(0); i<triangle.size(); i++) {
-        triangle[i].pos[0] += X;
-        triangle[i].pos[1] += Y;
-    }
-    return triangle;
-}
-
 inline std::array<Vertex, 3> rotate(std::array<Vertex, 3> triangle, Real angle, vec2 origin) {
     Real s = std::sin(angle);
     Real c = std::cos(angle);
     Real x0 = origin[0];
     Real y0 = origin[1];
     Real tempX, tempY;
-    for (size_t i(0); i<triangle.size(); i++) {
-        tempX = x0 + c*(triangle[i].pos[0]-x0) - s*(triangle[i].pos[1]-y0);
-        tempY = y0 + s*(triangle[i].pos[0]-x0) + c*(triangle[i].pos[1]-y0);
-        triangle[i].pos[0] = tempX;
-        triangle[i].pos[1] = tempY;
+    for (auto & i : triangle) {
+        tempX = x0 + c*(i.pos[0]-x0) - s*(i.pos[1]-y0);
+        tempY = y0 + s*(i.pos[0]-x0) + c*(i.pos[1]-y0);
+        i.pos[0] = tempX;
+        i.pos[1] = tempY;
     }
     return triangle;
-}
-
-inline vec2 center(std::array<Vertex, 3> triangle) {
-    vec2 center = {0,0};
-    for (size_t i(0); i<triangle.size(); i++) {
-        center[0] += (triangle[i].pos[0]/3) ;
-        center[1] += (triangle[i].pos[1]/3) ;
-    }
-    return center;
 }
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientation, Real a) {
