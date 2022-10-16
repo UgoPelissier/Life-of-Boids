@@ -58,10 +58,9 @@ public:
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours);
     void predatorLaw(std::vector<Agent>& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
-
-
 
     void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
