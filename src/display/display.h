@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../config/config.h"
+#include "../movement/agent.hpp"
+#include "../movement/obstacle.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <array>
