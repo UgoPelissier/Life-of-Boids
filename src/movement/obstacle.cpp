@@ -73,8 +73,8 @@ std::vector<Obstacle> initObstacles() {
             randomWidth = uniSize(engine);
             newObstacle = Obstacle(randomX, randomY, randomHeight, randomWidth);
 
-            obstacles.push_back(newObstacle);
         }
+        obstacles.push_back(newObstacle);
     }
     return obstacles;
 }
