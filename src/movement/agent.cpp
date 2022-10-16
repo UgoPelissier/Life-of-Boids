@@ -91,7 +91,7 @@ Real Agent::angle(Agent& a) const {
 }
 
 bool Agent::insideFieldView(Agent& a) const {
-    if (this->angle(a) > VIEW_RANGE/2)
+    if (std::abs(this->angle(a)) > VIEW_RANGE/2)
         return false;
     return true;
 }
