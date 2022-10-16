@@ -19,11 +19,13 @@ private:
     bool m_predator;
     bool m_obstacle;
     bool m_alive;
+    size_t m_index;
 
 public:
     Agent();
     Agent(Real const& x, Real const& y);
-	Agent(Real const& x, Real const& y, Real const& angle, bool const& predator);
+    Agent(Real const& x, Real const& y, Real const& angle, bool const& predator);
+	Agent(Real const& x, Real const& y, Real const& angle, bool const& predator, size_t& index);
 
     Real& get_x();
     Real& get_y();
@@ -31,15 +33,16 @@ public:
     bool& get_predator();
     bool& get_obstacle();
     bool& get_alive();
+    size_t& get_index();
 
     Real distance(Agent a);
     Real angle (Agent& a);
     bool insideFieldView(Agent& a);
-    std::vector<std::vector<size_t>> neighbours(size_t const& index, std::vector<Agent>& agents);
-    std::vector<size_t> predatorNeighbours(size_t const& index, std::vector<Agent>& agents);
-    size_t closerAgent(size_t const& index, std::vector<Agent>& agents);
+    std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);
+    std::vector<size_t> predatorNeighbours(std::vector<Agent>& agents);
+    size_t closestAgent(std::vector<Agent>& agents);
 
-    bool equal(Agent& a);
+    bool operator==(Agent& a) const;
     bool overlap(Agent& a);
     bool overlap(std::vector<Agent>& agents);
 
@@ -54,12 +57,12 @@ public:
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
-    void predatorLaw(size_t& index, std::vector<Agent>& agents);
+    void predatorLaw(std::vector<Agent>& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
 
 
 
-    void updateAgent(size_t& index, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+    void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
 };
 
@@ -91,7 +94,5 @@ inline Real angleVector(vec2 v1, vec2 v2) {
 }
 
 std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
-
-void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
 
 std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);

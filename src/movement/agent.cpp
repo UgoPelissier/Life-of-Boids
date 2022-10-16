@@ -8,6 +8,7 @@ Agent::Agent() {
     m_predator = false;
     m_obstacle = false;
     m_alive = true;
+    m_index = 0;
 }
 
 Agent::Agent(Real const& x, Real const& y) {
@@ -17,6 +18,7 @@ Agent::Agent(Real const& x, Real const& y) {
     m_predator = false;
     m_obstacle = false;
     m_alive = true;
+    m_index = 0;
 }
 
 Agent::Agent(Real const& x, Real const& y, Real const& angle, bool const& predator) {
@@ -26,6 +28,17 @@ Agent::Agent(Real const& x, Real const& y, Real const& angle, bool const& predat
     m_predator = predator;
     m_obstacle = false;
     m_alive = true;
+    m_index = 0;
+}
+
+Agent::Agent(Real const& x, Real const& y, Real const& angle, bool const& predator, size_t& index) {
+    m_x = x;
+    m_y = y;
+    m_angle = angle;
+    m_predator = predator;
+    m_obstacle = false;
+    m_alive = true;
+    m_index = index;
 }
 
 Real& Agent::get_x() {
@@ -52,8 +65,15 @@ bool& Agent::get_alive() {
     return m_alive;
 }
 
+size_t& Agent::get_index() {
+    return m_index;
+}
+
 Real Agent::distance(Agent a) {
-    return (Real)(std::sqrt((m_x - a.get_x()) * (m_x - a.get_x()) + (m_y - a.get_y()) * (m_y - a.get_y())));
+    Real diff_x = (m_x - a.get_x());
+    Real diff_y = (m_y - a.get_y());
+
+    return std::sqrt((diff_x * diff_x) + (diff_y * diff_y));
 }
 
 Real Agent::angle(Agent& a) {
@@ -69,25 +89,28 @@ bool Agent::insideFieldView(Agent& a) {
     return true;
 }
 
-std::vector<std::vector<size_t>> Agent::neighbours(size_t const& index, std::vector<Agent>& agents) {
+std::vector<std::vector<size_t>> Agent::neighbours(std::vector<Agent>& agents) {
+
     std::vector<size_t> predators, separation, alignment, cohesion;
+    Real current_distance(0);
     for (size_t i(0); i < agents.size(); i++) {
-        if (index!=i && this->insideFieldView(agents[i])) {
+        if (m_index!=i && this->insideFieldView(agents[i])) {
+            current_distance = this->distance(agents[i]);
             if ( !agents[i].get_predator() ) {
-                if (this->distance(agents[i]) < SEPARATION_RANGE) {
+                if (current_distance < SEPARATION_RANGE) {
                     separation.push_back(i);
                 }
-                else if (this->distance(agents[i]) > SEPARATION_RANGE && this->distance(agents[i]) < ALIGNMENT_RANGE) {
+                else if (current_distance > SEPARATION_RANGE && current_distance < ALIGNMENT_RANGE) {
                     alignment.push_back(i);
                 }
-                else if (this->distance(agents[i]) > ALIGNMENT_RANGE && this->distance(agents[i]) < COHESION_RANGE) {
+                else if (current_distance > ALIGNMENT_RANGE && current_distance < COHESION_RANGE) {
                         cohesion.push_back(i);
                     }
             }
             else {
-                if (this->distance(agents[i]) < PREDATOR_RANGE) {
+                if (current_distance < PREDATOR_RANGE) {
                     predators.push_back(i);
-                    if (this->distance(agents[i]) < DEAD_RANGE) {
+                    if (current_distance < DEAD_RANGE) {
                         m_alive = false;
                     }
                 }
@@ -97,10 +120,10 @@ std::vector<std::vector<size_t>> Agent::neighbours(size_t const& index, std::vec
     return {predators, separation, alignment, cohesion};
 }
 
-std::vector<size_t> Agent::predatorNeighbours(size_t const& index, std::vector<Agent>& agents) {
+std::vector<size_t> Agent::predatorNeighbours(std::vector<Agent>& agents) {
     std::vector<size_t> predators;
     for (size_t i(0); i < agents.size(); i++) {
-        if ( index!=i ) {
+        if ( m_index!=i ) {
             if ( agents[i].get_predator() ) {
                 if ( this->distance(agents[i]) < PREDATOR_RANGE ) {
                     predators.push_back(i);
@@ -111,28 +134,29 @@ std::vector<size_t> Agent::predatorNeighbours(size_t const& index, std::vector<A
     return predators;
 }
 
-size_t Agent::closerAgent(size_t const& index, std::vector<Agent>& agents) {
+size_t Agent::closestAgent(std::vector<Agent>& agents) {
     Real d = WIDTH;
-    size_t closer;
-    for (size_t i(0); i < agents.size(); i++) {
-        if (index!=i) {
-            if ( !agents[i].get_predator() ) {
-                if (this->distance(agents[i]) < d) {
-                    d = distance(agents[i]);
-                    closer = i;
-                }
+    size_t closest_index = agents[0].get_index();
+
+    for (size_t i(1); i < agents.size(); i++) {
+
+        if (m_index != i) {
+            Real current_distance = this->distance(agents[i]);
+            if (!agents[i].get_predator() && current_distance < d) {
+                d = current_distance;
+                closest_index = i;
             }
         }
     }
-    return closer;
+
+    return closest_index;
+
 }
 
-bool Agent::equal(Agent& a) {
-    if (m_x==a.get_x() && m_y==a.get_y() && m_angle==a.get_angle()) {
-        return true;
-    }
-    return false;
+bool Agent::operator==(Agent& a) const {
+    return (m_x == a.get_x() && m_y == a.get_y() && m_angle == a.get_angle());
 }
+
 
 bool Agent::overlap(Agent& a) {
     Real l = (sqrt(3)*BODY_SIZE/2)*(WIDTH/2);
@@ -144,7 +168,7 @@ bool Agent::overlap(Agent& a) {
 
 bool Agent::overlap(std::vector<Agent>& agents) {
     for(Agent& agent : agents) {
-        if ( (!this->equal(agent)) && this->overlap(agent) ) {
+        if ( this->operator==(agent) && this->overlap(agent) ) {
             return true;
         }
     }
@@ -176,34 +200,40 @@ void Agent::constantUpdate() {
 vec3 Agent::center(std::vector<Agent> agents, std::vector<size_t>& neighbours) {
     size_t n(neighbours.size());
     Real x(m_x), y(m_y), angle(m_angle);
+    Real inv = 1 / (n + 1);
     for(size_t& i : neighbours) {
         x += agents[i].get_x();
         y += agents[i].get_y();
         angle += agents[i].get_angle();
     }
-    return {(float)(x/(n+1)), (float)(y/(n+1)), (float)(angle/(n+1))};
+    return {(Real) x * inv, (Real) y * inv, (Real) angle * inv};
 }
 
 vec3 Agent::centerSeparation(std::vector<Agent>& agents, std::vector<size_t> & neighbours) {
     size_t n(neighbours.size());
     Real x(0), y(0), angle(0);
+    Real inv = 1 / n;
     for(size_t& i : neighbours) {
         x += agents[i].get_x();
         y += agents[i].get_y();
         angle += agents[i].get_angle();
     }
-    return {(float)(x/n), (float)(y/n), (float)(angle/n)};
+    return {(Real) x * inv, (Real) y * inv, (Real) angle * inv};
 }
 
 void Agent::cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours) {
+
     vec3 v = this->center(agents, neighbours);
+
     m_angle = (1-COHESION_RELAXATION)*atan2((v[1]-m_y),(v[0]-m_x)) + COHESION_RELAXATION*m_angle;
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
 }
 
 void Agent::alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours) {
+
     vec3 v = this->center(agents, neighbours);
+
     m_angle = m_angle = (1-ALIGNMENT_RELAXATION)*v[2] + ALIGNMENT_RELAXATION*m_angle ;
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
@@ -220,10 +250,10 @@ void Agent::separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neigh
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::predatorLaw(size_t& index, std::vector<Agent>& agents) {
+void Agent::predatorLaw(std::vector<Agent>& agents) {
 
-    size_t closer = this->closerAgent(index, agents);
-    vec2 target = normVector({(float)(agents[closer].get_x() - m_x),(float)(agents[closer].get_y() - m_y)});
+    size_t closest_index = this->closestAgent(agents);
+    vec2 target = normVector({(float)(agents[closest_index].get_x() - m_x),(float)(agents[closest_index].get_y() - m_y)});
 
     m_angle = (1-PREDATOR_RELAXATION)*atan2(target[1],target[0]) + PREDATOR_RELAXATION*m_angle;
 
@@ -247,16 +277,16 @@ void Agent::obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& n
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::updateAgent(size_t& index, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
+void Agent::updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
 
     std::vector<std::vector<size_t>> v;
     std::vector<size_t> predators, separation, alignment, cohesion, neighboursObstacles;
 
     neighboursObstacles = this->obstacle(obstacles);
-    v = this->neighbours(index, agents);
+    v = this->neighbours(agents);
 
     if (m_predator)
-        predators = this->predatorNeighbours(index, agents);
+        predators = this->predatorNeighbours(agents);
     else
         predators = v[0];
 
@@ -271,7 +301,7 @@ void Agent::updateAgent(size_t& index, std::vector<Agent>& agents, std::vector<O
             if (!predators.empty())
                 this->separationLaw(agents, predators);
             else
-                this->predatorLaw(index, agents);
+                this->predatorLaw(agents);
         }
     }
     else {
@@ -303,6 +333,7 @@ std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles) {
     int randomX;
     int randomY;
     Real randomAngle;
+    size_t n = agents.size();
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
@@ -315,54 +346,54 @@ std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles) {
         randomY = uniY(rng);
         randomAngle = 2*PI*unif(rng)-PI;
 
-        agent = Agent(randomX,randomY,randomAngle,false);
+        agent = Agent(randomX,randomY,randomAngle,false,n);
         agent.obstacle(obstacles);
         while (agent.get_obstacle() || agent.overlap(agents)) {
             randomX = uniX(rng);
             randomY = uniY(rng);
             randomAngle = 2*PI*unif(rng)-PI;
 
-            agent = Agent(randomX,randomY,randomAngle,false);
+            agent = Agent(randomX,randomY,randomAngle,false,n);
             agent.obstacle(obstacles);
         }
         agents.push_back(agent);
+        n = agents.size();
     }
-    for (size_t i = 0; i<DEFAULT_NUM_PREDATORS; ++i) {
+    for (size_t j = 0; j<DEFAULT_NUM_PREDATORS; ++j) {
 
         randomX = uniX(rng);
         randomY = uniY(rng);
         randomAngle = 2*PI*unif(rng)-PI;
 
-        agent = Agent(randomX,randomY,randomAngle,true);
+        agent = Agent(randomX,randomY,randomAngle,true,n);
         agent.obstacle(obstacles);
         while (agent.get_obstacle() || agent.overlap(agents)) {
             randomX = uniX(rng);
             randomY = uniY(rng);
             randomAngle = 2*PI*unif(rng)-PI;
 
-            agent = Agent(randomX,randomY,randomAngle,true);
+            agent = Agent(randomX,randomY,randomAngle,true,n);
             agent.obstacle(obstacles);
         }
         agents.push_back(agent);
+        n = agents.size();
     }
     return agents;
 }
 
-void checkObstacles(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
-    for (size_t i(0); i < agents.size(); i++) {
-        agents[i].obstacle(obstacles);
-    }
-}
-
 std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles) {
     std::vector<Agent> newAgents;
-    checkObstacles(agents, obstacles);
+    size_t n = 0;
     for (size_t i(0); i < agents.size(); i++) {
-        agents[i].updateAgent(i, agents, obstacles);
+        agents[i].obstacle(obstacles);
+        agents[i].updateAgent(agents, obstacles);
     }
     for (Agent& agent : agents) {
-        if ( agent.get_predator() || agent.get_alive() )
+        if ( agent.get_predator() || agent.get_alive() ) {
+            agent.get_index() = n;
             newAgents.push_back(agent);
+            n++;
+        }
     }
     return newAgents;
 }

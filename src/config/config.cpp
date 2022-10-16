@@ -1,7 +1,7 @@
 #include "config.h"
 
-const size_t DEFAULT_NUM_AGENTS = 500;
-const size_t DEFAULT_NUM_PREDATORS = 10;
+const size_t DEFAULT_NUM_AGENTS = 30;
+const size_t DEFAULT_NUM_PREDATORS = 8;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
 const Real CLOSE = 50;
 const Real SPEED = 1;
