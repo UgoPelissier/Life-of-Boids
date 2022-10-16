@@ -97,7 +97,6 @@ bool Agent::insideFieldView(Agent& a) const {
 }
 
 std::vector<std::vector<size_t>> Agent::neighbours(std::vector<Agent>& agents) {
-
     std::vector<size_t> predators, separation, alignment, cohesion;
     Real current_distance;
     for (size_t i(0); i < agents.size(); i++) {
@@ -361,7 +360,7 @@ std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles) {
     Real randomAngle;
     size_t n = agents.size();
 
-    std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::random_device dev;
