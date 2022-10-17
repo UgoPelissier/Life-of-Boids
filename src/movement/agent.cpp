@@ -77,6 +77,22 @@ size_t& Agent::get_index() {
     return m_index;
 }
 
+bool Agent::borders() {
+    if (m_x < CLOSE) {
+        return true;
+    }
+    else if ((WIDTH - CLOSE < m_x) && (m_x < WIDTH)) {
+        return true;
+    }
+    else if (m_y < CLOSE) {
+        return true;
+    }
+    else if ((HEIGHT - CLOSE < m_y) && (m_y < HEIGHT)) {
+        return true;
+    }
+    return false;
+}
+
 Real Agent::distance(Agent a) const {
     Real diff_x = (m_x - a.get_x());
     Real diff_y = (m_y - a.get_y());
@@ -87,6 +103,13 @@ Real Agent::distance(Agent a) const {
 Real Agent::distance(Obstacle obs) const {
     Real diff_x = (m_x - obs.get_x());
     Real diff_y = (m_y - obs.get_y());
+
+    return std::sqrt((diff_x * diff_x) + (diff_y * diff_y));
+}
+
+Real Agent::distance(Fruit f) const {
+    Real diff_x = (m_x - f.get_x());
+    Real diff_y = (m_y - f.get_y());
 
     return std::sqrt((diff_x * diff_x) + (diff_y * diff_y));
 }
@@ -204,12 +227,12 @@ size_t Agent::fruit(std::vector<Fruit>& fruits) { //Based on obstacle. m_fruit =
     m_fruit = false;
     size_t fruit_index=0;
     Real distance;
-    Real distance_min = WIDTH+HEIGHT;
+    Real minDistance = WIDTH;
     for (size_t i(0); i < fruits.size(); i++) {
-        distance = this->distance(Agent(fruits[i].get_x(), fruits[i].get_y())); //convert fruit to agent to do calculation
-        if (distance < FRUIT_RANGE) {
+        distance = this->distance(fruits[i]); //convert fruit to agent to do calculation
+        if (distance < FRUIT_RANGE && distance<minDistance) {
             m_fruit = true;
-            distance_min = distance;
+            minDistance = distance;
             fruit_index = i;
         }
     }
@@ -339,7 +362,7 @@ void Agent::fruitLaw(size_t& fruit_index, std::vector<Fruit>& fruits, std::vecto
 
     agent = Agent(fruits[fruit_index].get_x(), fruits[fruit_index].get_y());
 
-    if (this->distance(agent) <= DEAD_RANGE) { // if the agent get the fruit, delete the fruit and create new agent at current coord
+    if (this->distance(fruits[fruit_index]) <= DEAD_RANGE) { // if the agent get the fruit, delete the fruit and create new agent at current coord
         agent.get_index() = agents.size();
         agents.push_back(agent);
         fruits[fruit_index].get_alive() = false;

@@ -14,18 +14,16 @@ class Fruit {
 private:
     Real m_x;
     Real m_y;
-    Real m_height;
-    Real m_width;
+    Real m_size;
     bool m_alive;
 
 public:
     Fruit();
-    Fruit(Real const& x, Real const& y, Real const& height, Real const& width, bool const& alive);
+    Fruit(Real const& x, Real const& y, Real const& size, bool const& alive);
 
     Real& get_x();
     Real& get_y();
-    Real& get_height();
-    Real& get_width();
+    Real& get_size();
     bool& get_alive();
 
 };

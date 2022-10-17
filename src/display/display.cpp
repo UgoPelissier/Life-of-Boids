@@ -223,12 +223,12 @@ std::vector<std::array<triangle::Vertex, 3>>
         trianglesObs.push_back(obstacle[1]);
     }
     for (FruitTree tree : trees) {
-        tree_triangle = triangle::newTree(scale(tree), FRUIT_COLOR, tree.get_height() / HEIGHT, tree.get_width() / WIDTH);
+        tree_triangle = triangle::newTree(scale(tree), TREE_COLOR, tree.get_height() / HEIGHT, tree.get_width() / WIDTH);
         trianglesTree.push_back(tree_triangle[0]);
         trianglesTree.push_back(tree_triangle[1]);
     }
     for (Fruit fruit : fruits) {
-        fruit_triangle = triangle::newTree(scale(fruit), FRUIT_COLOR, fruit.get_height() / HEIGHT, fruit.get_width() / WIDTH);
+        fruit_triangle = triangle::newTree(scale(fruit), FRUIT_COLOR, fruit.get_size() / HEIGHT, fruit.get_size() / WIDTH);
         trianglesFruit.push_back(fruit_triangle[0]);
         trianglesFruit.push_back(fruit_triangle[1]);
     }
@@ -260,7 +260,7 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
     }
 
     for (size_t i(0); i < fruits.size(); i++) {
-        fruit_triangle = triangle::newTree(scale(fruits[i]), FRUIT_COLOR, fruits[i].get_height() / HEIGHT, fruits[i].get_width() / WIDTH);
+        fruit_triangle = triangle::newTree(scale(fruits[i]), FRUIT_COLOR, fruits[i].get_size() / HEIGHT, fruits[i].get_size() / WIDTH);
         trianglesFruit.push_back(fruit_triangle[0]);
         trianglesFruit.push_back(fruit_triangle[1]);
     }

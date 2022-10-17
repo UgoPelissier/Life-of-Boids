@@ -38,8 +38,10 @@ public:
     bool& get_fruit();
     size_t& get_index();
 
+    bool borders();
     Real distance(Agent a) const;
     Real distance(Obstacle obs) const;
+    Real distance(Fruit f) const;
     Real angle (Agent& a) const;
     bool insideFieldView(Agent& a) const;
     std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);

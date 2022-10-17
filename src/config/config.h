@@ -36,6 +36,7 @@ extern const Real BODY_OVERLAP;
 extern const vec3 PRED_COLOR;
 extern const vec3 BIRD_COLOR;
 extern const vec3 OBSTACLE_COLOR;
+extern const vec3 TREE_COLOR;
 extern const vec3 FRUIT_COLOR;
 extern const int NUMBER_LOOP_FPS;
 
