@@ -15,6 +15,7 @@ const int HEIGHT = 1300;
 const int MAX_OBSTACLE_SIZE = HEIGHT/5;
 const Real  RATIO = (float)WIDTH / (float)HEIGHT;
 const Real  BODY_SIZE = 0.02;
+const Real BODY_OVERLAP = (sqrt(3)*BODY_SIZE/2)*(WIDTH/2);
 const vec3 PRED_COLOR = { 1., 0., 0. };
 const vec3 BIRD_COLOR = { 1., 1., 1. };
 const vec3 OBSTACLE_COLOR = { 0.2, 0.2, 0.2 };

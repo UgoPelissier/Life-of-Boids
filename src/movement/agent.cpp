@@ -158,8 +158,7 @@ bool Agent::operator==(Agent& a) const {
 }
 
 bool Agent::overlap(Agent& a) const {
-    Real l = (sqrt(3)*BODY_SIZE/2)*(WIDTH/2);
-    if (this->distance(a)<l) {
+    if (this->distance(a)<BODY_OVERLAP) {
         return true;
     }
     return false;

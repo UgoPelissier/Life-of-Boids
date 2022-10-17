@@ -26,6 +26,7 @@ extern const int HEIGHT;
 extern const int MAX_OBSTACLE_SIZE;
 extern const Real RATIO;
 extern const Real BODY_SIZE;
+extern const Real BODY_OVERLAP;
 extern const vec3 PRED_COLOR;
 extern const vec3 BIRD_COLOR;
 extern const vec3 OBSTACLE_COLOR;
