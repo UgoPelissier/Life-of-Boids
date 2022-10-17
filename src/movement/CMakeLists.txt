@@ -1,1 +1,1 @@
-add_library(agent agent.cpp agent.hpp)
+add_library(agent agent.cpp agent.hpp obstacle.cpp obstacle.h)

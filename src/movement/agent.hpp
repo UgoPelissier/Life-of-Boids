@@ -6,40 +6,70 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include "../main.h"
+#include "../config/config.h"
+#include "obstacle.h"
 
-using vec2 = std::array<float, 2>;
-using vec3 = std::array<float, 3>;
-using vec4 = std::array<float, 4>;
-using mat2x2 = std::array<vec2, 2>;
-using mat4x4 = std::array<vec4, 4>;
+//====================AGENT CLASS============================
+class Agent {
+private:
+    Real m_x;
+    Real m_y;
+    Real m_angle;
+    bool m_predator;
+    bool m_obstacle;
+    bool m_alive;
+    size_t m_index;
 
-//====================DEFAULT PARAMETERS==================
-// Agent parameters
-#define DEFAULT_NUM_AGENTS 200
-#define DEFAULT_NUM_PREDATORS 2
-#define CLOSE 50
-#define SPEED 2
-#define PI  3.14159265358979323846
+public:
+    Agent();
+    Agent(Real const& x, Real const& y);
+    Agent(Real const& x, Real const& y, Real const& angle, bool const& predator);
+	Agent(Real const& x, Real const& y, Real const& angle, bool const& predator, size_t& index);
 
-// Display parameters
-#define WIDTH 1800
-#define HEIGHT 1200
-#define TRIANGLE_SIZE   0.015
+    Real& get_x();
+    Real& get_y();
+    Real& get_angle();
+    bool& get_predator();
+    bool& get_obstacle();
+    bool& get_alive();
+    size_t& get_index();
 
-// Laws parameters
-static double const SEPARATION = TRIANGLE_SIZE*WIDTH;
-static double const ALIGNMENT = 2*SEPARATION;
-#define PREDATOR 50
-#define COHESION 200
+    Real distance(Agent a) const;
+    Real distance(Obstacle obs) const;
+    Real angle (Agent& a) const;
+    bool insideFieldView(Agent& a) const;
+    std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);
+    std::vector<size_t> predatorNeighbours(std::vector<Agent>& agents) const;
+    size_t closestAgent(std::vector<Agent>& agents) const;
 
-#define SMOOTH_ALIGNMENT 0.25
-#define SMOOTH_COHESION 0.5
+    bool operator==(Agent& a) const;
+    bool overlap(Agent& a) const;
+    bool overlap(std::vector<Agent>& agents) const;
 
-#define TURN_AROUND false
+    std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
 
-inline double modulo(double a, double b)
+    void windowUpdate();
+    void constantUpdate();
+
+    vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours) const;
+    vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+
+    void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    void biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours);
+    void predatorLaw(std::vector<Agent>& agents);
+    void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
+
+    void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+
+};
+
+//====================AGENT VECTORS FOR GLOBAL MOTION============================
+inline Real modulo(Real const& a, Real const& b)
 {
-    double mod(a);
+    Real mod(a);
     if (a < 0) {
         while (mod < 0)
             mod += b;
@@ -51,62 +81,18 @@ inline double modulo(double a, double b)
     return mod;
 }
 
-inline vec2 normVector(vec2 v) {
+inline vec2 normVector(vec2 const& v) {
     float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
     return {v[0]/norm,v[1]/norm};
 }
 
-//====================AGENT CLASS============================
-class Agent {
-private:
-    double m_x;
-    double m_y;
-    double m_angle;
-    bool m_predator;
-    bool m_border;
-    double m_opp;
+inline Real angleVector(vec2 v1, vec2 v2) {
+    Real dot = v1[0]*v2[0] + v1[1]*v2[1];
+    Real det = v1[0]*v2[1] - v1[1]*v2[0];
+    Real angle = atan2(det, dot);
+    return angle;
+}
 
-public:
-    Agent();
-	Agent(double x, double y, double angle, bool predator);
+std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
-    double& get_x();
-    double& get_y();
-    double& get_angle();
-    bool& get_predator();
-    bool& get_border();
-    double& get_opp();
-
-    double distance(Agent a);
-    std::vector<std::vector<size_t>> neighbours(size_t index, std::vector<Agent> agents);
-    std::vector<size_t> predatorNeighbours(size_t index, std::vector<Agent> agents);
-    size_t closerAgent(size_t index, std::vector<Agent> agents);
-
-    bool equal(Agent a);
-    bool overlap(Agent a);
-    bool overlap(std::vector<Agent> agents);
-
-    void borders();
-    void borderNeighbour(size_t index, std::vector<Agent> agents);
-
-    void borderUpdate(double opp);
-    void windowUpdate();
-    void constantUpdate();
-
-    vec3 center(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    vec3 centerSeparation(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void cohesionLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void alignmentLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void separationLaw(std::vector<Agent> agents, std::vector<size_t> neighbours);
-    void predatorLaw(size_t index, std::vector<Agent> agents);
-
-    void updateAgent(size_t index, std::vector<Agent> agents);
-
-};
-
-//====================AGENT VECTORS FOR GLOBAL MOTION============================
-std::vector<Agent> initialiaze_agents();
-
-void checkBorders(std::vector<Agent>& agents);
-
-void updateAgents(std::vector<Agent>& agents);
+std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
