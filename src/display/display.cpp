@@ -119,32 +119,39 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> 
     return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
 }
 
-std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
+std::tuple<agents_t, agents_t, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
     std::vector<Obstacle> obstacles = initObstacles();
-    std::vector<Agent> agents = initialiaze_agents(obstacles);
+    agents_t birds, predators;
+    std::tie(birds, predators) = initialiaze_agents(obstacles);
 
     std::vector<std::array<triangle::Vertex, 3>> triangles;
     std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
     std::vector<std::array<triangle::Vertex, 3>> obstacle;
 
-    for (Agent agent : agents) {
-        if ( agent.get_predator() )
-            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
-        else
-            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
+    for (auto& it : birds) {
+        Agent& agent = it.second;
+        triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
+    }
+    for (auto &it : predators) {
+        Agent &agent = it.second;
+        triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
     }
     for (Obstacle obs : obstacles) {
         obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
         trianglesObs.push_back(obstacle[0]);
         trianglesObs.push_back(obstacle[1]);
     }
-    return std::make_tuple(agents, obstacles,triangles, trianglesObs);
+    return std::make_tuple(birds, predators, obstacles,triangles, trianglesObs);
 }
 
-void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void updateAgentWindow(GLFWwindow* window,
+                        agents_t& birds,
+                        agents_t& predators,
+                        std::vector<Obstacle>& obstacles,
+                        std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     triangles = {};
 
     int width{}, height{};
@@ -154,22 +161,23 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    agents = updateAgents(agents, obstacles);
+    updateAgents(birds, predators, obstacles);
 
-    for (auto & agent : agents) {
-        if (agent.get_predator()) {
-            triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
-        }
-        else {
-            triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
-        }
+    for (auto &i : birds) {
+        Agent agent = i.second;
+        triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
     }
+    for (auto& i : predators) {
+        Agent agent = i.second;
+        triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
+    }
+    
 
 }
 
-void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
-    size_t n = agents.size();
+    size_t n;
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     Real ratio = (Real)width / (Real)height;
     Agent newAgent;
@@ -178,11 +186,11 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
     std::mt19937 engine(dev());
 
     if (addBird) { // Add new bird to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false,n);
+        n = birds.size();
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false, n);
         newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-            agents.push_back(newAgent);
-            n = agents.size();
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(birds) && !newAgent.overlap(predators)) {
+            birds[n] = newAgent;
             triangles.push_back(triangle::newTriangle(
                     scale(newAgent, ratio),
                     BIRD_COLOR,
@@ -193,11 +201,11 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<
     }
 
     if (addPredator) { // Add new predator to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true,n);
+        n = predators.size();
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true, n);
         newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-            agents.push_back(newAgent);
-            n = agents.size();
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(birds) && !newAgent.overlap(predators)) {
+            predators[n] = newAgent;
             triangles.push_back(triangle::newTriangle(
                     scale(newAgent, ratio),
                     PRED_COLOR,

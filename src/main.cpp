@@ -17,17 +17,18 @@ int main() {
     std::tie(window, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location) = initWindow();
 
     // Agents initialization
-    std::vector<Agent> agents;
+    agents_t birds, predators;
     std::vector<Obstacle> obstacles;
     std::vector<std::array<triangle::Vertex, 3>> triangles; // Array that will contain the birds, represented with triangles
     std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
-    std::tie(agents, obstacles,triangles, trianglesObs) = initAgentWindow();
+    std::tie(birds, predators, obstacles, triangles, trianglesObs) = initAgentWindow();
 
     // Global loop
-    while (!glfwWindowShouldClose(window)) {
-        updateAgentWindow(window, agents, obstacles,triangles);
-        addAgent(window, addBird, addPredator, agents, obstacles, triangles);
+   while (!glfwWindowShouldClose(window)) {
+        updateAgentWindow(window, birds, predators, obstacles,triangles);
+        addAgent(window, addBird, addPredator, birds, predators, obstacles, triangles);
         updateWindow(window, triangles, trianglesObs, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
+        //std::cout << "hi" << std::endl;
     }
 
     endWindow(window);

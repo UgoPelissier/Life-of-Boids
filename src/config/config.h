@@ -1,8 +1,10 @@
 #pragma once
-#include <cstdio>
 
+#include <cstdio>
 #include <array>
 #include <cmath>
+
+#define agents_t std::unordered_map<size_t, Agent>
 
 using Real = float;
 using vec2 = std::array<Real, 2>;

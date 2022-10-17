@@ -26,11 +26,11 @@ vec2 scale(Obstacle& obstacle);
 
 std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow();
 
-std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow();
+std::tuple <agents_t, agents_t, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>> > initAgentWindow();
 
-void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents,  std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles);
+void updateAgentWindow(GLFWwindow* window, agents_t& birds, agents_t& predators,  std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles);
 
-void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles);
+void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles);
 
 void updateWindow(GLFWwindow* window,
                   std::vector<std::array<triangle::Vertex, 3>>& triangles,

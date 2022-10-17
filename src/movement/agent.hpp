@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
 #include <array>
 #include <cmath>
 #include <iomanip>
@@ -9,7 +10,6 @@
 #include "../main.h"
 #include "../config/config.h"
 #include "obstacle.h"
-
 //====================AGENT CLASS============================
 class Agent {
 private:
@@ -39,30 +39,30 @@ public:
     Real distance(Obstacle obs) const;
     Real angle (Agent& a) const;
     bool insideFieldView(Agent& a) const;
-    std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);
-    std::vector<size_t> predatorNeighbours(std::vector<Agent>& agents) const;
-    size_t closestAgent(std::vector<Agent>& agents) const;
+    std::vector<std::vector<size_t>> neighbours(agents_t& birds, agents_t& predators);
+    std::vector<size_t> predatorNeighbours(agents_t& predators) const;
+    size_t closestAgent(agents_t& agents) const;
 
     bool operator==(Agent& a) const;
     bool overlap(Agent& a) const;
-    bool overlap(std::vector<Agent>& agents) const;
+    bool overlap(agents_t& agents) const;
 
     std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
 
     void windowUpdate();
     void constantUpdate();
 
-    vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours) const;
-    vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    vec3 center(agents_t agents, std::vector<size_t>& neighbours) const;
+    vec3 centerSeparation(agents_t& agents, std::vector<size_t>& neighbours);
 
-    void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
-    void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
-    void separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
-    void biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours);
-    void predatorLaw(std::vector<Agent>& agents);
+    void cohesionLaw(agents_t& agents, std::vector<size_t>& neighbours);
+    void alignmentLaw(agents_t& agents, std::vector<size_t>& neighbours);
+    void separationLaw(agents_t& agents, std::vector<size_t>& neighbours);
+    void biSeparationLaw(agents_t& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours);
+    void predatorLaw(agents_t& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
 
-    void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+    void updateAgent(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles);
 
 };
 
@@ -82,8 +82,8 @@ inline Real modulo(Real const& a, Real const& b)
 }
 
 inline vec2 normVector(vec2 const& v) {
-    float norm = sqrt(v[0]*v[0] + v[1]*v[1]);
-    return {v[0]/norm,v[1]/norm};
+    float inv_norm = 1. / sqrt(v[0]*v[0] + v[1]*v[1]);
+    return {v[0] * inv_norm, v[1] * inv_norm};
 }
 
 inline Real angleVector(vec2 v1, vec2 v2) {
@@ -93,6 +93,6 @@ inline Real angleVector(vec2 v1, vec2 v2) {
     return angle;
 }
 
-std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
+std::tuple<agents_t, agents_t> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
-std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+void updateAgents(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles);
