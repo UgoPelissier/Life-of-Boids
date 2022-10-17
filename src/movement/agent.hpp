@@ -62,7 +62,8 @@ public:
     void predatorLaw(agents_t& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
 
-    void updateAgent(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles);
+    void updateBird(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles);
+    void updatePredator(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles);
 
 };
 

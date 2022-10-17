@@ -316,7 +316,52 @@ void Agent::obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& n
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::updateAgent(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles) {
+void Agent::updateBird(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles) {
+
+    /*
+    * earlier we had one agent vector now i have created two separate maps for birds and predators
+    * The logic is a bit changed where the following size_t vectors for indices will now hold an index
+    * with respect to these two different maps
+    * So, for example.
+    * predators_ids will only have the indices for agents_t predators
+    */
+    std::vector<std::vector<size_t>> v;
+    std::vector<size_t> predators_ids, separation_ids, alignment_ids, cohesion_ids, neighboursObstacles_ids;
+
+    neighboursObstacles_ids = this->obstacle(obstacles);
+    v = this->neighbours(birds, predators); // O(n)
+
+    predators_ids = v[0];
+    separation_ids = v[1];
+    alignment_ids = v[2];
+    cohesion_ids = v[3];
+
+    if (m_obstacle) {
+        this->obstacleLaw(obstacles, neighboursObstacles_ids); // O(n) 
+    } else {
+        if (!predators_ids.empty()) {
+            if (!separation_ids.empty())
+                this->biSeparationLaw(birds, predators, separation_ids, predators_ids); // O(n)
+            else
+                this->separationLaw(predators, predators_ids); // O(n)
+        } else if (!separation_ids.empty()) {
+            this->separationLaw(birds, separation_ids); // O(n)
+        } else if (!alignment_ids.empty()) {
+            this->alignmentLaw(birds, alignment_ids); // O(n)
+        } else if (!cohesion_ids.empty()) {
+            this->cohesionLaw(birds, cohesion_ids); // O(n)
+        } else {
+            this->constantUpdate();
+        }
+    }
+    this->windowUpdate();
+
+    // delete the agent from the map if it dies in the current iteration.
+    if (!m_alive)
+        birds.erase(m_index);
+}
+
+void Agent::updatePredator(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles) {
 
     std::vector<std::vector<size_t>> v;
     std::vector<size_t> predators_ids, separation_ids, alignment_ids, cohesion_ids, neighboursObstacles_ids;
@@ -324,51 +369,22 @@ void Agent::updateAgent(agents_t& birds, agents_t& predators, std::vector<Obstac
     neighboursObstacles_ids = this->obstacle(obstacles);
     v = this->neighbours(birds, predators); // O(n)
 
-    if (m_predator)
-        predators_ids = this->predatorNeighbours(predators); // O(n)
-    else
-        predators_ids = v[0];
-
+    predators_ids = this->predatorNeighbours(predators); // O(n)
     separation_ids = v[1];
     alignment_ids = v[2];
     cohesion_ids = v[3];
 
-    if (m_predator) {
-        if (m_obstacle) {
+    if (m_obstacle) {
             this->obstacleLaw(obstacles, neighboursObstacles_ids); // O(m)
-        } else {
-            if (!predators_ids.empty())
-                this->separationLaw(predators, predators_ids);
-            else
-                this->predatorLaw(birds);
-        }
     }
     else {
-        if (m_obstacle) {
-            this->obstacleLaw(obstacles, neighboursObstacles_ids); // O(n) 
-        } else {
-            if (!predators_ids.empty()) {
-                if (!separation_ids.empty())
-                    this->biSeparationLaw(birds, predators, separation_ids, predators_ids); // O(n)
-                else
-                    this->separationLaw(predators, predators_ids); // O(n)
-            } else if (!separation_ids.empty()) {
-                this->separationLaw(birds, separation_ids); // O(n)
-            } else if (!alignment_ids.empty()) {
-                this->alignmentLaw(birds, alignment_ids); // O(n)
-            } else if (!cohesion_ids.empty()) {
-                this->cohesionLaw(birds, cohesion_ids); // O(n)
-            } else {
-                this->constantUpdate();
-            }
-        }
+        if (!predators_ids.empty())
+            this->separationLaw(predators, predators_ids);
+        else
+            this->predatorLaw(birds);
     }
 
     this->windowUpdate();
-
-    // delete the agent from the map if it dies in the current iteration.
-    if (!m_alive)
-        birds.erase(m_index);
 }
 
 //====================RELATED FUNCTIONS============================
@@ -388,9 +404,11 @@ std::tuple<agents_t, agents_t> initialiaze_agents(std::vector<Obstacle>& obstacl
     std::random_device dev;
     std::mt19937 engine(dev());
 
+    const size_t surplus = 20;
+
     //reserve the memory in advance
-    birds.reserve(DEFAULT_NUM_AGENTS);
-    predators.reserve(DEFAULT_NUM_PREDATORS);
+    birds.reserve(DEFAULT_NUM_AGENTS + surplus);
+    predators.reserve(DEFAULT_NUM_PREDATORS + surplus);
 
     for (size_t i = 0; i<DEFAULT_NUM_AGENTS; ++i) {
 
@@ -437,13 +455,13 @@ void updateAgents(agents_t& birds, agents_t& predators, std::vector<Obstacle>& o
     for (auto &it : birds) {
         Agent& agent = it.second;
         agent.obstacle(obstacles);
-        agent.updateAgent(birds, predators, obstacles);
+        agent.updateBird(birds, predators, obstacles);
     }
 
     for (auto& it : predators) {
         Agent& agent = it.second;
         agent.obstacle(obstacles);
-        agent.updateAgent(birds, predators, obstacles);
+        agent.updatePredator(birds, predators, obstacles);
     }
 }
 
