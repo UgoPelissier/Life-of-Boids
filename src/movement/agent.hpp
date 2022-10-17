@@ -54,6 +54,7 @@ public:
 
     vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours) const;
     vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    vec2 centerSeparation(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighbours);
 
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);

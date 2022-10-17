@@ -210,13 +210,24 @@ vec3 Agent::center(std::vector<Agent> agents, std::vector<size_t>& neighbours) c
 vec3 Agent::centerSeparation(std::vector<Agent>& agents, std::vector<size_t> & neighbours) {
     size_t n(neighbours.size());
     Real x(0), y(0), angle(0);
-    Real inv = 1 / n;
+    Real inv = (Real)1 / (Real)(n+1);
     for(size_t& i : neighbours) {
         x += agents[i].get_x();
         y += agents[i].get_y();
         angle += agents[i].get_angle();
     }
     return {(Real) x * inv, (Real) y * inv, (Real) angle * inv};
+}
+
+vec2 Agent::centerSeparation(std::vector<Obstacle>& obstacles, std::vector<size_t> & neighbours) {
+    size_t n(neighbours.size());
+    Real x(0), y(0);
+    Real inv = (Real)1 / (Real)n;
+    for(size_t& i : neighbours) {
+        x += obstacles[i].get_x();
+        y += obstacles[i].get_y();
+    }
+    return {(Real) x * inv, (Real) y * inv};
 }
 
 void Agent::cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours) {
@@ -240,7 +251,7 @@ void Agent::alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighb
 void Agent::separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours) {
 
     vec3 v = this->centerSeparation(agents, neighbours);
-    vec2 separation = normVector({(float)(m_x-v[0]),(float)(m_y-v[1])});
+    vec2 separation = normVector({(Real)(m_x-v[0]),(Real)(m_y-v[1])});
 
     m_angle = (1-SEPARATION_RELAXATION)*atan2(separation[1],separation[0]) + SEPARATION_RELAXATION*m_angle;
 
@@ -251,10 +262,10 @@ void Agent::separationLaw(std::vector<Agent>& agents, std::vector<size_t>& neigh
 void Agent::biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours) {
 
     vec3 vBird = this->centerSeparation(agents, birdsNeighbours);
-    vec2 separationBird = normVector({(float)(m_x-vBird[0]),(float)(m_y-vBird[1])});
+    vec2 separationBird = normVector({(Real)(m_x-vBird[0]),(Real)(m_y-vBird[1])});
 
     vec3 vPred = this->centerSeparation(agents, predNeighbours);
-    vec2 separationPred = normVector({(float)(m_x-vPred[0]),(float)(m_y-vPred[1])});
+    vec2 separationPred = normVector({(Real)(m_x-vPred[0]),(Real)(m_y-vPred[1])});
 
     Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
     Real anglePred = (1-SEPARATION_RELAXATION)*atan2(separationPred[1],separationPred[0]) + SEPARATION_RELAXATION*m_angle;
@@ -268,7 +279,7 @@ void Agent::biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& bir
 void Agent::predatorLaw(std::vector<Agent>& agents) {
 
     size_t closest_index = this->closestAgent(agents);
-    vec2 target = normVector({(float)(agents[closest_index].get_x() - m_x),(float)(agents[closest_index].get_y() - m_y)});
+    vec2 target = normVector({(Real)(agents[closest_index].get_x() - m_x),(Real)(agents[closest_index].get_y() - m_y)});
 
     m_angle = (1-PREDATOR_RELAXATION)*atan2(target[1],target[0]) + PREDATOR_RELAXATION*m_angle;
 
@@ -278,13 +289,13 @@ void Agent::predatorLaw(std::vector<Agent>& agents) {
 
 void Agent::obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles) {
 
-    std::vector<Agent> agents(obstacles.size());
+/*    std::vector<Agent> agents(obstacles.size());
     for (size_t i = 0; i<obstacles.size(); i++) {
         agents[i] = Agent(obstacles[i].get_x(),obstacles[i].get_y());
-    }
+    }*/
 
-    vec3 v = this->centerSeparation(agents, neighboursObstacles);
-    vec2 separation = normVector({(float)(m_x-v[0]),(float)(m_y-v[1])});
+    vec2 v = this->centerSeparation(obstacles, neighboursObstacles);
+    vec2 separation = normVector({(Real)(m_x-v[0]),(Real)(m_y-v[1])});
 
     m_angle = (1-OBSTACLE_RELAXATION)*atan2(separation[1],separation[0]) + OBSTACLE_RELAXATION*m_angle;
 
@@ -408,7 +419,7 @@ std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle
         agents[i].updateAgent(agents, obstacles);
     }
     for (Agent& agent : agents) {
-        if ( agent.get_predator() || agent.get_alive() ) {
+        if (agent.get_predator() || agent.get_alive()) {
             agent.get_index() = n;
             newAgents.push_back(agent);
             n++;

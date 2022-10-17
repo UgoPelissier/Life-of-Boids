@@ -53,9 +53,9 @@ std::vector<Obstacle> initObstacles() {
     int randomWidth;
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::uniform_int_distribution uniX(0, WIDTH);
-    std::uniform_int_distribution uniY(0, HEIGHT);
-    std::uniform_int_distribution uniSize(0, MAX_OBSTACLE_SIZE);
+    std::uniform_int_distribution uniX(10, WIDTH-10);
+    std::uniform_int_distribution uniY(10, HEIGHT-10);
+    std::uniform_int_distribution uniSize(1, MAX_OBSTACLE_SIZE);
     std::random_device dev;
     std::mt19937 engine(dev());
 
