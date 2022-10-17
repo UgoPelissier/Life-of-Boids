@@ -113,12 +113,10 @@ std::vector<std::vector<size_t>> Agent::neighbours(std::vector<Agent>& agents) {
                         cohesion.push_back(i);
                     }
             }
-            else {
-                if (current_distance < PREDATOR_RANGE) {
-                    predators.push_back(i);
-                    if (current_distance < DEAD_RANGE) {
-                        m_alive = false;
-                    }
+            else if (current_distance < PREDATOR_RANGE) {
+                predators.push_back(i);
+                if (current_distance < DEAD_RANGE) {
+                    m_alive = false;
                 }
             }
         }
@@ -128,14 +126,10 @@ std::vector<std::vector<size_t>> Agent::neighbours(std::vector<Agent>& agents) {
 
 std::vector<size_t> Agent::predatorNeighbours(std::vector<Agent>& agents) const {
     std::vector<size_t> predators;
+
     for (size_t i(0); i < agents.size(); i++) {
-        if ( m_index!=i ) {
-            if ( agents[i].get_predator() ) {
-                if ( this->distance(agents[i]) < PREDATOR_RANGE ) {
+        if ( m_index!=i && agents[i].get_predator() && this->distance(agents[i]) < PREDATOR_RANGE )
                     predators.push_back(i);
-                }
-            }
-        }
     }
     return predators;
 }
