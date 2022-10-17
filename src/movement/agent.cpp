@@ -97,25 +97,8 @@ bool Agent::insideFieldView(Agent& a) const {
 std::vector<std::vector<size_t>> Agent::neighbours(agents_t& birds, agents_t& predators) {
     std::vector<size_t> predators_ids, separation_ids, alignment_ids, cohesion_ids;
     Real current_distance;
-    for (auto& it : birds) {
-        
-        size_t i = it.first;
-        Agent &agent = it.second;
-        
-        if (m_index != it.first && this->insideFieldView(agent)) {
-            current_distance = this->distance(agent);
-            if (current_distance < SEPARATION_RANGE) {
-                separation_ids.push_back(i);
-            }
-            else if (current_distance > SEPARATION_RANGE && current_distance < ALIGNMENT_RANGE) {
-                alignment_ids.push_back(i);
-            }
-            else if (current_distance > ALIGNMENT_RANGE && current_distance < COHESION_RANGE) {
-                cohesion_ids.push_back(i);
-            }
-        }
-    }
 
+    // First iterate over the Predators. They will kill some agents. And we can avoid redundant computations
     for (auto& it : predators) {
 
         size_t i = it.first;
@@ -133,6 +116,28 @@ std::vector<std::vector<size_t>> Agent::neighbours(agents_t& birds, agents_t& pr
         }
     }
 
+    if (m_alive) {
+
+        for (auto& it : birds) {
+
+            size_t i = it.first;
+            Agent& agent = it.second;
+
+            if (m_index != it.first && this->insideFieldView(agent)) {
+                current_distance = this->distance(agent);
+                if (current_distance < SEPARATION_RANGE) {
+                    separation_ids.push_back(i);
+                }
+                else if (current_distance > SEPARATION_RANGE && current_distance < ALIGNMENT_RANGE) {
+                    alignment_ids.push_back(i);
+                }
+                else if (current_distance > ALIGNMENT_RANGE && current_distance < COHESION_RANGE) {
+                    cohesion_ids.push_back(i);
+                }
+            }
+        }
+    }
+
     return {predators_ids, separation_ids, alignment_ids, cohesion_ids};
 }
 
@@ -143,7 +148,7 @@ std::vector<size_t> Agent::predatorNeighbours(agents_t& predators) const {
         size_t i = it.first;
         Agent& agent = it.second;
         
-        if (m_index!= i && agent.get_predator() && this->distance(agent) < PREDATOR_RANGE)
+        if (m_index!= i && this->distance(agent) < PREDATOR_RANGE)
             predators_return_vec.push_back(i);
     }
     return predators_return_vec;
@@ -176,14 +181,13 @@ bool Agent::operator==(Agent& a) const {
 }
 
 bool Agent::overlap(Agent& a) const {
-    Real l = (sqrt(3)*BODY_SIZE/2)*(WIDTH/2);
-    if (this->distance(a)<l) {
-        return true;
-    }
-    return false;
+    Real l = (sqrt(3) * BODY_SIZE / 2) * (WIDTH / 2);
+
+    return (this->distance(a) < l);
 }
 
 bool Agent::overlap(agents_t& agents) const {
+
     for(auto &it : agents) {
         Agent& agent = it.second;
         if ( this->operator==(agent) && this->overlap(agent) ) {
@@ -379,9 +383,9 @@ void Agent::updatePredator(agents_t& birds, agents_t& predators, std::vector<Obs
     }
     else {
         if (!predators_ids.empty())
-            this->separationLaw(predators, predators_ids);
+            this->separationLaw(predators, predators_ids); // O(k)
         else
-            this->predatorLaw(birds);
+            this->predatorLaw(birds); // O(n)
     }
 
     this->windowUpdate();
@@ -451,31 +455,15 @@ std::tuple<agents_t, agents_t> initialiaze_agents(std::vector<Obstacle>& obstacl
 
 void updateAgents(agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles) {
     
-
-    for (auto &it : birds) {
-        Agent& agent = it.second;
-        agent.obstacle(obstacles);
-        agent.updateBird(birds, predators, obstacles);
-    }
-
     for (auto& it : predators) {
         Agent& agent = it.second;
         agent.obstacle(obstacles);
         agent.updatePredator(birds, predators, obstacles);
     }
+
+    for (auto& it : birds) {
+        Agent& agent = it.second;
+        agent.obstacle(obstacles);
+        agent.updateBird(birds, predators, obstacles);
+    }
 }
-
-
-/*
-* Bottlenecks
-* 1. We update agents and then create a new list of agents to be returned for each iteration of the main loop
-* 2. We are going through each agent and then update its respective categories like predators, separation, etc.
-* Each of these are taking O(n) in the worst case. 
-* 3. There are a lot of checks within each for loop.
-* 
-* Solutions:
-* 1. If there is a way to combine all these minor for loops into 1 single big loop
-* 2. Managing the category vectors' creation at the initialization phase.
-* 3. Maybe using an efficient data structure like queue to push and pop the agents rather than returning a new vector each time.
-* 
-*/
