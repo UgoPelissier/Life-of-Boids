@@ -1,11 +1,5 @@
 #include "agent.hpp"
 
-//Templates includes for comparison
-#include <chrono>
-#include <algorithm>
-#include <execution>
-#include <mutex>
-
 //====================AGENT CLASS============================
 Agent::Agent() {
     m_x = 0;
