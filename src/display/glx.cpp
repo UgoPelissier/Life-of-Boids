@@ -30,7 +30,6 @@ void Buffer_bind(Buffer& buffer, GLenum target) {
 }
 
 ShaderProgram ShaderProgram_new(const char* vertex_shader_text, const char* fragment_shader_text) {
-  // TODO Manage errors
   const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex_shader, 1, &vertex_shader_text, nullptr);
   glCompileShader(vertex_shader);

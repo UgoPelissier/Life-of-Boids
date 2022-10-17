@@ -1,4 +1,1 @@
-add_library(law law.cpp)
-
-# add_executable()
-
+add_library(agent agent.cpp agent.hpp obstacle.cpp obstacle.h)
