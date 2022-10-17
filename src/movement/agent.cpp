@@ -272,12 +272,12 @@ void Agent::separationLaw(agents_t& agents, std::vector<size_t>& neighbours) {
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::biSeparationLaw(agents_t& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours) {
+void Agent::biSeparationLaw(agents_t& birds, agents_t& predators, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours) {
 
-    vec3 vBird = this->centerSeparation(agents, birdsNeighbours);
+    vec3 vBird = this->centerSeparation(birds, birdsNeighbours);
     vec2 separationBird = normVector({(float)(m_x-vBird[0]),(float)(m_y-vBird[1])});
 
-    vec3 vPred = this->centerSeparation(agents, predNeighbours);
+    vec3 vPred = this->centerSeparation(predators, predNeighbours);
     vec2 separationPred = normVector({(float)(m_x-vPred[0]),(float)(m_y-vPred[1])});
 
     Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
@@ -349,9 +349,9 @@ void Agent::updateAgent(agents_t& birds, agents_t& predators, std::vector<Obstac
         } else {
             if (!predators_ids.empty()) {
                 if (!separation_ids.empty())
-                    this->biSeparationLaw(birds, separation_ids, predators_ids); // O(n)
+                    this->biSeparationLaw(birds, predators, separation_ids, predators_ids); // O(n)
                 else
-                    this->separationLaw(birds, predators_ids); // O(n)
+                    this->separationLaw(predators, predators_ids); // O(n)
             } else if (!separation_ids.empty()) {
                 this->separationLaw(birds, separation_ids); // O(n)
             } else if (!alignment_ids.empty()) {
