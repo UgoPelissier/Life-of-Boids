@@ -9,6 +9,7 @@
 #include "../main.h"
 #include "../config/config.h"
 #include "obstacle.h"
+#include "fruit.h"
 
 //====================AGENT CLASS============================
 class Agent {
@@ -19,6 +20,7 @@ private:
     bool m_predator;
     bool m_obstacle;
     bool m_alive;
+    bool m_fruit;
     size_t m_index;
 
 public:
@@ -33,10 +35,13 @@ public:
     bool& get_predator();
     bool& get_obstacle();
     bool& get_alive();
+    bool& get_fruit();
     size_t& get_index();
 
+    bool borders();
     Real distance(Agent a) const;
     Real distance(Obstacle obs) const;
+    Real distance(Fruit f) const;
     Real angle (Agent& a) const;
     bool insideFieldView(Agent& a) const;
     std::vector<std::vector<size_t>> neighbours(std::vector<Agent>& agents);
@@ -48,12 +53,14 @@ public:
     bool overlap(std::vector<Agent>& agents) const;
 
     std::vector<size_t> obstacle(std::vector<Obstacle>& obstacles);
+    size_t fruit(std::vector<Fruit>& fruits);
 
     void windowUpdate();
     void constantUpdate();
 
     vec3 center(std::vector<Agent> agents, std::vector<size_t>& neighbours) const;
     vec3 centerSeparation(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
+    vec2 centerSeparation(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighbours);
 
     void cohesionLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
     void alignmentLaw(std::vector<Agent>& agents, std::vector<size_t>& neighbours);
@@ -61,8 +68,9 @@ public:
     void biSeparationLaw(std::vector<Agent>& agents, std::vector<size_t>& birdsNeighbours, std::vector<size_t>& predNeighbours);
     void predatorLaw(std::vector<Agent>& agents);
     void obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles);
+    void fruitLaw(size_t& index, std::vector<Fruit>& fruits, std::vector<Agent>& agents);
 
-    void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+    void updateAgent(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<Fruit>&fruits);
 
 };
 
@@ -95,4 +103,4 @@ inline Real angleVector(vec2 v1, vec2 v2) {
 
 std::vector<Agent> initialiaze_agents(std::vector<Obstacle>& obstacles);
 
-std::vector<Agent> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles);
+std::tuple <std::vector<Agent>, std::vector<Fruit>> updateAgents(std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<FruitTree>& trees, std::vector<Fruit>& fruits);
