@@ -2,7 +2,7 @@
 
 const size_t DEFAULT_NUM_AGENTS = 500;
 const size_t DEFAULT_NUM_PREDATORS = 10;
-const size_t DEFAULT_NUM_OBSTACLES = 20;
+const size_t DEFAULT_NUM_OBSTACLES = 50;
 const size_t DEFAULT_NUM_FRUIT_TREES = 10;
 const int DEFAULT_NUM_FRUITS_DROPS = 5;
 const Real CLOSE = 50;

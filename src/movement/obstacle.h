@@ -25,6 +25,7 @@ public:
     Real& get_width();
 
     bool borders() const;
+    bool overlap(std::vector<Obstacle>& obstacles);
 };
 
 std::vector<Obstacle> initObstacles();
