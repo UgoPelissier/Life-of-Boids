@@ -180,8 +180,16 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buff
     return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangleTree_vertexArray, triangleFruit_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
 }
 
-
-std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<FruitTree>, std::vector<Fruit>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
+std::tuple<
+std::vector<Agent>,
+std::vector<Obstacle>,
+std::vector<FruitTree>,
+std::vector<Fruit>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>
+> initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
@@ -191,7 +199,7 @@ std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<FruitTree>, st
     std::vector<FruitTree> trees = initFruitTree(obstacles);
     std::vector<Fruit> fruits = {};
     for (FruitTree tree : trees) {
-        fruits = tree.DropFruit(fruits);
+        fruits = tree.DropFruit(fruits, obstacles);
     }
 
     std::vector<std::array<triangle::Vertex, 3>> triangles;

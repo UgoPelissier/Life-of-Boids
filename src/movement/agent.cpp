@@ -183,24 +183,31 @@ bool Agent::overlap(std::vector<Agent>& agents) const {
 
 std::vector<size_t> Agent::obstacle(std::vector<Obstacle>& obstacles) {
     m_obstacle = false;
-    std::vector<size_t> neighboursObstacles;
+    Real minDistance = WIDTH;
+    Real distance;
+    std::vector<size_t> neighbourObstacles;
+    size_t index = obstacles.size();
     for (size_t i(0); i < obstacles.size(); i++) {
-        if ( this->distance(obstacles[i]) < std::max(obstacles[i].get_height()/2.5,obstacles[i].get_width()/2.5) ) {
+        distance = this->distance(obstacles[i]);
+        if ( distance < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) && distance<minDistance ) {
             m_obstacle = true;
-            neighboursObstacles.push_back(i);
+            index = i;
+            minDistance = distance;
         }
     }
-    return neighboursObstacles;
+    if (index<obstacles.size())
+        neighbourObstacles.push_back(index);
+    return neighbourObstacles;
 }
 
-size_t Agent::fruit(std::vector<Fruit>& fruits) { //based on obstacle. m_fruit = True if fruit nearby, else False. Return closest fruit index
+size_t Agent::fruit(std::vector<Fruit>& fruits) { //Based on obstacle. m_fruit = True if fruit nearby, else False. Return closest fruit index
     m_fruit = false;
     size_t fruit_index=0;
     Real distance;
     Real distance_min = WIDTH+HEIGHT;
     for (size_t i(0); i < fruits.size(); i++) {
         distance = this->distance(Agent(fruits[i].get_x(), fruits[i].get_y())); //convert fruit to agent to do calculation
-        if (distance < FRUIT_RANGE && distance<=distance) {
+        if (distance < FRUIT_RANGE) {
             m_fruit = true;
             distance_min = distance;
             fruit_index = i;
@@ -208,7 +215,6 @@ size_t Agent::fruit(std::vector<Fruit>& fruits) { //based on obstacle. m_fruit =
     }
     return fruit_index;
 }
-
 
 void Agent::windowUpdate() {
     m_x = modulo(m_x,WIDTH);
@@ -248,6 +254,10 @@ vec2 Agent::centerSeparation(std::vector<Obstacle>& obstacles, std::vector<size_
     size_t n(neighbours.size());
     Real x(0), y(0);
     Real inv = (Real)1 / (Real)n;
+    if (inv<1e-10) {
+        inv = n;
+        inv = 1/inv;
+    }
     for(size_t& i : neighbours) {
         x += obstacles[i].get_x();
         y += obstacles[i].get_y();
@@ -314,11 +324,6 @@ void Agent::predatorLaw(std::vector<Agent>& agents) {
 
 void Agent::obstacleLaw(std::vector<Obstacle>& obstacles, std::vector<size_t>& neighboursObstacles) {
 
-/*    std::vector<Agent> agents(obstacles.size());
-    for (size_t i = 0; i<obstacles.size(); i++) {
-        agents[i] = Agent(obstacles[i].get_x(),obstacles[i].get_y());
-    }*/
-
     vec2 v = this->centerSeparation(obstacles, neighboursObstacles);
     vec2 separation = normVector({(Real)(m_x-v[0]),(Real)(m_y-v[1])});
 
@@ -334,7 +339,8 @@ void Agent::fruitLaw(size_t& fruit_index, std::vector<Fruit>& fruits, std::vecto
 
     agent = Agent(fruits[fruit_index].get_x(), fruits[fruit_index].get_y());
 
-    if (this->distance(agent) <= 3) { // if the agent get the fruit, delete the fruit and create new agent at current coord
+    if (this->distance(agent) <= DEAD_RANGE) { // if the agent get the fruit, delete the fruit and create new agent at current coord
+        agent.get_index() = agents.size();
         agents.push_back(agent);
         fruits[fruit_index].get_alive() = false;
     }
@@ -475,7 +481,7 @@ std::tuple <std::vector<Agent>, std::vector<Fruit>> updateAgents(std::vector<Age
     }
 
     for (FruitTree& tree : trees) {
-        fruits = tree.DropFruit(fruits);
+        fruits = tree.DropFruit(fruits, obstacles);
     }
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())

@@ -90,6 +90,8 @@ bool FruitTree::borders() {
     return false;
 }
 
+
+
 FruitTree randomFruitTree() {
     FruitTree fruit_tree;
 
@@ -104,13 +106,14 @@ FruitTree randomFruitTree() {
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::uniform_int_distribution uniSize(MIN_FRUIT_TREE_SIZE, MAX_FRUIT_TREE_SIZE);
     //   std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
-    std::mt19937_64 rng;
+    std::random_device dev;
+    std::mt19937 engine(dev());
     //   time_t start;
 
-    randomX = uniX(rng);
-    randomY = uniY(rng);
-    randomHeight = uniSize(rng);
-    randomWidth = uniSize(rng);
+    randomX = uniX(engine);
+    randomY = uniY(engine);
+    randomHeight = uniSize(engine);
+    randomWidth = uniSize(engine);
     randomTime = 5;
     //   randomTime = uniTime(rng) + time(&start);
 
@@ -136,24 +139,25 @@ std::vector<FruitTree> initFruitTree(std::vector<Obstacle> obstacles) {
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::uniform_int_distribution uniSize(MIN_FRUIT_TREE_SIZE, MAX_FRUIT_TREE_SIZE);
     std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
-    std::mt19937_64 rng;
+    std::random_device dev;
+    std::mt19937 engine(dev());
     time_t start;
 
     while (fruit_trees.size() < DEFAULT_NUM_FRUIT_TREES) {
-        randomX = uniX(rng);
-        randomY = uniY(rng);
-        randomHeight = uniSize(rng);
-        randomWidth = uniSize(rng);
-        randomTime = uniTime(rng)+time(&start);
+        randomX = uniX(engine);
+        randomY = uniY(engine);
+        randomHeight = uniSize(engine);
+        randomWidth = uniSize(engine);
+        randomTime = uniTime(engine)+time(&start);
         newFruitTree = FruitTree(randomX, randomY, randomHeight, randomWidth, randomTime);
 
         agent = Agent(randomX, randomY);
         agent.obstacle(obstacles);
         while (newFruitTree.borders() || agent.get_obstacle()) {
-            randomX = uniX(rng);
-            randomY = uniY(rng);
-            randomHeight = uniSize(rng);
-            randomWidth = uniSize(rng);
+            randomX = uniX(engine);
+            randomY = uniY(engine);
+            randomHeight = uniSize(engine);
+            randomWidth = uniSize(engine);
             newFruitTree = FruitTree(randomX, randomY, randomHeight, randomWidth, randomTime);
 
             agent = Agent(randomX, randomY);
@@ -166,11 +170,14 @@ std::vector<FruitTree> initFruitTree(std::vector<Obstacle> obstacles) {
     return fruit_trees;
 }
 
-std::vector<Fruit> FruitTree::DropFruit(std::vector<Fruit>& fruits) {
+std::vector<Fruit> FruitTree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> obstacles) {
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::uniform_int_distribution uniNumFruit(DEFAULT_NUM_FRUITS_DROPS/2, DEFAULT_NUM_FRUITS_DROPS);
-    std::mt19937_64 rng;
+    std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
+    std::random_device dev;
+    std::mt19937 engine(dev());
     time_t finish;
+
+    Agent fruit;
 
     if (m_time<=time(&finish)) {
         int randomNumFruit;
@@ -178,16 +185,25 @@ std::vector<Fruit> FruitTree::DropFruit(std::vector<Fruit>& fruits) {
         int randomY;
         std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
 
-        randomNumFruit = uniNumFruit(rng);
+        randomNumFruit = uniNumFruit(engine);
 
         for (int i(0); i < randomNumFruit; i++) {
             std::uniform_int_distribution uniX(0, MAX_FRUIT_DISTANCE * 2);
             std::uniform_int_distribution uniY(0, MAX_FRUIT_DISTANCE * 2);
-            randomX = uniX(rng) - MAX_FRUIT_DISTANCE + (int)m_x;
-            randomY = uniY(rng) - MAX_FRUIT_DISTANCE + (int)m_y;
+            randomX = uniX(engine) - MAX_FRUIT_DISTANCE + (int)m_x;
+            randomY = uniY(engine) - MAX_FRUIT_DISTANCE + (int)m_y;
+
+            fruit = Agent(randomX, randomY);
+            fruit.obstacle(obstacles);
+            while (fruit.get_obstacle()) {
+                randomX = uniX(engine);
+                randomY = uniY(engine);
+                fruit = Agent(randomX, randomY);
+                fruit.obstacle(obstacles);
+            }
             fruits.push_back(Fruit(randomX, randomY, m_height / 2, m_width / 2, true));
         }
-        m_time= uniTime(rng) + time(&finish);
+        m_time= uniTime(engine) + time(&finish);
     }
     return fruits;
 }

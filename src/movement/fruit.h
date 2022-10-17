@@ -50,7 +50,7 @@ public:
 
     bool borders();
 
-    std::vector < Fruit >  DropFruit(std::vector < Fruit >& fruits);
+    std::vector <Fruit> DropFruit(std::vector < Fruit >& fruits, std::vector<Obstacle> obstacles);
 };
 
 FruitTree randomFruitTree();
