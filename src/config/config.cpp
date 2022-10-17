@@ -2,7 +2,7 @@
 
 const size_t DEFAULT_NUM_AGENTS = 500;
 const size_t DEFAULT_NUM_PREDATORS = 10;
-const size_t DEFAULT_NUM_OBSTACLES = 50;
+const size_t DEFAULT_NUM_OBSTACLES = 20;
 const size_t DEFAULT_NUM_FRUIT_TREES = 10;
 const int DEFAULT_NUM_FRUITS_DROPS = 5;
 const Real CLOSE = 50;
@@ -15,8 +15,8 @@ const Real VIEW_RANGE = 3*PI/2;
 const int WIDTH = 2400;
 const int HEIGHT = 1300;
 const int MAX_OBSTACLE_SIZE = HEIGHT/5;
-const int MAX_FRUIT_TREE_SIZE = 50;
-const int MIN_FRUIT_TREE_SIZE = 25;
+const int MAX_FRUIT_TREE_SIZE = 75;
+const int MIN_FRUIT_TREE_SIZE = 50;
 const int MAX_FRUIT_DISTANCE = 100;
 
 
@@ -26,8 +26,8 @@ const Real BODY_OVERLAP = (sqrt(3)*BODY_SIZE/2)*(WIDTH/2);
 const vec3 PRED_COLOR = { 1., 0., 0. };
 const vec3 BIRD_COLOR = { 1., 1., 1. };
 const vec3 OBSTACLE_COLOR = { 0.2, 0.2, 0.2 };
-const vec3 TREE_COLOR = { (Real)91/(Real)256, (Real)60/(Real)256, (Real)17/(Real)256 };
-const vec3 FRUIT_COLOR = { 0., 1., 0. };
+const vec3 TREE_COLOR = { (Real)98/(Real)256, (Real)52/(Real)256, (Real)18/(Real)256 };
+const vec3 FRUIT_COLOR = {0., 1., 0.};
 const int NUMBER_LOOP_FPS = 10;
 
 // Laws parameters

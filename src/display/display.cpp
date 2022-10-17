@@ -55,27 +55,12 @@ vec2 scale(FruitTree& tree) {
     };
 }
 
-vec2 scale(FruitTree& tree, Real ratio) {
-    return {
-            2 * ratio * (((Real)(tree.get_x())) / (Real)(WIDTH)) - ratio,
-            2 * (((Real)(tree.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
 vec2 scale(Fruit& fruit) {
     return {
             2 * RATIO * (((Real)(fruit.get_x())) / (Real)(WIDTH)) - RATIO,
             2 * (((Real)(fruit.get_y())) / (Real)(HEIGHT)) - 1
     };
 }
-
-vec2 scale(Fruit& fruit, Real ratio) {
-    return {
-            2 * ratio * (((Real)(fruit.get_x())) / (Real)(WIDTH)) - ratio,
-            2 * (((Real)(fruit.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
 
 std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
 
@@ -219,18 +204,21 @@ std::vector<std::array<triangle::Vertex, 3>>
     }
     for (Obstacle obs : obstacles) {
         obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
-        trianglesObs.push_back(obstacle[0]);
-        trianglesObs.push_back(obstacle[1]);
+        for (const auto & i : obstacle) {
+            trianglesObs.push_back(i);
+        }
     }
     for (FruitTree tree : trees) {
         tree_triangle = triangle::newTree(scale(tree), TREE_COLOR, tree.get_height() / HEIGHT, tree.get_width() / WIDTH);
-        trianglesTree.push_back(tree_triangle[0]);
-        trianglesTree.push_back(tree_triangle[1]);
+        for (const auto & i : tree_triangle) {
+            trianglesTree.push_back(i);
+        }
     }
     for (Fruit fruit : fruits) {
-        fruit_triangle = triangle::newTree(scale(fruit), FRUIT_COLOR, fruit.get_size() / HEIGHT, fruit.get_size() / WIDTH);
-        trianglesFruit.push_back(fruit_triangle[0]);
-        trianglesFruit.push_back(fruit_triangle[1]);
+        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
+        for (const auto & i : fruit_triangle) {
+            trianglesFruit.push_back(i);
+        }
     }
     return std::make_tuple(agents, obstacles, trees, fruits, triangles, trianglesObs, trianglesTree, trianglesFruit);
 }
@@ -259,10 +247,11 @@ void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vect
         }
     }
 
-    for (size_t i(0); i < fruits.size(); i++) {
-        fruit_triangle = triangle::newTree(scale(fruits[i]), FRUIT_COLOR, fruits[i].get_size() / HEIGHT, fruits[i].get_size() / WIDTH);
-        trianglesFruit.push_back(fruit_triangle[0]);
-        trianglesFruit.push_back(fruit_triangle[1]);
+    for (auto & fruit : fruits) {
+        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
+        for (const auto & i : fruit_triangle) {
+            trianglesFruit.push_back(i);
+        }
     }
 
 }
@@ -327,30 +316,6 @@ void updateWindow(GLFWwindow* window,
 
     mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
 
-    //Agents
-    VertexArray_bind(triangle_vertexArray);
-    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
-    ShaderProgram_activate(triangle_shaderProgram);
-
-    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
-    glBindVertexArray(triangle_vertexArray.vertex_array);
-
-    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * triangles.size() * sizeof(triangle::Vertex), triangles.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * triangles.size());
-
-    //Obstacles
-    VertexArray_bind(triangleObs_vertexArray);
-    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
-    ShaderProgram_activate(triangle_shaderProgram);
-
-    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
-    glBindVertexArray(triangleObs_vertexArray.vertex_array);
-
-    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesObs.size() * sizeof(triangle::Vertex), trianglesObs.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesObs.size());
-
     //Tree
     VertexArray_bind(triangleTree_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
@@ -374,6 +339,30 @@ void updateWindow(GLFWwindow* window,
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
     glBufferData(GL_ARRAY_BUFFER, 3 * trianglesFruit.size() * sizeof(triangle::Vertex), trianglesFruit.data(), GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesFruit.size());
+
+    //Agents
+    VertexArray_bind(triangle_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangle_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * triangles.size() * sizeof(triangle::Vertex), triangles.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * triangles.size());
+
+    //Obstacles
+    VertexArray_bind(triangleObs_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangleObs_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesObs.size() * sizeof(triangle::Vertex), trianglesObs.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesObs.size());
 
     glfwSwapBuffers(window);
     glfwPollEvents();

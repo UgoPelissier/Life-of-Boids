@@ -30,6 +30,10 @@ vec2 scale(Agent& agent, Real ratio);
 
 vec2 scale(Obstacle& obstacle);
 
+vec2 scale(FruitTree& tree);
+
+vec2 scale(Fruit& fruit);
+
 std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow();
 
 std::tuple<std::vector<Agent>, std::vector<Obstacle>, std::vector<FruitTree>, std::vector<Fruit>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow();

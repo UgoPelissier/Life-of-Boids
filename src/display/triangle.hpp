@@ -144,6 +144,35 @@ inline std::vector<std::array<Vertex, 3>> newTree(vec2 center, vec3 color, Real 
     return tree;
 }
 
+inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real r) {
+
+    std::vector<std::array<Vertex, 3>> fruit;
+
+    Real x0 = center[0];
+    Real y0 = center[1];
+
+    Real x1, x2, y1, y2;
+    Real theta = 0;
+    int N = 20;
+
+    while (theta<2*PI) {
+        x1 = x0 + r*cos(theta);
+        y1 = y0 + r*sin(theta);
+        x2 = x0 + r*cos(theta + (2*PI/N));
+        y2 = y0 + r*sin(theta + (2*PI/N));
+
+        fruit.push_back({ {
+            // (position 2d + color 3d pack)
+            {{x0, y0}, color},  //
+            {{x1, y1}, color},  //
+            {{x2, y2}, color}   //
+        } });
+
+        theta += 2*PI/N;
+    }
+    return fruit;
+}
+
 
 static const char* const vertex_shader_text
     = "#version 330\n"

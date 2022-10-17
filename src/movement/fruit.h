@@ -44,13 +44,10 @@ public:
     Real& get_y();
     Real& get_height();
     Real& get_width();
-    double get_time();
 
     bool borders();
 
-    std::vector <Fruit> DropFruit(std::vector < Fruit >& fruits, std::vector<Obstacle> obstacles);
+    std::vector <Fruit> DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> obstacles);
 };
-
-FruitTree randomFruitTree();
 
 std::vector<FruitTree> initFruitTree(std::vector<Obstacle> obstacles);
