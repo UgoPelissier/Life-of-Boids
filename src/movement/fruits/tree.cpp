@@ -1,70 +1,24 @@
-#include "fruit.h"
-#include "agent.hpp"
-#include "obstacle.h"
+#include "tree.h"
 
-Fruit::Fruit() {
-    m_x = 0;
-    m_y = 0;
-    m_size=0;
-    m_alive = true;
-}
+Tree::Tree() : Object()
+{}
 
-Fruit::Fruit(Real const& x, Real const& y, Real const& size, bool const& alive) {
-    m_x = x;
-    m_y = y;
-    m_size = size;
-    m_alive = alive;
-}
+Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Object(x,y), m_height(height), m_width(width), m_time(time)
+{}
 
-Real& Fruit::get_x() {
-    return m_x;
-}
-
-Real& Fruit::get_y() {
-    return m_y;
-}
-
-Real& Fruit::get_size() {
-    return m_size;
-}
-
-bool& Fruit::get_alive() {
-    return m_alive;
-}
-
-FruitTree::FruitTree() {
-    m_x = 0;
-    m_y = 0;
-    m_height = 0;
-    m_width = 0;
-    m_time = 0;
-}
-
-FruitTree::FruitTree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) {
-    m_x = x;
-    m_y = y;
-    m_height = height;
-    m_width = width;
-    m_time = time;
-}
-
-Real& FruitTree::get_x() {
-    return m_x;
-}
-
-Real& FruitTree::get_y() {
-    return m_y;
-}
-
-Real& FruitTree::get_height() {
+Real Tree::get_height() const {
     return m_height;
 }
 
-Real& FruitTree::get_width() {
+Real Tree::get_width() const {
     return m_width;
 }
 
-bool FruitTree::borders() {
+bool Tree::get_obstacle() const {
+    return m_obstacle;
+}
+
+bool Tree::borders() const {
     if (m_x < CLOSE) {
         return true;
     }
@@ -80,14 +34,14 @@ bool FruitTree::borders() {
     return false;
 }
 
-std::vector<Fruit> FruitTree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> obstacles) {
+std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles) {
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
     std::random_device dev;
     std::mt19937 engine(dev());
     time_t finish;
 
-    Agent fruit;
+    Fruit fruit;
 
     if (m_time<=time(&finish)) {
         int randomNumFruit;
@@ -100,35 +54,46 @@ std::vector<Fruit> FruitTree::DropFruit(std::vector<Fruit>& fruits, std::vector<
         for (int i(0); i < randomNumFruit; i++) {
             std::uniform_real_distribution<Real> uniX(0, MAX_FRUIT_DISTANCE);
             std::uniform_real_distribution<Real> uniY(0, MAX_FRUIT_DISTANCE);
-            randomX = uniX(engine) + m_x;
-            randomY = uniY(engine) + m_y;
+            randomX = m_x + uniX(engine);
+            randomY = m_y + uniY(engine);
 
-            fruit = Agent(randomX, randomY);
+            fruit = Fruit(randomX, randomY);
             fruit.obstacle(obstacles);
             while (fruit.borders() || fruit.get_obstacle()) {
                 randomX = uniX(engine);
                 randomY = uniY(engine);
-                fruit = Agent(randomX, randomY);
+                fruit = Fruit(randomX, randomY);
                 fruit.obstacle(obstacles);
             }
             fruits.push_back(Fruit(randomX, randomY, std::min(m_height,m_width)/2, true));
         }
-        m_time= uniTime(engine) + time(&finish);
+        m_time = uniTime(engine) + time(&finish);
     }
     return fruits;
 }
 
-std::vector<FruitTree> initFruitTree(std::vector<Obstacle> obstacles) {
-    std::vector<FruitTree> fruit_trees;
-    FruitTree newFruitTree;
+void Tree::obstacle(std::vector<Obstacle> const& obstacles) {
+    m_obstacle = false;
+    for (size_t i(0); i < obstacles.size(); i++) {
+        if ( this->distance(obstacles[i]) < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) ) {
+            m_obstacle = true;
+        }
+    }
+}
+
+Tree::~Tree() {
+
+}
+
+std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
+    std::vector<Tree> trees;
+    Tree newTree;
 
     Real randomX;
     Real randomY;
     int randomHeight;
     int randomWidth;
     double randomTime;
-
-    Agent fruitTree;
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_real_distribution<Real> uniX(0, WIDTH);
@@ -139,29 +104,25 @@ std::vector<FruitTree> initFruitTree(std::vector<Obstacle> obstacles) {
     std::mt19937 engine(dev());
     time_t start;
 
-    while (fruit_trees.size() < DEFAULT_NUM_FRUIT_TREES) {
+    while (trees.size() < DEFAULT_NUM_FRUIT_TREES) {
         randomX = uniX(engine);
         randomY = uniY(engine);
         randomHeight = uniSize(engine);
         randomWidth = uniSize(engine);
         randomTime = uniTime(engine)+time(&start);
-        newFruitTree = FruitTree(randomX, randomY, randomHeight, randomWidth, randomTime);
+        newTree = Tree(randomX, randomY, randomHeight, randomWidth, randomTime);
 
-        fruitTree = Agent(randomX, randomY);
-        fruitTree.obstacle(obstacles);
-        while (newFruitTree.borders() || fruitTree.get_obstacle()) {
+        newTree.obstacle(obstacles);
+        while (newTree.borders() || newTree.get_obstacle()) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomHeight = uniSize(engine);
             randomWidth = uniSize(engine);
-            newFruitTree = FruitTree(randomX, randomY, randomHeight, randomWidth, randomTime);
-
-            fruitTree = Agent(randomX, randomY);
-            fruitTree.obstacle(obstacles);
-
+            newTree = Tree(randomX, randomY, randomHeight, randomWidth, randomTime);
+            newTree.obstacle(obstacles);
         }
 
-        fruit_trees.push_back(newFruitTree);
+        trees.push_back(newTree);
     }
-    return fruit_trees;
+    return trees;
 }

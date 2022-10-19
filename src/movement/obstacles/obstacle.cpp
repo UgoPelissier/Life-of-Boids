@@ -1,36 +1,20 @@
 #include "obstacle.h"
 
-Obstacle::Obstacle() {
-    m_x = 0;
-    m_y = 0;
-    m_height = 0;
-    m_width = 0;
-}
+Obstacle::Obstacle() : Object(), m_height(0), m_width(0)
+{}
 
-Obstacle::Obstacle(Real const& x, Real const& y, Real const& height, Real const& width) {
-    m_x = x;
-    m_y = y;
-    m_height = height;
-    m_width = width;
-}
+Obstacle::Obstacle(Real const& x, Real const& y, Real const& height, Real const& width) : Object(x,y), m_height(height), m_width(width)
+{}
 
-Real& Obstacle::get_x() {
-    return m_x;
-}
-
-Real& Obstacle::get_y() {
-    return m_y;
-}
-
-Real& Obstacle::get_height() {
+Real Obstacle::get_height() const {
     return m_height;
 }
 
-Real& Obstacle::get_width() {
+Real Obstacle::get_width() const {
     return m_width;
 }
 
-bool Obstacle::borders() const{
+bool Obstacle::borders() const {
     if ( m_x < m_width/2 )
         return true;
     else if ((WIDTH - m_width/2 < m_x) && (m_x < WIDTH)) {
@@ -43,8 +27,8 @@ bool Obstacle::borders() const{
     return false;
 }
 
-bool Obstacle::overlap(std::vector<Obstacle>& obstacles) {
-    for (Obstacle& obs : obstacles) {
+bool Obstacle::overlap(std::vector<Obstacle>  const& obstacles) const {
+    for (Obstacle  const& obs : obstacles) {
         if ( ( std::abs(obs.get_x()-m_x) <= (obs.get_width()/2 + m_width/2 + ALIGNMENT_RANGE) ) && ( std::abs(obs.get_y()-m_y) <= (obs.get_height()/2 + m_height/2 + ALIGNMENT_RANGE) ) ) {
             return true;
         }
@@ -52,7 +36,11 @@ bool Obstacle::overlap(std::vector<Obstacle>& obstacles) {
     return false;
 }
 
-std::vector<Obstacle> initObstacles() {
+Obstacle::~Obstacle() {
+
+}
+
+std::vector<Obstacle> obstacles_init() {
     std::vector<Obstacle> obstacles;
     Obstacle newObstacle;
 
@@ -87,4 +75,3 @@ std::vector<Obstacle> initObstacles() {
     }
     return obstacles;
 }
-
