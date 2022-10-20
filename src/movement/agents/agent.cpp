@@ -57,20 +57,26 @@ bool Agent::overlap(std::vector<Agent> const& agents) const {
     return false;
 }
 
-std::vector<size_t> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
+std::pair<state,std::vector<Real>> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
     m_obstacle = false;
-    Real minDistance = WIDTH;
-    Real distance;
-    std::vector<size_t> neighboursObstacle;
+
+    state s = constant;
+    std::vector<Real> v;
+
+    Real current_distance;
+    Real min_distance = WIDTH+HEIGHT;
+
     for (size_t i(0); i < obstacles.size(); i++) {
-        distance = this->distance(obstacles[i]);
-        if ( distance < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) && distance<minDistance ) {
+        current_distance = this->distance(obstacles[i]);
+
+        if ( current_distance < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) && current_distance<min_distance ) {
             m_obstacle = true;
-            neighboursObstacle = {i};
-            minDistance = distance;
+            s = obst;
+            min_distance = current_distance;
+            v = {obstacles[i].get_x(),obstacles[i].get_y()};
         }
     }
-    return neighboursObstacle;
+    return std::make_pair(s,v);
 }
 
 void Agent::windowUpdate() {
@@ -145,9 +151,9 @@ Agent Agent::closest(std::vector<Agent> const& birds) const {
     return bird;
 }
 
-void Agent::obstacleLaw(std::vector<Obstacle> const& obstacles, std::vector<size_t> const& neighboursObstacle) {
+void Agent::obstacleLaw(std::vector<Real> const&  obstacle) {
 
-    vec2 separation = normVector({(Real)(m_x-obstacles[neighboursObstacle[0]].get_x()),(Real)(m_y-obstacles[neighboursObstacle[0]].get_y())});
+    vec2 separation = normVector({(Real)(m_x-obstacle[0]),(Real)(m_y-obstacle[1])});
 
     m_angle = (1-OBSTACLE_RELAXATION)*atan2(separation[1],separation[0]) + OBSTACLE_RELAXATION*m_angle;
 
@@ -179,9 +185,9 @@ void Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<A
     std::vector<Real> update;
 
     // Obstacles
-    std::vector<size_t> neighboursObstacle = this->obstacle(obstacles);
+    std::tie(s,update) = this->obstacle(obstacles);
     if (m_obstacle) {
-        this->obstacleLaw(obstacles, neighboursObstacle);
+        this->obstacleLaw(update);
     }
     else {
         std::tie(s,update) = this->neighbour(predators, birds);

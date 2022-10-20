@@ -2,7 +2,7 @@
 #include "../object.h"
 #include "../obstacles/obstacle.h"
 
-enum state {separation, alignment, cohesion, constant};
+enum state {obst, separation, alignment, cohesion, constant};
 
 class Agent : public Object {
 protected:
@@ -27,7 +27,7 @@ public:
     virtual bool overlap(Agent const& a) const;
     virtual bool overlap(std::vector<Agent> const& agents) const;
 
-    virtual std::vector<size_t> obstacle(std::vector<Obstacle> const& obstacles);
+    virtual std::pair<state,std::vector<Real>> obstacle(std::vector<Obstacle> const& obstacles);
 
     virtual void windowUpdate();
     virtual void constantUpdate();
@@ -35,7 +35,7 @@ public:
     virtual std::pair<state,std::vector<Real>> neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) const;
     virtual Agent closest(std::vector<Agent> const& birds) const;
 
-    virtual void obstacleLaw(std::vector<Obstacle> const& obstacles, std::vector<size_t> const& neighboursObstacle);
+    virtual void obstacleLaw(std::vector<Real> const&  obstacle);
     virtual void separationLaw(std::vector<Real> const&  predator);
     virtual void predatorLaw(std::vector<Real> const& birds);
 

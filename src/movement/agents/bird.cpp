@@ -82,8 +82,10 @@ std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& bir
         case constant:
             v = {0};
             return std::make_pair(s,v);
+        default:
+            v = {0};
+            return std::make_pair(s,v);
     }
-
 }
 
 std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
@@ -191,16 +193,15 @@ int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    std::vector<size_t> neighboursObstacle;
     size_t fruit_index;
 
     state s;
     std::vector<Real> update, predator;
 
     // Obstacles
-    neighboursObstacle = this->obstacle(obstacles);
+    std::tie(s,update) = this->obstacle(obstacles);
     if (m_obstacle) {
-        this->obstacleLaw(obstacles, neighboursObstacle);
+        this->obstacleLaw(update);
 
         this->windowUpdate();
         return 0;
