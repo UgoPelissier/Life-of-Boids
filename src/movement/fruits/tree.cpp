@@ -104,7 +104,7 @@ std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
     std::mt19937 engine(dev());
     time_t start;
 
-    while (trees.size() < DEFAULT_NUM_FRUIT_TREES) {
+    while (trees.size() < DEFAULT_NUM_TREES) {
         randomX = uniX(engine);
         randomY = uniY(engine);
         randomHeight = uniSize(engine);

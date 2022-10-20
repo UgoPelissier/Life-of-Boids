@@ -211,7 +211,7 @@ std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector
     std::random_device dev;
     std::mt19937 engine(dev());
 
-    for (size_t i = 0; i<DEFAULT_NUM_AGENTS; ++i) {
+    for (size_t i = 0; i<DEFAULT_NUM_BIRDS; ++i) {
 
         randomX = uniX(engine);
         randomY = uniY(engine);

@@ -11,10 +11,10 @@ using vec4 = std::array<Real, 4>;
 using mat4x4 = std::array<vec4, 4>;
 
 // Agent parameters
-extern const size_t DEFAULT_NUM_AGENTS;
+extern const size_t DEFAULT_NUM_BIRDS;
 extern const size_t  DEFAULT_NUM_PREDATORS;
 extern const size_t  DEFAULT_NUM_OBSTACLES;
-extern const size_t  DEFAULT_NUM_FRUIT_TREES;
+extern const size_t  DEFAULT_NUM_TREES;
 extern const int  DEFAULT_NUM_FRUITS_DROPS;
 extern const Real CLOSE;
 extern const Real SPEED;
