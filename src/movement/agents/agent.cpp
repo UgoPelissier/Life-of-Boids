@@ -181,7 +181,7 @@ void Agent::predatorLaw(std::vector<Real> const& bird) {
 }
 
 void Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
-    state s;
+    state s = constant;
     std::vector<Real> update;
 
     // Obstacles

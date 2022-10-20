@@ -16,17 +16,17 @@ public:
 
     virtual bool get_alive() const;
 
-    virtual std::pair<state,std::vector<Real>> neighbours(std::vector<Bird> const& birds, state& s) const;
-    std::pair<state,std::vector<Real>> pred(std::vector<Agent> const& predators);
-    virtual size_t fruit(std::vector<Fruit> const& fruits);
+    virtual std::vector<Real> neighbours(std::vector<Bird> const& birds, state& s) const;
+    virtual std::vector<Real> pred(std::vector<Agent> const& predators, state& s);
+    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds, state& s);
 
     virtual void cohesionLaw(std::vector<Real> const& group);
     virtual void alignmentLaw(std::vector<Real> const& group);
 
     virtual void biSeparationLaw(std::vector<Real> const& bird, std::vector<Real> const&  predator);
 
-    virtual void fruitLaw(Fruit& fruit, std::vector<Bird>& birds);
-    virtual void biFruitLaw(Fruit& fruit, std::vector<Real> const& bird, std::vector<Bird>& birds);
+    virtual void fruitLaw(std::vector<Real> const& f);
+    virtual void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
 
     virtual int update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits);
 
