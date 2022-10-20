@@ -48,7 +48,22 @@ vec2 scale(Obstacle& obstacle) {
     };
 }
 
-std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
+vec2 scale(FruitTree& tree) {
+    return {
+            2 * RATIO * (((Real)(tree.get_x())) / (Real)(WIDTH)) - RATIO,
+            2 * (((Real)(tree.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
+vec2 scale(Fruit& fruit) {
+    return {
+            2 * RATIO * (((Real)(fruit.get_x())) / (Real)(WIDTH)) - RATIO,
+            2 * (((Real)(fruit.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
+std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
+
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
@@ -116,43 +131,103 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> 
     glEnableVertexAttribArray(vpos_location);
     glEnableVertexAttribArray(vcol_location);
 
-    return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
+    // Tree triangle
+    //New
+    VertexArray triangleTree_vertexArray = VertexArray_new();
+    // Init
+    VertexArray_bind(triangleTree_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glVertexAttribPointer(
+            vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, pos));
+    glVertexAttribPointer(
+            vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, col));
+    glEnableVertexAttribArray(vpos_location);
+    glEnableVertexAttribArray(vcol_location);
+
+
+    // Fruit triangle
+    //New
+    VertexArray triangleFruit_vertexArray = VertexArray_new();
+    // Init
+    VertexArray_bind(triangleFruit_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glVertexAttribPointer(
+            vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, pos));
+    glVertexAttribPointer(
+            vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, col));
+    glEnableVertexAttribArray(vpos_location);
+    glEnableVertexAttribArray(vcol_location);
+
+    return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangleTree_vertexArray, triangleFruit_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
 }
 
-std::tuple<agents_t, agents_t, std::vector<Obstacle>, std::vector<std::array<triangle::Vertex, 3>>, std::vector<std::array<triangle::Vertex, 3>>> initAgentWindow() {
+std::tuple<
+std::vector<Agent>,
+std::vector<Obstacle>,
+std::vector<FruitTree>,
+std::vector<Fruit>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>,
+std::vector<std::array<triangle::Vertex, 3>>
+> initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
     std::vector<Obstacle> obstacles = initObstacles();
-    agents_t birds, predators;
-    std::tie(birds, predators) = initialiaze_agents(obstacles);
+    std::vector<Agent> agents = initialiaze_agents(obstacles);
+
+    std::vector<FruitTree> trees = initFruitTree(obstacles);
+    std::vector<Fruit> fruits = {};
+    for (FruitTree tree : trees) {
+        fruits = tree.DropFruit(fruits, obstacles);
+    }
 
     std::vector<std::array<triangle::Vertex, 3>> triangles;
     std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
     std::vector<std::array<triangle::Vertex, 3>> obstacle;
 
-    for (auto& it : birds) {
-        Agent& agent = it.second;
-        triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
-    }
-    for (auto &it : predators) {
-        Agent &agent = it.second;
-        triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
+    std::vector<std::array<triangle::Vertex, 3>> trianglesTree;
+    std::vector<std::array<triangle::Vertex, 3>> tree_triangle;
+    std::vector<std::array<triangle::Vertex, 3>> trianglesFruit;
+    std::vector<std::array<triangle::Vertex, 3>> fruit_triangle;
+
+    for (Agent agent : agents) {
+        if ( agent.get_predator() )
+            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
+        else
+            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
     }
     for (Obstacle obs : obstacles) {
         obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
-        trianglesObs.push_back(obstacle[0]);
-        trianglesObs.push_back(obstacle[1]);
+        for (const auto & i : obstacle) {
+            trianglesObs.push_back(i);
+        }
     }
-    return std::make_tuple(birds, predators, obstacles,triangles, trianglesObs);
+    for (FruitTree tree : trees) {
+        tree_triangle = triangle::newTree(scale(tree), TREE_COLOR, tree.get_height() / HEIGHT, tree.get_width() / WIDTH);
+        for (const auto & i : tree_triangle) {
+            trianglesTree.push_back(i);
+        }
+    }
+    for (Fruit fruit : fruits) {
+        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
+        for (const auto & i : fruit_triangle) {
+            trianglesFruit.push_back(i);
+        }
+    }
+    return std::make_tuple(agents, obstacles, trees, fruits, triangles, trianglesObs, trianglesTree, trianglesFruit);
 }
 
-void updateAgentWindow(GLFWwindow* window,
-                        agents_t& birds,
-                        agents_t& predators,
-                        std::vector<Obstacle>& obstacles,
-                        std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<FruitTree>& trees, std::vector<Fruit>& fruits, std::vector<std::array<triangle::Vertex, 3>>& triangles, std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit) {
     triangles = {};
+    trianglesFruit = {};
+    std::vector<std::array<triangle::Vertex, 3>> fruit_triangle;
+
 
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -161,23 +236,29 @@ void updateAgentWindow(GLFWwindow* window,
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    updateAgents(birds, predators, obstacles);
+    std::tie(agents, fruits) = updateAgents(agents, obstacles, trees, fruits);
 
-    for (auto &i : birds) {
-        Agent agent = i.second;
-        triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
+    for (auto & agent : agents) {
+        if (agent.get_predator()) {
+            triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
+        }
+        else {
+            triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
+        }
     }
-    for (auto& i : predators) {
-        Agent agent = i.second;
-        triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
+
+    for (auto & fruit : fruits) {
+        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
+        for (const auto & i : fruit_triangle) {
+            trianglesFruit.push_back(i);
+        }
     }
-    
 
 }
 
-void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& birds, agents_t& predators, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
+void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
     int width{}, height{};
-    size_t n;
+    size_t n = agents.size();
     glfwGetFramebufferSize(window, &width, &height); // Get window size
     Real ratio = (Real)width / (Real)height;
     Agent newAgent;
@@ -186,11 +267,11 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& bi
     std::mt19937 engine(dev());
 
     if (addBird) { // Add new bird to the window
-        n = birds.size();
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false, n);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false,n);
         newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(birds) && !newAgent.overlap(predators)) {
-            birds[n] = newAgent;
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
+            agents.push_back(newAgent);
+            n = agents.size();
             triangles.push_back(triangle::newTriangle(
                     scale(newAgent, ratio),
                     BIRD_COLOR,
@@ -201,11 +282,11 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& bi
     }
 
     if (addPredator) { // Add new predator to the window
-        n = predators.size();
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true, n);
+        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true,n);
         newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(birds) && !newAgent.overlap(predators)) {
-            predators[n] = newAgent;
+        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
+            agents.push_back(newAgent);
+            n = agents.size();
             triangles.push_back(triangle::newTriangle(
                     scale(newAgent, ratio),
                     PRED_COLOR,
@@ -219,8 +300,12 @@ void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, agents_t& bi
 void updateWindow(GLFWwindow* window,
                   std::vector<std::array<triangle::Vertex, 3>>& triangles,
                   std::vector<std::array<triangle::Vertex, 3>>& trianglesObs,
+                  std::vector<std::array<triangle::Vertex, 3>>& trianglesTree,
+                  std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit,
                   VertexArray& triangle_vertexArray,
                   VertexArray& triangleObs_vertexArray,
+                  VertexArray& triangleTree_vertexArray,
+                  VertexArray& triangleFruit_vertexArray,
                   Buffer& triangle_buffer,
                   ShaderProgram& triangle_shaderProgram,
                   GLint& mvp_location) {
@@ -231,6 +316,31 @@ void updateWindow(GLFWwindow* window,
 
     mat4x4 p = triangle::mat4x4_ortho(-ratio, ratio, -1., 1., 1., -1.); // Projection matrix (Visualization operation)
 
+    //Tree
+    VertexArray_bind(triangleTree_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangleTree_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesTree.size() * sizeof(triangle::Vertex), trianglesTree.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesTree.size());
+
+    //Fruit
+    VertexArray_bind(triangleFruit_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangleFruit_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesFruit.size() * sizeof(triangle::Vertex), trianglesFruit.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesFruit.size());
+
+    //Agents
     VertexArray_bind(triangle_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
     ShaderProgram_activate(triangle_shaderProgram);
@@ -242,6 +352,7 @@ void updateWindow(GLFWwindow* window,
     glBufferData(GL_ARRAY_BUFFER, 3 * triangles.size() * sizeof(triangle::Vertex), triangles.data(), GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 3 * triangles.size());
 
+    //Obstacles
     VertexArray_bind(triangleObs_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
     ShaderProgram_activate(triangle_shaderProgram);
@@ -253,10 +364,16 @@ void updateWindow(GLFWwindow* window,
     glBufferData(GL_ARRAY_BUFFER, 3 * trianglesObs.size() * sizeof(triangle::Vertex), trianglesObs.data(), GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesObs.size());
 
-    glfwSetWindowTitle(window, "Life of boids"); // Set window title
-
     glfwSwapBuffers(window);
     glfwPollEvents();
+}
+
+void display_fps(GLFWwindow* window, std::chrono::time_point<std::chrono::high_resolution_clock>& start, std::chrono::time_point<std::chrono::high_resolution_clock>& end) {
+    std::chrono::duration<double, std::milli> float_ms = end - start;
+    std::stringstream ss;
+    ss << "FPS : " << (1 / (float_ms.count()) * 1000)* NUMBER_LOOP_FPS;
+    glfwSetWindowTitle(window, ss.str().c_str());
+
 }
 
 void endWindow(GLFWwindow* window) {
