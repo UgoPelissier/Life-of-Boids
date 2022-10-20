@@ -140,6 +140,26 @@ void Bird::fruitLaw(Fruit& fruit, std::vector<Bird>& birds) {
     }
 }
 
+void Bird::biFruitLaw(Fruit& fruit, Bird const& bird, std::vector<Bird>& birds) {
+
+    if (this->distance(fruit) < DEAD_RANGE) {
+        size_t size = birds.size();
+        birds.push_back(Bird(fruit.get_x(), fruit.get_y(), -m_angle, size));
+        fruit.get_alive() = false;
+    }
+    else {
+        vec2 separationBird = normVector({(Real)(m_x-bird.get_x()),(Real)(m_y-bird.get_y())});
+        vec2 target = normVector({ (float)(fruit.get_x() - m_x),(float)(fruit.get_y() - m_y) });
+
+        Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
+        Real angleFruit = (1 - PREDATOR_RELAXATION) * atan2(target[1], target[0]) + PREDATOR_RELAXATION * m_angle;
+
+        m_angle = m_angle = 0.5*angleFruit + 0.5*angleBird;
+        m_x += PRED_SPEED * cos(m_angle);
+        m_y += PRED_SPEED * sin(m_angle);
+    }
+}
+
 void Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits) {
 
     std::vector<std::vector<size_t>> v;
@@ -168,8 +188,12 @@ void Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> cons
         } else {
             fruit_index = this->fruit(fruits);
             if (m_fruit) {
-                this->fruitLaw(fruits[fruit_index], birds);
-            } else if (!separation.empty())
+                if (!separation.empty())
+                    this->biFruitLaw(fruits[fruit_index],birds[separation[0]],birds);
+                else
+                    this->fruitLaw(fruits[fruit_index], birds);
+            }
+            else if (!separation.empty())
                 this->separationLaw(birds[separation[0]]);
             else if (!alignment.empty())
                 this->alignmentLaw(birds, alignment);
@@ -178,7 +202,6 @@ void Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> cons
             else
                 this->constantUpdate();
         }
-
         this->windowUpdate();
     }
 }

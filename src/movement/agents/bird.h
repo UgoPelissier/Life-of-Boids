@@ -27,6 +27,7 @@ public:
     virtual void separationLaw(Agent const&  predator);
     virtual void biSeparationLaw(Bird const& bird, Agent const&  predator);
     virtual void fruitLaw(Fruit& fruit, std::vector<Bird>& birds);
+    virtual void biFruitLaw(Fruit& fruit, Bird const& bird, std::vector<Bird>& birds);
 
     virtual void update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits);
 
