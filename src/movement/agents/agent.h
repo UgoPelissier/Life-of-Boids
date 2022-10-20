@@ -2,7 +2,7 @@
 #include "../object.h"
 #include "../obstacles/obstacle.h"
 
-enum state {obst, separation, alignment, cohesion, constant};
+enum state {obst, predator, predatorANDseparation, separation, alignment, cohesion, constant};
 
 class Agent : public Object {
 protected:

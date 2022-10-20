@@ -16,8 +16,7 @@ bool Bird::get_alive() const {
     return m_alive;
 }
 
-std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& birds) const {
-    state s = constant;
+std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& birds, state& s) const {
     std::vector<Real> v;
 
     Real xSeparation(0), ySeparation(0);
@@ -40,27 +39,34 @@ std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& bir
 
             if ( (current_distance < SEPARATION_RANGE) && (current_distance < min_distance) ) {
                 if (this->insideFieldView(birds[i])) {
-                    s = separation;
+                    if ( s==predator || s==predatorANDseparation)
+                        s = predatorANDseparation;
+                    else
+                        s = separation;
                     min_distance = current_distance;
                     xSeparation = birds[i].get_x();
                     ySeparation = birds[i].get_y();
                 }
             }
 
-            else if ( (s != separation) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
-                if (this->insideFieldView(birds[i])) {
-                    s = alignment;
-                    angleAlignment += birds[i].get_angle();
-                    nAlignment++;
+            else if ( (s != separation) && (s != predator) && (s != predatorANDseparation) ) {
+                if ( (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
+                    if (this->insideFieldView(birds[i])) {
+                        s = alignment;
+                        angleAlignment += birds[i].get_angle();
+                        nAlignment++;
+                    }
                 }
             }
 
-            else if ( (s != separation) && (s != alignment) && (current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE) ) {
-                if (this->insideFieldView(birds[i])) {
-                    s = cohesion;
-                    xCohesion += birds[i].get_x();
-                    yCohesion += birds[i].get_y();
-                    nCohesion++;
+            else if ( (s != separation) && (s != predator) && (s != predatorANDseparation) && (s != alignment) ) {
+                if ((current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
+                    if (this->insideFieldView(birds[i])) {
+                        s = cohesion;
+                        xCohesion += birds[i].get_x();
+                        yCohesion += birds[i].get_y();
+                        nCohesion++;
+                    }
                 }
             }
         }
@@ -69,6 +75,9 @@ std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& bir
     switch ( s )
     {
         case separation:
+            v = {xSeparation,ySeparation};
+            return std::make_pair(s,v);
+        case predatorANDseparation:
             v = {xSeparation,ySeparation};
             return std::make_pair(s,v);
         case alignment:
@@ -88,9 +97,10 @@ std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& bir
     }
 }
 
-std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
+std::pair<state,std::vector<Real>> Bird::pred(std::vector<Agent> const& predators) {
 
     std::vector<Real> pred;
+    state s;
 
     Real current_distance;
     Real min_distance = WIDTH+HEIGHT;
@@ -99,7 +109,9 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
         current_distance = this->distance(predators[i]);
 
         if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
+
             if (this->insideFieldView(predators[i])) {
+                s = predator;
                 min_distance = current_distance;
                 pred={predators[i].get_x(), predators[i].get_y()};
 
@@ -108,7 +120,7 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
             }
         }
     }
-    return pred;
+    return std::make_pair(s,pred);
 }
 
 size_t Bird::fruit(std::vector<Fruit> const& fruits) {
@@ -208,10 +220,10 @@ int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const
     }
     else {
         // Predators
-        predator = this->pred(predators);
+        std::tie(s,update) = this->pred(predators);
 
         // Neighbours
-        std::tie(s,update) = this->neighbours(birds);
+        std::tie(s,update) = this->neighbours(birds, s);
 
         if (!predator.empty()) {
             if (s==separation)

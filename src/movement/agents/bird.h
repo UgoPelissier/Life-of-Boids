@@ -16,8 +16,8 @@ public:
 
     virtual bool get_alive() const;
 
-    virtual std::pair<state,std::vector<Real>> neighbours(std::vector<Bird> const& birds) const;
-    virtual std::vector<Real> pred(std::vector<Agent> const& predators);
+    virtual std::pair<state,std::vector<Real>> neighbours(std::vector<Bird> const& birds, state& s) const;
+    std::pair<state,std::vector<Real>> pred(std::vector<Agent> const& predators);
     virtual size_t fruit(std::vector<Fruit> const& fruits);
 
     virtual void cohesionLaw(std::vector<Real> const& group);
