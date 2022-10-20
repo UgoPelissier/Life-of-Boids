@@ -6,7 +6,6 @@
 class Bird : public Agent {
 protected:
     bool m_alive;
-    bool m_fruit;
 
 public:
     Bird();
@@ -16,9 +15,9 @@ public:
 
     virtual bool get_alive() const;
 
-    virtual std::vector<Real> neighbours(std::vector<Bird> const& birds, state& s) const;
-    virtual std::vector<Real> pred(std::vector<Agent> const& predators, state& s);
-    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds, state& s);
+    virtual std::vector<Real> neighbours(std::vector<Bird> const& birds);
+    virtual std::vector<Real> pred(std::vector<Agent> const& predators);
+    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds);
 
     virtual void cohesionLaw(std::vector<Real> const& group);
     virtual void alignmentLaw(std::vector<Real> const& group);

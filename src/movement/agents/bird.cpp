@@ -1,22 +1,22 @@
 #include "bird.h"
 
-Bird::Bird() : Agent(), m_alive(true), m_fruit(false)
+Bird::Bird() : Agent(), m_alive(true)
 {}
 
-Bird::Bird(Real const& x, Real const& y) : Agent(x,y), m_alive(true), m_fruit(false)
+Bird::Bird(Real const& x, Real const& y) : Agent(x,y), m_alive(true)
 {}
 
-Bird::Bird(Real const& x, Real const& y, Real const& angle) : Agent(x,y,angle), m_alive(true), m_fruit(false)
+Bird::Bird(Real const& x, Real const& y, Real const& angle) : Agent(x,y,angle), m_alive(true)
 {}
 
-Bird::Bird(Real const& x, Real const& y, Real const& angle, size_t& index) : Agent(x,y,angle,index), m_alive(true), m_fruit(false)
+Bird::Bird(Real const& x, Real const& y, Real const& angle, size_t& index) : Agent(x,y,angle,index), m_alive(true)
 {}
 
 bool Bird::get_alive() const {
     return m_alive;
 }
 
-std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds, state& s) const {
+std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
     std::vector<Real> v;
 
     Real xSeparation(0), ySeparation(0);
@@ -39,32 +39,32 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds, state& s) con
 
             if ( (current_distance < SEPARATION_RANGE) && (current_distance < min_distance) ) {
                 if (this->insideFieldView(birds[i])) {
-                    if ( s==predator || s==predatorANDseparation )
-                        s = predatorANDseparation;
-                    else if ( s==fruit || s==fruitANDseparation )
-                        s = fruitANDseparation;
+                    if ( m_state==predator || m_state==predatorANDseparation )
+                        m_state = predatorANDseparation;
+                    else if ( m_state==fruit || m_state==fruitANDseparation )
+                        m_state = fruitANDseparation;
                     else
-                        s = separation;
+                        m_state = separation;
                     min_distance = current_distance;
                     xSeparation = birds[i].get_x();
                     ySeparation = birds[i].get_y();
                 }
             }
 
-            else if ( (s == alignment) || (s == constant) ) {
+            else if ( (m_state == alignment) || (m_state == constant) ) {
                 if ( (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
                     if (this->insideFieldView(birds[i])) {
-                        s = alignment;
+                        m_state = alignment;
                         angleAlignment += birds[i].get_angle();
                         nAlignment++;
                     }
                 }
             }
 
-            else if ( (s == cohesion) || (s == constant) ) {
+            else if ( (m_state == cohesion) || (m_state == constant) ) {
                 if ((current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
                     if (this->insideFieldView(birds[i])) {
-                        s = cohesion;
+                        m_state = cohesion;
                         xCohesion += birds[i].get_x();
                         yCohesion += birds[i].get_y();
                         nCohesion++;
@@ -74,7 +74,7 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds, state& s) con
         }
     }
 
-    switch ( s )
+    switch ( m_state )
     {
         case separation:
             v = {xSeparation,ySeparation};
@@ -99,7 +99,7 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds, state& s) con
     }
 }
 
-std::vector<Real> Bird::pred(std::vector<Agent> const& predators, state& s) {
+std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
     std::vector<Real> pred;
 
     Real current_distance;
@@ -111,7 +111,7 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators, state& s) {
         if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
 
             if (this->insideFieldView(p)) {
-                s = predator;
+                m_state = predator;
                 min_distance = current_distance;
                 pred={p.get_x(), p.get_y()};
 
@@ -123,8 +123,7 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators, state& s) {
     return pred;
 }
 
-std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds, state& s) {
-    m_fruit = false;
+std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds) {
 
     std::vector<Real> fr;
 
@@ -135,8 +134,7 @@ std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& bi
         current_distance = this->distance(f);
 
         if ( (current_distance < FRUIT_RANGE) && (current_distance<min_distance) ) {
-            m_fruit = true;
-            s = fruit;
+            m_state = fruit;
             min_distance = current_distance;
             fr = {f.get_x(),f.get_y()};
 
@@ -200,29 +198,29 @@ void Bird::biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird)
 
 int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits) {
 
-    state s = constant;
+    m_state = constant;
     std::vector<Real> update, pred, f;
 
     // Obstacles
-    std::tie(s,update) = this->obstacle(obstacles);
+    update = this->obstacle(obstacles);
 
-    if (s==obst) {
+    if (m_state==obst) {
         this->obstacleLaw(update);
         this->windowUpdate();
         return 0;
     }
 
     // Predators
-    pred = this->pred(predators,s);
+    pred = this->pred(predators);
 
     // Fruits
-    if ( s!= predator )
-        f = this->fruits(fruits,birds, s);
+    if ( m_state!= predator )
+        f = this->fruits(fruits,birds);
 
     // Neighbours
-    update = this->neighbours(birds, s);
+    update = this->neighbours(birds);
 
-    switch ( s )
+    switch ( m_state )
     {
         case predatorANDseparation:
             this->biSeparationLaw(update, pred);
@@ -299,7 +297,7 @@ std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector
 
         bird = Bird(randomX,randomY,randomAngle,n);
         bird.obstacle(obstacles);
-        while (bird.get_obstacle() || bird.overlap(birds2agents(birds)) || bird.overlap(predators) ) {
+        while (bird.get_state()==obst || bird.overlap(birds2agents(birds)) || bird.overlap(predators) ) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomAngle = 2*PI*unif(engine)-PI;

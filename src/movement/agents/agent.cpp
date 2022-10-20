@@ -1,23 +1,23 @@
 #include "agent.h"
 
-Agent::Agent() : Object(), m_angle(0), m_obstacle(false), m_index(0)
+Agent::Agent() : Object(), m_angle(0), m_state(constant), m_index(0)
 {}
 
-Agent::Agent(Real const& x, Real const& y) : Object(x,y), m_angle(0), m_obstacle(false), m_index(0)
+Agent::Agent(Real const& x, Real const& y) : Object(x,y), m_angle(0), m_state(constant), m_index(0)
 {}
 
-Agent::Agent(Real const& x, Real const& y, Real const& angle) : Object(x,y), m_angle(angle), m_obstacle(false), m_index(0)
+Agent::Agent(Real const& x, Real const& y, Real const& angle) : Object(x,y), m_angle(angle), m_state(constant), m_index(0)
 {}
 
-Agent::Agent(Real const& x, Real const& y, Real const& angle, size_t& index) : Object(x,y), m_angle(angle), m_obstacle(false), m_index(index)
+Agent::Agent(Real const& x, Real const& y, Real const& angle, size_t& index) : Object(x,y), m_angle(angle), m_state(constant), m_index(index)
 {}
 
 Real Agent::get_angle() const {
     return m_angle;
 }
 
-bool Agent::get_obstacle() const {
-    return m_obstacle;
+state Agent::get_state() const {
+    return m_state;
 }
 
 size_t& Agent::get_index() {
@@ -57,10 +57,7 @@ bool Agent::overlap(std::vector<Agent> const& agents) const {
     return false;
 }
 
-std::pair<state,std::vector<Real>> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
-    m_obstacle = false;
-
-    state s = constant;
+std::vector<Real> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
     std::vector<Real> v;
 
     Real current_distance;
@@ -70,13 +67,12 @@ std::pair<state,std::vector<Real>> Agent::obstacle(std::vector<Obstacle> const& 
         current_distance = this->distance(obstacles[i]);
 
         if ( current_distance < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) && current_distance<min_distance ) {
-            m_obstacle = true;
-            s = obst;
+            m_state = obst;
             min_distance = current_distance;
             v = {obstacles[i].get_x(),obstacles[i].get_y()};
         }
     }
-    return std::make_pair(s,v);
+    return v;
 }
 
 void Agent::windowUpdate() {
@@ -89,8 +85,7 @@ void Agent::constantUpdate() {
     m_y += SPEED * sin(m_angle);
 }
 
-std::pair<state,std::vector<Real>> Agent::neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) const {
-    state s = constant;
+std::vector<Real> Agent::neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
     std::vector<Real> v;
 
     Real current_distance;
@@ -102,17 +97,17 @@ std::pair<state,std::vector<Real>> Agent::neighbour(std::vector<Agent> const& pr
         if (m_index != i && (current_distance < PREDATOR_RANGE) && (current_distance < min_distance)) {
 
             if ( this->insideFieldView(predators[i]) ) {
-                s = separation;
+                m_state = separation;
                 min_distance = current_distance;
                 v = {predators[i].get_x(),predators[i].get_y()};
             }
         }
     }
 
-    if ( s!=separation ) {
+    if ( m_state!=separation ) {
         min_distance = WIDTH+HEIGHT;
 
-        for (size_t i(1); i < birds.size(); i++) {
+        for (size_t i(0); i < birds.size(); i++) {
 
             if (m_index != i) {
                 current_distance = this->distance(birds[i]);
@@ -128,27 +123,7 @@ std::pair<state,std::vector<Real>> Agent::neighbour(std::vector<Agent> const& pr
         }
     }
 
-    return std::make_pair(s,v);
-}
-
-Agent Agent::closest(std::vector<Agent> const& birds) const {
-    Agent bird;
-
-    Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
-
-    for (size_t i(1); i < birds.size(); i++) {
-        if (m_index != i) {
-            if (this->insideFieldView(birds[i])) {
-                current_distance = this->distance(birds[i]);
-                if (current_distance < min_distance) {
-                    min_distance = current_distance;
-                    bird = birds[i];
-                }
-            }
-        }
-    }
-    return bird;
+    return v;
 }
 
 void Agent::obstacleLaw(std::vector<Real> const&  obstacle) {
@@ -180,23 +155,29 @@ void Agent::predatorLaw(std::vector<Real> const& bird) {
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-void Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
-    state s = constant;
+int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
+    m_state = constant;
     std::vector<Real> update;
 
     // Obstacles
-    std::tie(s,update) = this->obstacle(obstacles);
-    if (m_obstacle) {
+    update = this->obstacle(obstacles);
+    if (m_state==obst) {
         this->obstacleLaw(update);
+        this->windowUpdate();
+        return 0;
     }
-    else {
-        std::tie(s,update) = this->neighbour(predators, birds);
-        if (s==separation)
-            this->separationLaw(update);
-        else
-            this->predatorLaw(update);
+
+    // Neighbours and preys
+    update = this->neighbour(predators, birds);
+
+    if (m_state==separation) {
+        this->separationLaw(update);
+        this->windowUpdate();
+        return 0;
     }
+    this->predatorLaw(update);
     this->windowUpdate();
+    return 0;
 }
 
 Agent::~Agent() {
@@ -227,7 +208,7 @@ std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles) {
 
         predator = Agent(randomX,randomY,randomAngle,n);
         predator.obstacle(obstacles);
-        while (predator.get_obstacle() || predator.overlap(predators)) {
+        while (predator.get_state()==obst || predator.overlap(predators)) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomAngle = 2*PI*unif(engine)-PI;

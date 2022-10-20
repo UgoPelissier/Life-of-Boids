@@ -357,7 +357,7 @@ void addAgent(
     if (addBird) { // Add new bird to the window
         newBird = Bird(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI,n_birds);
         newBird.obstacle(obstacles);
-        if ( !newBird.get_obstacle() && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
+        if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
             birds.push_back(newBird);
             n_birds++;
             trianglesBirds.push_back(triangle::newTriangle(
@@ -372,7 +372,7 @@ void addAgent(
     if (addPredator) { // Add new predator to the window
         newPredator = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI,n_predators);
         newPredator.obstacle(obstacles);
-        if ( !newPredator.get_obstacle() && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
+        if ( newPredator.get_state()!=obst && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
             predators.push_back(newPredator);
             n_predators ++;
             trianglesPredators.push_back(triangle::newTriangle(
