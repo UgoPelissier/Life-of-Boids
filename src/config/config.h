@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cmath>
+#include <chrono>
 
 using Real = float;
 using vec2 = std::array<Real, 2>;

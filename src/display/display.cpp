@@ -65,12 +65,12 @@ vec2 scale(Fruit const& fruit) {
 std::tuple <
         std::vector<Bird>,
                 std::vector<Fruit>
-                        >
-                        updateObjects(std::vector<Obstacle>& obstacles,
+                        >updateObjects(std::vector<Obstacle>& obstacles,
                                       std::vector<Agent>& predators,
                                       std::vector<Bird>& birds,
                                       std::vector<Tree>& trees,
                                       std::vector<Fruit>& fruits) {
+
     std::vector<Bird> newBirds;
     std::vector<Fruit> newFruits;
     size_t n = 0;
@@ -87,6 +87,7 @@ std::tuple <
     for (Tree& tree : trees) {
         fruits = tree.DropFruit(fruits, obstacles);
     }
+
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())
             newFruits.push_back(fruit);
@@ -99,6 +100,7 @@ std::tuple <
             n++;
         }
     }
+
     return std::make_tuple(newBirds, newFruits);
 }
 

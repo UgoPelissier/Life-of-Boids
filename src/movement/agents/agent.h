@@ -2,6 +2,8 @@
 #include "../object.h"
 #include "../obstacles/obstacle.h"
 
+enum state {separation, alignment, cohesion, constant};
+
 class Agent : public Object {
 protected:
     Real m_angle;
@@ -30,14 +32,12 @@ public:
     virtual void windowUpdate();
     virtual void constantUpdate();
 
-    virtual std::vector<size_t> neighbour(std::vector<Agent> const& predators) const;
+    virtual std::pair<state,std::vector<Real>> neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) const;
     virtual Agent closest(std::vector<Agent> const& birds) const;
 
-    virtual vec3 center(std::vector<Agent> const& agents, std::vector<size_t> const& neighbours) const;
-
     virtual void obstacleLaw(std::vector<Obstacle> const& obstacles, std::vector<size_t> const& neighboursObstacle);
-    virtual void separationLaw(Agent const&  predator);
-    virtual void predatorLaw(std::vector<Agent> const& birds);
+    virtual void separationLaw(std::vector<Real> const&  predator);
+    virtual void predatorLaw(std::vector<Real> const& birds);
 
     virtual void update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds);
 

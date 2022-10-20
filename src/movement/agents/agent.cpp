@@ -83,21 +83,46 @@ void Agent::constantUpdate() {
     m_y += SPEED * sin(m_angle);
 }
 
-std::vector<size_t> Agent::neighbour(std::vector<Agent> const& predators) const {
-    std::vector<size_t> preds;
+std::pair<state,std::vector<Real>> Agent::neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) const {
+    state s = constant;
+    std::vector<Real> v;
 
     Real current_distance;
     Real min_distance = WIDTH+HEIGHT;
+
     for (size_t i(0); i < predators.size(); i++) {
-        if ( this->insideFieldView(predators[i]) ) {
-            current_distance = this->distance(predators[i]);
-            if (m_index != i && (current_distance < PREDATOR_RANGE) && (current_distance < min_distance)) {
+        current_distance = this->distance(predators[i]);
+
+        if (m_index != i && (current_distance < PREDATOR_RANGE) && (current_distance < min_distance)) {
+
+            if ( this->insideFieldView(predators[i]) ) {
+                s = separation;
                 min_distance = current_distance;
-                preds = {i};
+                v = {predators[i].get_x(),predators[i].get_y()};
             }
         }
     }
-    return preds;
+
+    if ( s!=separation ) {
+        min_distance = WIDTH+HEIGHT;
+
+        for (size_t i(1); i < birds.size(); i++) {
+
+            if (m_index != i) {
+                current_distance = this->distance(birds[i]);
+
+                if (current_distance < min_distance) {
+
+                    if (this->insideFieldView(birds[i])) {
+                        min_distance = current_distance;
+                        v = {birds[i].get_x(),birds[i].get_y()};
+                    }
+                }
+            }
+        }
+    }
+
+    return std::make_pair(s,v);
 }
 
 Agent Agent::closest(std::vector<Agent> const& birds) const {
@@ -120,18 +145,6 @@ Agent Agent::closest(std::vector<Agent> const& birds) const {
     return bird;
 }
 
-vec3 Agent::center(std::vector<Agent> const& agents, std::vector<size_t> const& neighbours) const {
-    size_t n(neighbours.size());
-    Real x(m_x), y(m_y), angle(m_angle);
-    Real inv = 1 / (n + 1);
-    for(size_t const& i : neighbours) {
-        x += agents[i].get_x();
-        y += agents[i].get_y();
-        angle += agents[i].get_angle();
-    }
-    return {(Real) x * inv, (Real) y * inv, (Real) angle * inv};
-}
-
 void Agent::obstacleLaw(std::vector<Obstacle> const& obstacles, std::vector<size_t> const& neighboursObstacle) {
 
     vec2 separation = normVector({(Real)(m_x-obstacles[neighboursObstacle[0]].get_x()),(Real)(m_y-obstacles[neighboursObstacle[0]].get_y())});
@@ -142,8 +155,8 @@ void Agent::obstacleLaw(std::vector<Obstacle> const& obstacles, std::vector<size
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::separationLaw(Agent const&  predator) {
-    vec2 separationPred = normVector({(Real)(m_x-predator.get_x()),(Real)(m_y-predator.get_y())});
+void Agent::separationLaw(std::vector<Real> const&  predator) {
+    vec2 separationPred = normVector({(Real)(m_x-predator[0]),(Real)(m_y-predator[1])});
 
     m_angle = (1-SEPARATION_RELAXATION)*atan2(separationPred[1],separationPred[0]) + SEPARATION_RELAXATION*m_angle;
 
@@ -151,10 +164,9 @@ void Agent::separationLaw(Agent const&  predator) {
     m_y += SPEED * sin(m_angle);
 }
 
-void Agent::predatorLaw(std::vector<Agent> const& birds) {
+void Agent::predatorLaw(std::vector<Real> const& bird) {
 
-    Agent bird = this->closest(birds);
-    vec2 target = normVector({(Real)(bird.get_x() - m_x),(Real)(bird.get_y() - m_y)});
+    vec2 target = normVector({(Real)(bird[0] - m_x),(Real)(bird[1] - m_y)});
 
     m_angle = (1-PREDATOR_RELAXATION)*atan2(target[1],target[0]) + PREDATOR_RELAXATION*m_angle;
 
@@ -163,6 +175,8 @@ void Agent::predatorLaw(std::vector<Agent> const& birds) {
 }
 
 void Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
+    state s;
+    std::vector<Real> update;
 
     // Obstacles
     std::vector<size_t> neighboursObstacle = this->obstacle(obstacles);
@@ -170,11 +184,11 @@ void Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<A
         this->obstacleLaw(obstacles, neighboursObstacle);
     }
     else {
-        std::vector<size_t> predator = this->neighbour(predators);
-        if (!predator.empty())
-            this->separationLaw(predators[predator[0]]);
+        std::tie(s,update) = this->neighbour(predators, birds);
+        if (s==separation)
+            this->separationLaw(update);
         else
-            this->predatorLaw(birds);
+            this->predatorLaw(update);
     }
     this->windowUpdate();
 }

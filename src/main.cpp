@@ -36,6 +36,7 @@ int main() {
     std::vector<std::array<triangle::Vertex, 3>> trianglesBirds;
     std::vector<std::array<triangle::Vertex, 3>> trianglesTree;
     std::vector<std::array<triangle::Vertex, 3>> trianglesFruit;
+
     std::tie(obstacles, predators, birds, trees, fruits,
              trianglesObs, trianglesPredators, trianglesBirds, trianglesTree, trianglesFruit) = initAgentWindow();
 
@@ -65,7 +66,6 @@ int main() {
             i = 0;
             start = std::chrono::high_resolution_clock::now();
         }
-
 
     }
 

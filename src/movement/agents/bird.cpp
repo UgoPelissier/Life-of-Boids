@@ -16,46 +16,97 @@ bool Bird::get_alive() const {
     return m_alive;
 }
 
-bool Bird::get_fruit() const {
-    return m_fruit;
-}
+std::pair<state,std::vector<Real>> Bird::neighbours(std::vector<Bird> const& birds) const {
+    state s = constant;
+    std::vector<Real> v;
 
-std::vector<std::vector<size_t>> Bird::neighbours(std::vector<Bird> const& birds) const {
-    std::vector<size_t> separation, alignment, cohesion;
+    Real xSeparation(0), ySeparation(0);
+
+    Real angleAlignment(0);
+    int nAlignment(0);
+
+    Real xCohesion(0), yCohesion(0);
+    int nCohesion(0);
+
     Real current_distance;
     Real min_distance = WIDTH+HEIGHT;
+    Real inv;
+
     for (size_t i(0); i < birds.size(); i++) {
-        if (m_index!=i && this->insideFieldView(birds[i])) {
+
+        if (m_index!=i) {
+
             current_distance = this->distance(birds[i]);
+
             if ( (current_distance < SEPARATION_RANGE) && (current_distance < min_distance) ) {
-                min_distance = current_distance;
-                separation={i};
+                if (this->insideFieldView(birds[i])) {
+                    s = separation;
+                    min_distance = current_distance;
+                    xSeparation = birds[i].get_x();
+                    ySeparation = birds[i].get_y();
+                }
             }
-            else if (current_distance > SEPARATION_RANGE && current_distance < ALIGNMENT_RANGE)
-                alignment.push_back(i);
-            else if (current_distance > ALIGNMENT_RANGE && current_distance < COHESION_RANGE)
-                cohesion.push_back(i);
+
+            else if ( (s != separation) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
+                if (this->insideFieldView(birds[i])) {
+                    s = alignment;
+                    angleAlignment += birds[i].get_angle();
+                    nAlignment++;
+                }
+            }
+
+            else if ( (s != separation) && (s != alignment) && (current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE) ) {
+                if (this->insideFieldView(birds[i])) {
+                    s = cohesion;
+                    xCohesion += birds[i].get_x();
+                    yCohesion += birds[i].get_y();
+                    nCohesion++;
+                }
+            }
         }
     }
-    return {separation, alignment, cohesion};
+
+    switch ( s )
+    {
+        case separation:
+            v = {xSeparation,ySeparation};
+            return std::make_pair(s,v);
+        case alignment:
+            inv = (Real)1 / (Real)(nAlignment + 1);
+            v = {angleAlignment*inv};
+            return std::make_pair(s,v);
+        case cohesion:
+            inv = (Real)1 / (Real)(nCohesion + 1);
+            v = {xCohesion*inv,yCohesion*inv};
+            return std::make_pair(s,v);
+        case constant:
+            v = {0};
+            return std::make_pair(s,v);
+    }
+
 }
 
-std::vector<size_t> Bird::pred(std::vector<Agent> const& predators) {
-    std::vector<size_t> preds;
+std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
+
+    std::vector<Real> pred;
+
     Real current_distance;
     Real min_distance = WIDTH+HEIGHT;
+
     for (size_t i(0); i < predators.size(); i++) {
-        if (this->insideFieldView(predators[i])) {
-            current_distance = this->distance(predators[i]);
-            if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
+        current_distance = this->distance(predators[i]);
+
+        if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
+            if (this->insideFieldView(predators[i])) {
                 min_distance = current_distance;
-                preds={i};
+                pred={predators[i].get_x(), predators[i].get_y()};
+
                 if (current_distance < DEAD_RANGE)
                     m_alive = false;
             }
         }
     }
-    return preds;
+    return pred;
 }
 
 size_t Bird::fruit(std::vector<Fruit> const& fruits) {
@@ -74,45 +125,21 @@ size_t Bird::fruit(std::vector<Fruit> const& fruits) {
     return fruit_index;
 }
 
-void Bird::cohesionLaw(std::vector<Bird> const& birds, std::vector<size_t> const& neighbours) {
-
-    vec3 v = this->center(birds2agents(birds), neighbours);
-
-    m_angle = (1-COHESION_RELAXATION)*atan2((v[1]-m_y),(v[0]-m_x)) + COHESION_RELAXATION*m_angle;
+void Bird::cohesionLaw(std::vector<Real> const& group) {
+    m_angle = (1-COHESION_RELAXATION)*atan2((group[1]-m_y),(group[0]-m_x)) + COHESION_RELAXATION*m_angle;
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
 }
 
-void Bird::alignmentLaw(std::vector<Bird> const& birds, std::vector<size_t> const& neighbours) {
-
-    vec3 v = this->center(birds2agents(birds), neighbours);
-
-    m_angle = (1-ALIGNMENT_RELAXATION)*v[2] + ALIGNMENT_RELAXATION*m_angle ;
+void Bird::alignmentLaw(std::vector<Real> const& group) {
+    m_angle = (1-ALIGNMENT_RELAXATION)*group[0] + ALIGNMENT_RELAXATION*m_angle ;
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
 }
 
-void Bird::separationLaw(Bird const& bird){
-    vec2 separationBird = normVector({(Real)(m_x-bird.get_x()),(Real)(m_y-bird.get_y())});
-
-    m_angle = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
-
-    m_x += SPEED * cos(m_angle);
-    m_y += SPEED * sin(m_angle);
-}
-
-void Bird::separationLaw(Agent const&  predator) {
-    vec2 separationPred = normVector({(Real)(m_x-predator.get_x()),(Real)(m_y-predator.get_y())});
-
-    m_angle = (1-SEPARATION_RELAXATION)*atan2(separationPred[1],separationPred[0]) + SEPARATION_RELAXATION*m_angle;
-
-    m_x += SPEED * cos(m_angle);
-    m_y += SPEED * sin(m_angle);
-}
-
-void Bird::biSeparationLaw(Bird const& bird, Agent const&  predator) {
-    vec2 separationBird = normVector({(Real)(m_x-bird.get_x()),(Real)(m_y-bird.get_y())});
-    vec2 separationPred = normVector({(Real)(m_x-predator.get_x()),(Real)(m_y-predator.get_y())});
+void Bird::biSeparationLaw(std::vector<Real> const& bird, std::vector<Real> const& predator) {
+    vec2 separationBird = normVector({(Real)(m_x-bird[0]),(Real)(m_y-bird[1])});
+    vec2 separationPred = normVector({(Real)(m_x-predator[0]),(Real)(m_y-predator[0])});
 
     Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
     Real anglePred = (1-SEPARATION_RELAXATION)*atan2(separationPred[1],separationPred[0]) + SEPARATION_RELAXATION*m_angle;
@@ -140,7 +167,7 @@ void Bird::fruitLaw(Fruit& fruit, std::vector<Bird>& birds) {
     }
 }
 
-void Bird::biFruitLaw(Fruit& fruit, Bird const& bird, std::vector<Bird>& birds) {
+void Bird::biFruitLaw(Fruit& fruit, std::vector<Real> const& bird, std::vector<Bird>& birds) {
 
     if (this->distance(fruit) < DEAD_RANGE) {
         size_t size = birds.size();
@@ -148,7 +175,7 @@ void Bird::biFruitLaw(Fruit& fruit, Bird const& bird, std::vector<Bird>& birds) 
         fruit.get_alive() = false;
     }
     else {
-        vec2 separationBird = normVector({(Real)(m_x-bird.get_x()),(Real)(m_y-bird.get_y())});
+        vec2 separationBird = normVector({(Real)(m_x-bird[0]),(Real)(m_y-bird[1])});
         vec2 target = normVector({ (float)(fruit.get_x() - m_x),(float)(fruit.get_y() - m_y) });
 
         Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
@@ -160,49 +187,74 @@ void Bird::biFruitLaw(Fruit& fruit, Bird const& bird, std::vector<Bird>& birds) 
     }
 }
 
-void Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits) {
+int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits) {
 
-    std::vector<std::vector<size_t>> v;
-    std::vector<size_t> predator, separation, alignment, cohesion, neighboursObstacle;
+    auto start = std::chrono::high_resolution_clock::now();
+
+    std::vector<size_t> neighboursObstacle;
     size_t fruit_index;
+
+    state s;
+    std::vector<Real> update, predator;
 
     // Obstacles
     neighboursObstacle = this->obstacle(obstacles);
-    if (m_obstacle)
+    if (m_obstacle) {
         this->obstacleLaw(obstacles, neighboursObstacle);
+
+        this->windowUpdate();
+        return 0;
+    }
     else {
         // Predators
         predator = this->pred(predators);
 
         // Neighbours
-        v = this->neighbours(birds);
-        separation = v[0];
-        alignment = v[1];
-        cohesion = v[2];
+        std::tie(s,update) = this->neighbours(birds);
 
         if (!predator.empty()) {
-            if (!separation.empty())
-                this->biSeparationLaw(birds[separation[0]], predators[predator[0]]);
+            if (s==separation)
+                this->biSeparationLaw(update, predator);
             else
-                this->separationLaw(predators[predator[0]]);
+                this->separationLaw(predator);
+            this->windowUpdate();
+            return 0;
+
         } else {
             fruit_index = this->fruit(fruits);
             if (m_fruit) {
-                if (!separation.empty())
-                    this->biFruitLaw(fruits[fruit_index],birds[separation[0]],birds);
+                if (s==separation)
+                    this->biFruitLaw(fruits[fruit_index],update,birds);
                 else
                     this->fruitLaw(fruits[fruit_index], birds);
+                this->windowUpdate();
+                auto stop = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+                std::cout << "Fruit: " << duration.count() << std::endl;
+                std::cout << "" << std::endl;
+                return 0;
             }
-            else if (!separation.empty())
-                this->separationLaw(birds[separation[0]]);
-            else if (!alignment.empty())
-                this->alignmentLaw(birds, alignment);
-            else if (!cohesion.empty())
-                this->cohesionLaw(birds, cohesion);
-            else
+            else if (s==separation) {
+                this->separationLaw(update);
+                this->windowUpdate();
+                return 0;
+            }
+            else if (s==alignment) {
+                this->alignmentLaw(update);
+                this->windowUpdate();
+                return 0;
+            }
+            else if (s==cohesion) {
+                this->cohesionLaw(update);
+                this->windowUpdate();
+                return 0;
+            }
+            else {
                 this->constantUpdate();
+                this->windowUpdate();
+                return 0;
+            }
         }
-        this->windowUpdate();
     }
 }
 

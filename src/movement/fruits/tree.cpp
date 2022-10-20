@@ -65,7 +65,7 @@ std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obsta
                 fruit = Fruit(randomX, randomY);
                 fruit.obstacle(obstacles);
             }
-            fruits.push_back(Fruit(randomX, randomY, std::min(m_height,m_width)/2, true));
+            fruits.push_back(Fruit(randomX, randomY, std::min(m_height,m_width)/4, true));
         }
         m_time = uniTime(engine) + time(&finish);
     }
