@@ -74,7 +74,7 @@ std::tuple <
     std::vector<Bird> newBirds;
     std::vector<Fruit> newFruits;
     size_t n = 0;
-    size_t bird_size = birds.size(); //because agent.size can change in the loop when eating fruit
+    size_t bird_size = birds.size(); //Birds size can change in the loop when eating fruit
 
     for (size_t i(0); i < predators.size(); i++) {
         predators[i].update_predator(obstacles, predators, birds2agents(birds));
@@ -105,7 +105,16 @@ std::tuple <
 }
 
 
-std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
+std::tuple<
+        GLFWwindow*,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        Buffer,
+        ShaderProgram,
+        GLint> initWindow() {
 
     glfwSetErrorCallback(error_callback);
 
