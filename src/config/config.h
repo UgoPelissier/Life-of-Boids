@@ -29,7 +29,7 @@ extern const int HEIGHT;
 extern const int MAX_OBSTACLE_SIZE;
 extern const int MAX_FRUIT_TREE_SIZE;
 extern const int MIN_FRUIT_TREE_SIZE;
-extern const int MAX_FRUIT_DISTANCE;
+extern const Real MAX_FRUIT_DISTANCE;
 
 extern const Real RATIO;
 extern const Real BODY_SIZE;

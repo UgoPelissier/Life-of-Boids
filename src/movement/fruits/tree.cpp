@@ -1,9 +1,9 @@
 #include "tree.h"
 
-Tree::Tree() : Object()
+Tree::Tree() : Object(), m_height(0), m_width(0), m_obstacle(false), m_time(0)
 {}
 
-Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Object(x,y), m_height(height), m_width(width), m_time(time)
+Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Object(x,y), m_height(height), m_width(width), m_obstacle(false), m_time(time)
 {}
 
 Real Tree::get_height() const {
@@ -19,16 +19,16 @@ bool Tree::get_obstacle() const {
 }
 
 bool Tree::borders() const {
-    if (m_x < CLOSE) {
+    if (m_x < (Real)CLOSE) {
         return true;
     }
-    else if ((WIDTH - CLOSE < m_x) && (m_x < WIDTH)) {
+    else if (( (Real)WIDTH- (Real)CLOSE < m_x) && (m_x < (Real)WIDTH)) {
         return true;
     }
     else if (m_y < CLOSE) {
         return true;
     }
-    else if ((HEIGHT - CLOSE < m_y) && (m_y < HEIGHT)) {
+    else if (( (Real)HEIGHT- (Real)CLOSE ) < m_y && (m_y < (Real)HEIGHT) ) {
         return true;
     }
     return false;
@@ -43,7 +43,7 @@ std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obsta
 
     Fruit fruit;
 
-    if (m_time<=time(&finish)) {
+    if (m_time<=(double)time(&finish)) {
         int randomNumFruit;
         Real randomX;
         Real randomY;
@@ -65,25 +65,23 @@ std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obsta
                 fruit = Fruit(randomX, randomY);
                 fruit.obstacle(obstacles);
             }
-            fruits.push_back(Fruit(randomX, randomY, std::min(m_height,m_width)/4, true));
+            fruits.emplace_back(randomX, randomY, std::min(m_height,m_width)/4, true);
         }
-        m_time = uniTime(engine) + time(&finish);
+        m_time = (double)uniTime(engine) + (double)time(&finish);
     }
     return fruits;
 }
 
 void Tree::obstacle(std::vector<Obstacle> const& obstacles) {
     m_obstacle = false;
-    for (size_t i(0); i < obstacles.size(); i++) {
-        if ( this->distance(obstacles[i]) < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) ) {
+    for (const auto & obstacle : obstacles) {
+        if ( this->distance(obstacle) < std::max(obstacle.get_height()/2,obstacle.get_width()/2) ) {
             m_obstacle = true;
         }
     }
 }
 
-Tree::~Tree() {
-
-}
+Tree::~Tree() = default;
 
 std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
     std::vector<Tree> trees;
@@ -96,8 +94,8 @@ std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
     double randomTime;
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::uniform_real_distribution<Real> uniX(0, WIDTH);
-    std::uniform_real_distribution<Real> uniY(0, HEIGHT);
+    std::uniform_real_distribution<Real> uniX(0, (Real)WIDTH);
+    std::uniform_real_distribution<Real> uniY(0, (Real)HEIGHT);
     std::uniform_int_distribution uniSize(MIN_FRUIT_TREE_SIZE, MAX_FRUIT_TREE_SIZE);
     std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
     std::random_device dev;
@@ -109,8 +107,8 @@ std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
         randomY = uniY(engine);
         randomHeight = uniSize(engine);
         randomWidth = uniSize(engine);
-        randomTime = uniTime(engine)+time(&start);
-        newTree = Tree(randomX, randomY, randomHeight, randomWidth, randomTime);
+        randomTime = (double)uniTime(engine)+(double)time(&start);
+        newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
 
         newTree.obstacle(obstacles);
         while (newTree.borders() || newTree.get_obstacle()) {
@@ -118,7 +116,7 @@ std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
             randomY = uniY(engine);
             randomHeight = uniSize(engine);
             randomWidth = uniSize(engine);
-            newTree = Tree(randomX, randomY, randomHeight, randomWidth, randomTime);
+            newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
             newTree.obstacle(obstacles);
         }
 

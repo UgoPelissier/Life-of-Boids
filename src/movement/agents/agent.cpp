@@ -49,10 +49,10 @@ bool Agent::overlap(Agent const& a) const {
 }
 
 bool Agent::overlap(std::vector<Agent> const& agents) const {
-    for(Agent const& agent : agents) {
-        if ( this->operator==(agent) && this->overlap(agent) ) {
-            return true;
-        }
+    if (std::any_of(agents.begin(),
+                    agents.end(),
+                    [this](Agent const& agent){ return this->operator==(agent) && this->overlap(agent);} ) ) {
+        return true;
     }
     return false;
 }
@@ -61,23 +61,23 @@ std::vector<Real> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
     std::vector<Real> v;
 
     Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
+    Real min_distance = (Real)(WIDTH+HEIGHT);
 
-    for (size_t i(0); i < obstacles.size(); i++) {
-        current_distance = this->distance(obstacles[i]);
+    for (const auto & obstacle : obstacles) {
+        current_distance = this->distance(obstacle);
 
-        if ( current_distance < std::max(obstacles[i].get_height()/2,obstacles[i].get_width()/2) && current_distance<min_distance ) {
+        if ( current_distance < std::max(obstacle.get_height()/2,obstacle.get_width()/2) && current_distance<min_distance ) {
             m_state = obst;
             min_distance = current_distance;
-            v = {obstacles[i].get_x(),obstacles[i].get_y()};
+            v = {obstacle.get_x(),obstacle.get_y()};
         }
     }
     return v;
 }
 
 void Agent::windowUpdate() {
-    m_x = modulo(m_x,WIDTH);
-    m_y = modulo(m_y, HEIGHT);
+    m_x = modulo(m_x,(Real)WIDTH);
+    m_y = modulo(m_y, (Real)HEIGHT);
 }
 
 void Agent::constantUpdate() {
@@ -89,7 +89,7 @@ std::vector<Real> Agent::neighbour(std::vector<Agent> const& predators, std::vec
     std::vector<Real> v;
 
     Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
+    Real min_distance = (Real)(WIDTH+HEIGHT);
 
     for (size_t i(0); i < predators.size(); i++) {
         current_distance = this->distance(predators[i]);
@@ -105,7 +105,7 @@ std::vector<Real> Agent::neighbour(std::vector<Agent> const& predators, std::vec
     }
 
     if ( m_state!=separation ) {
-        min_distance = WIDTH+HEIGHT;
+        min_distance = (Real)(WIDTH+HEIGHT);
 
         for (size_t i(0); i < birds.size(); i++) {
 
@@ -180,9 +180,7 @@ int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Ag
     return 0;
 }
 
-Agent::~Agent() {
-
-}
+Agent::~Agent() = default;
 
 std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles) {
 
@@ -204,16 +202,16 @@ std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles) {
 
         randomX = uniX(engine);
         randomY = uniY(engine);
-        randomAngle = 2*PI*unif(engine)-PI;
+        randomAngle = (Real)(2*PI*unif(engine)-PI);
 
-        predator = Agent(randomX,randomY,randomAngle,n);
+        predator = Agent((Real)randomX,(Real)randomY,randomAngle,n);
         predator.obstacle(obstacles);
         while (predator.get_state()==obst || predator.overlap(predators)) {
             randomX = uniX(engine);
             randomY = uniY(engine);
-            randomAngle = 2*PI*unif(engine)-PI;
+            randomAngle = (Real)2*PI*unif(engine)-PI;
 
-            predator = Agent(randomX,randomY,randomAngle,n);
+            predator = Agent((Real)randomX,(Real)randomY,randomAngle,n);
             predator.obstacle(obstacles);
         }
         predators.push_back(predator);

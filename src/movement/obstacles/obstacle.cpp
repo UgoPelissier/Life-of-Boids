@@ -17,42 +17,43 @@ Real Obstacle::get_width() const {
 bool Obstacle::borders() const {
     if ( m_x < m_width/2 )
         return true;
-    else if ((WIDTH - m_width/2 < m_x) && (m_x < WIDTH)) {
+    else if (( (Real)WIDTH - m_width/2 < m_x) && (m_x < (Real)WIDTH)) {
         return true;
     } else if (m_y < m_height/2) {
         return true;
-    } else if ((HEIGHT - m_height/2 < m_y) && (m_y < HEIGHT)) {
+    } else if (( (Real)HEIGHT - m_height/2 < m_y) && (m_y < (Real)HEIGHT)) {
         return true;
     }
     return false;
 }
 
 bool Obstacle::overlap(std::vector<Obstacle>  const& obstacles) const {
-    for (Obstacle  const& obs : obstacles) {
-        if ( ( std::abs(obs.get_x()-m_x) <= (obs.get_width()/2 + m_width/2 + ALIGNMENT_RANGE) ) && ( std::abs(obs.get_y()-m_y) <= (obs.get_height()/2 + m_height/2 + ALIGNMENT_RANGE) ) ) {
-            return true;
-        }
+
+    if (std::any_of(obstacles.begin(),
+                    obstacles.end(),
+                    [this](Obstacle const& obs){ return ( (( std::abs(obs.get_x()-m_x) <= (obs.get_width()/2 + m_width/2 + ALIGNMENT_RANGE) )
+                                                           && ( std::abs(obs.get_y()-m_y) <= (obs.get_height()/2 + m_height/2 + ALIGNMENT_RANGE) )) ) ;}
+                                                           ) ) {
+        return true;
     }
     return false;
 }
 
-Obstacle::~Obstacle() {
-
-}
+Obstacle::~Obstacle() = default;
 
 std::vector<Obstacle> obstacles_init() {
     std::vector<Obstacle> obstacles;
     Obstacle newObstacle;
 
-    int randomX;
-    int randomY;
-    int randomHeight;
-    int randomWidth;
+    Real randomX;
+    Real randomY;
+    Real randomHeight;
+    Real randomWidth;
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::uniform_int_distribution uniX(0, WIDTH);
-    std::uniform_int_distribution uniY(0, HEIGHT);
-    std::uniform_int_distribution uniSize(10, MAX_OBSTACLE_SIZE);
+    std::uniform_real_distribution<Real> uniX(0, (Real)WIDTH);
+    std::uniform_real_distribution<Real> uniY(0, (Real)HEIGHT);
+    std::uniform_real_distribution<Real> uniSize(10, (Real)MAX_OBSTACLE_SIZE);
     std::random_device dev;
     std::mt19937 engine(dev());
 
@@ -61,7 +62,7 @@ std::vector<Obstacle> obstacles_init() {
         randomY = uniY(engine);
         randomHeight = uniSize(engine);
         randomWidth = uniSize(engine);
-        newObstacle = Obstacle(randomX, randomY, randomHeight, randomWidth);
+        newObstacle = Obstacle((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth);
 
         while ( newObstacle.overlap(obstacles) || newObstacle.borders() ) {
             randomX = uniX(engine);

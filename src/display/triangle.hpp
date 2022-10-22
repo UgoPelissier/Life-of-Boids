@@ -45,7 +45,7 @@ inline vec2 center(std::array<Vertex, 3> triangle) {
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientation, Real a) {
     Real b = a/2;
-    Real h = a*std::sqrt(5)/3;
+    Real h = a*(Real)(std::sqrt(5)/3);
     Real l = 2*h/3;
 
     Real x0 = center[0];
@@ -158,8 +158,8 @@ inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real
     while (theta<2*PI) {
         x1 = x0 + r*cos(theta);
         y1 = y0 + r*sin(theta);
-        x2 = x0 + r*cos(theta + (2*PI/N));
-        y2 = y0 + r*sin(theta + (2*PI/N));
+        x2 = x0 + r*cos(theta + (2*PI/(Real)N));
+        y2 = y0 + r*sin(theta + (2*PI/(Real)N));
 
         fruit.push_back({ {
             // (position 2d + color 3d pack)
@@ -168,7 +168,7 @@ inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real
             {{x2, y2}, color}   //
         } });
 
-        theta += 2*PI/N;
+        theta += 2*PI/(Real)N;
     }
     return fruit;
 }

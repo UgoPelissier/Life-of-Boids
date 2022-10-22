@@ -28,7 +28,7 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
     int nCohesion(0);
 
     Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
+    Real min_distance = (Real)(WIDTH+HEIGHT);
     Real inv;
 
     for (size_t i(0); i < birds.size(); i++) {
@@ -90,9 +90,6 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
             inv = (Real)1 / (Real)(nCohesion + 1);
             v = {xCohesion*inv,yCohesion*inv};
             return v;
-        case constant:
-            v = {0};
-            return v;
         default:
             v = {0};
             return v;
@@ -103,7 +100,7 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
     std::vector<Real> pred;
 
     Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
+    Real min_distance = (Real)(WIDTH+HEIGHT);
 
     for (const auto & p : predators) {
         current_distance = this->distance(p);
@@ -128,7 +125,7 @@ std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& bi
     std::vector<Real> fr;
 
     Real current_distance;
-    Real min_distance = WIDTH+HEIGHT;
+    Real min_distance = (Real)(WIDTH+HEIGHT);
 
     for (auto & f : fruits) {
         current_distance = this->distance(f);
@@ -140,7 +137,7 @@ std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& bi
 
             if (current_distance < DEAD_RANGE) {
                 size_t size = birds.size();
-                birds.push_back(Bird(f.get_x(), f.get_y(), -m_angle, size));
+                birds.emplace_back(f.get_x(), f.get_y(), -m_angle, size);
                 f.get_alive() = false;
             }
         }
@@ -167,7 +164,7 @@ void Bird::biSeparationLaw(std::vector<Real> const& bird, std::vector<Real> cons
     Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
     Real anglePred = (1-SEPARATION_RELAXATION)*atan2(separationPred[1],separationPred[0]) + SEPARATION_RELAXATION*m_angle;
 
-    m_angle = 0.5*anglePred + 0.5*angleBird;
+    m_angle = (Real)(0.5*anglePred + 0.5*angleBird);
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
 
@@ -191,7 +188,7 @@ void Bird::biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird)
     Real angleBird = (1-SEPARATION_RELAXATION)*atan2(separationBird[1],separationBird[0]) + SEPARATION_RELAXATION*m_angle;
     Real angleFruit = (1 - PREDATOR_RELAXATION) * atan2(target[1], target[0]) + PREDATOR_RELAXATION * m_angle;
 
-    m_angle = m_angle = 0.5*angleFruit + 0.5*angleBird;
+    m_angle = m_angle = (Real)(0.5*angleFruit + 0.5*angleBird);
     m_x += PRED_SPEED * cos(m_angle);
     m_y += PRED_SPEED * sin(m_angle);
 }
@@ -261,14 +258,12 @@ int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const
     }
 }
 
-Bird::~Bird() {
-
-}
+Bird::~Bird() = default;
 
 std::vector<Agent> birds2agents(std::vector<Bird> const& birds) {
     std::vector<Agent> agents(birds.size());
     for (Bird const& bird : birds) {
-        agents.push_back(Agent(bird));
+        agents.emplace_back(bird);
     }
     return agents;
 }
@@ -293,16 +288,16 @@ std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector
 
         randomX = uniX(engine);
         randomY = uniY(engine);
-        randomAngle = 2*PI*unif(engine)-PI;
+        randomAngle = (Real)(2*PI*unif(engine)-PI);
 
-        bird = Bird(randomX,randomY,randomAngle,n);
+        bird = Bird((Real)randomX,(Real)randomY,randomAngle,n);
         bird.obstacle(obstacles);
         while (bird.get_state()==obst || bird.overlap(birds2agents(birds)) || bird.overlap(predators) ) {
             randomX = uniX(engine);
             randomY = uniY(engine);
-            randomAngle = 2*PI*unif(engine)-PI;
+            randomAngle = (Real)(2*PI*unif(engine)-PI);
 
-            bird = Bird(randomX,randomY,randomAngle,n);
+            bird = Bird((Real)randomX,(Real)randomY,randomAngle,n);
             bird.obstacle(obstacles);
         }
         birds.push_back(bird);
