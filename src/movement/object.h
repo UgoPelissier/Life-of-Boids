@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
-#include "../main.h"
-#include "../config/config.h"
+#include "main.h"
+#include "config.h"
 
 class Object {
 protected:

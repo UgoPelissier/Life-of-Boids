@@ -1,7 +1,7 @@
 #pragma once
-#include "../object.h"
+#include "object.h"
 #include "agent.h"
-#include "../fruits/fruit.h"
+#include "fruit.h"
 
 class Bird : public Agent {
 protected:

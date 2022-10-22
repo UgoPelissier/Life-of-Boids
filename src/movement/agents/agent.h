@@ -1,6 +1,6 @@
 #pragma once
-#include "../object.h"
-#include "../obstacles/obstacle.h"
+#include "object.h"
+#include "obstacle.h"
 
 enum state {obst, predator, predatorANDseparation, fruit, fruitANDseparation, separation, alignment, cohesion, constant};
 

@@ -15,12 +15,12 @@
 #include <iostream>
 #include <sstream>
 
-#include "../config/config.h"
-#include "agents/agent.h"
-#include "agents/bird.h"
-#include "obstacles/obstacle.h"
-#include "fruits/fruit.h"
-#include "fruits/tree.h"
+#include "config.h"
+#include "agent.h"
+#include "bird.h"
+#include "obstacle.h"
+#include "fruit.h"
+#include "tree.h"
 
 void error_callback(int error, const char* description);
 

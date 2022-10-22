@@ -1,6 +1,4 @@
 #include "display.h"
-#include "glx.hpp"
-#include "triangle.hpp"
 
 void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";

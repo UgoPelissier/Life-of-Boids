@@ -1,6 +1,6 @@
 #pragma once
-#include "../object.h"
-#include "../obstacles/obstacle.h"
+#include "object.h"
+#include "obstacle.h"
 #include "fruit.h"
 
 class Tree : public Object {
