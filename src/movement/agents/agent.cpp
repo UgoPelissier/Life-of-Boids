@@ -108,16 +108,14 @@ std::vector<Real> Agent::neighbour(std::vector<Agent> const& predators, std::vec
         min_distance = (Real)(WIDTH+HEIGHT);
 
         for (size_t i(0); i < birds.size(); i++) {
+            current_distance = this->distance(birds[i]);
 
-            if (m_index != i) {
-                current_distance = this->distance(birds[i]);
+            if (current_distance < min_distance) {
 
-                if (current_distance < min_distance) {
-
-                    if (this->insideFieldView(birds[i])) {
-                        min_distance = current_distance;
-                        v = {birds[i].get_x(),birds[i].get_y()};
-                    }
+                if (this->insideFieldView(birds[i])) {
+                    m_state = predator;
+                    min_distance = current_distance;
+                    v = {birds[i].get_x(),birds[i].get_y()};
                 }
             }
         }
@@ -161,23 +159,34 @@ int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Ag
 
     // Obstacles
     update = this->obstacle(obstacles);
+
     if (m_state==obst) {
         this->obstacleLaw(update);
         this->windowUpdate();
         return 0;
     }
-
     // Neighbours and preys
     update = this->neighbour(predators, birds);
 
-    if (m_state==separation) {
-        this->separationLaw(update);
-        this->windowUpdate();
-        return 0;
+    switch ( m_state )
+    {
+        case predator:
+            this->predatorLaw(update);
+            this->windowUpdate();
+            return 0;
+        case separation:
+            this->separationLaw(update);
+            this->windowUpdate();
+            return 0;
+        case constant:
+            this->constantUpdate();
+            this->windowUpdate();
+            return 0;
+        default:
+            this->constantUpdate();
+            this->windowUpdate();
+            return 0;
     }
-    this->predatorLaw(update);
-    this->windowUpdate();
-    return 0;
 }
 
 Agent::~Agent() = default;

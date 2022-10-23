@@ -11,7 +11,7 @@ public:
     Bird();
     Bird(Real const& x, Real const& y);
     Bird(Real const& x, Real const& y, Real const& angle);
-    Bird(Real const& x, Real const& y, Real const& angle,size_t& index);
+    Bird(Real const& x, Real const& y, Real const& angle, size_t& index);
 
     virtual bool get_alive() const;
 

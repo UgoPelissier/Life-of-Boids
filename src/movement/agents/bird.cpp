@@ -50,26 +50,24 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
                     ySeparation = birds[i].get_y();
                 }
             }
-
-            else if ( (m_state == alignment) || (m_state == constant) ) {
-                if ( (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
+            else if ( ( (m_state == alignment) || (m_state == constant) ) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
+                //if ( (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
                     if (this->insideFieldView(birds[i])) {
                         m_state = alignment;
                         angleAlignment += birds[i].get_angle();
                         nAlignment++;
                     }
-                }
+                //}
             }
-
-            else if ( (m_state == cohesion) || (m_state == constant) ) {
-                if ((current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
+            else if ( ( (m_state == cohesion) || (m_state == constant) ) && (current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE) ) {
+                //if ((current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
                     if (this->insideFieldView(birds[i])) {
                         m_state = cohesion;
                         xCohesion += birds[i].get_x();
                         yCohesion += birds[i].get_y();
                         nCohesion++;
                     }
-                }
+                //}
             }
         }
     }
@@ -137,7 +135,7 @@ std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& bi
 
             if (current_distance < DEAD_RANGE) {
                 size_t size = birds.size();
-                birds.emplace_back(f.get_x(), f.get_y(), -m_angle, size);
+                // birds.emplace_back(f.get_x(), f.get_y(), -m_angle, size);
                 f.get_alive() = false;
             }
         }
