@@ -48,7 +48,7 @@ bool Agent::overlap(Agent const& a) const {
     return false;
 }
 
-bool Agent::overlap(std::vector<Agent> const& agents) const {
+bool Agent::overlap(agents_t const& agents) const {
     if (std::any_of(agents.begin(),
                     agents.end(),
                     [this](Agent const& agent){ return this->operator==(agent) && this->overlap(agent);} ) ) {
@@ -85,7 +85,7 @@ void Agent::constantUpdate() {
     m_y += SPEED * sin(m_angle);
 }
 
-std::vector<Real> Agent::neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
+std::vector<Real> Agent::neighbour(agents_t const& predators, agents_t const& birds) {
     std::vector<Real> v;
 
     Real current_distance;
@@ -153,7 +153,7 @@ void Agent::predatorLaw(std::vector<Real> const& bird) {
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds) {
+int Agent::update_predator(std::vector<Obstacle>const& obstacles, agents_t const& predators, agents_t const& birds) {
     m_state = constant;
     std::vector<Real> update;
 
@@ -178,11 +178,9 @@ int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Ag
             this->separationLaw(update);
             this->windowUpdate();
             return 0;
-        case constant:
-            this->constantUpdate();
-            this->windowUpdate();
-            return 0;
+        // for default or constant, do a constant update        
         default:
+        case constant:
             this->constantUpdate();
             this->windowUpdate();
             return 0;
@@ -191,9 +189,9 @@ int Agent::update_predator(std::vector<Obstacle>const& obstacles, std::vector<Ag
 
 Agent::~Agent() = default;
 
-std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles) {
+agents_t predators_init(std::vector<Obstacle> const& obstacles) {
 
-    std::vector<Agent> predators;
+    agents_t predators;
     Agent predator;
 
     int randomX;
@@ -223,8 +221,9 @@ std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles) {
             predator = Agent((Real)randomX,(Real)randomY,randomAngle,n);
             predator.obstacle(obstacles);
         }
-        predators.push_back(predator);
+        predators[n] = predator;
         n = predators.size();
     }
+
     return predators;
 }

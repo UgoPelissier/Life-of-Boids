@@ -3,6 +3,7 @@
 #include "obstacle.h"
 
 enum state {obst, predator, predatorANDseparation, fruit, fruitANDseparation, separation, alignment, cohesion, constant};
+using agents_t = std::unordered_map<size_t, Agent>;
 
 class Agent : public Object {
 protected:
@@ -25,22 +26,22 @@ public:
 
     virtual bool operator==(Agent const& a) const;
     virtual bool overlap(Agent const& a) const;
-    virtual bool overlap(std::vector<Agent> const& agents) const;
+    virtual bool overlap(agents_t const& agents) const;
 
     virtual std::vector<Real> obstacle(std::vector<Obstacle> const& obstacles);
 
     virtual void windowUpdate();
     virtual void constantUpdate();
 
-    virtual std::vector<Real> neighbour(std::vector<Agent> const& predators, std::vector<Agent> const& birds);
+    virtual std::vector<Real> neighbour(agents_t const& predators, agents_t const& birds);
 
     virtual void obstacleLaw(std::vector<Real> const&  obstacle);
     virtual void separationLaw(std::vector<Real> const&  predator);
     virtual void predatorLaw(std::vector<Real> const& birds);
 
-    virtual int update_predator(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Agent> const& birds);
+    virtual int update_predator(std::vector<Obstacle>const& obstacles, agents_t const& predators, agents_t const& birds);
 
     virtual ~Agent();
 };
 
-std::vector<Agent> predators_init(std::vector<Obstacle> const& obstacles);
+agents_t predators_init(std::vector<Obstacle> const& obstacles);

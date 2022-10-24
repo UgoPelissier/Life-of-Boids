@@ -20,6 +20,4 @@ Real Object::distance(Object const& object) const {
     return std::sqrt((diff_x * diff_x) + (diff_y * diff_y));
 }
 
-Object::~Object() {
-
-}
+Object::~Object() = default;
