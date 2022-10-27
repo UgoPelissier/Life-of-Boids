@@ -20,4 +20,11 @@ Real Object::distance(Object const& object) const {
     return std::sqrt((diff_x * diff_x) + (diff_y * diff_y));
 }
 
+vec2 Object::scale(Object const& obj, Real ratio) {
+    return {
+            2 * ratio * (((Real)(obj.get_x())) / (Real)(WIDTH)) - ratio,
+            2 * (((Real)(obj.get_y())) / (Real)(HEIGHT)) - 1
+    };
+}
+
 Object::~Object() = default;

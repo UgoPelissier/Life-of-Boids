@@ -25,41 +25,6 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
     }
 }
 
-vec2 scale(Agent const& agent) {
-    return {
-            2 * RATIO * (((Real)(agent.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Agent const& agent, Real ratio) {
-    return {
-            2 * ratio * (((Real)(agent.get_x())) / (Real)(WIDTH)) - ratio,
-            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Obstacle const& obstacle) {
-    return {
-            2 * RATIO * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Tree const& tree) {
-    return {
-            2 * RATIO * (((Real)(tree.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(tree.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Fruit const& fruit) {
-    return {
-            2 * RATIO * (((Real)(fruit.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(fruit.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                       agents_t& predators,
                                       birds_t& birds,
@@ -259,26 +224,26 @@ initAgentWindow() {
 
     for (auto& it : predators) {
         Agent& predator = it.second;
-        trianglesPredators.push_back(triangle::newTriangle(scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
+        trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
     for (auto& it : birds) {
         Bird& bird = it.second;
-        trianglesBirds.push_back(triangle::newTriangle(scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
+        trianglesBirds.push_back(triangle::newTriangle(Object::scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
     for (Obstacle const& obs : obstacles) {
-        obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/(Real)HEIGHT, obs.get_width()/(Real)WIDTH);
+        obstacle = triangle::newObstacle(Object::scale(obs), OBSTACLE_COLOR, obs.get_height()/(Real)HEIGHT, obs.get_width()/(Real)WIDTH);
         for (const auto & i : obstacle) {
             trianglesObs.push_back(i);
         }
     }
     for (Tree const& tree : trees) {
-        tree_triangles = triangle::newTree(scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
+        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
         for (const auto & i : tree_triangles) {
             trianglesTree.push_back(i);
         }
     }
     for (Fruit const& fruit : fruits) {
-        fruit_triangles = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/(Real)WIDTH);
+        fruit_triangles = triangle::newFruit(Object::scale(fruit), FRUIT_COLOR, fruit.get_size()/(Real)WIDTH);
         for (const auto & i : fruit_triangles) {
             trianglesFruit.push_back(i);
         }
@@ -314,16 +279,16 @@ void updateAgentWindow(
 
     for (auto& it : predators) {
         Agent& predator = it.second;
-        trianglesPredators.push_back(triangle::newTriangle(scale(predator, ratio), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
+        trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator, ratio), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
 
     for (auto& it : birds) {
         Bird& bird = it.second;
-        trianglesBirds.push_back(triangle::newTriangle(scale(bird, ratio), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
+        trianglesBirds.push_back(triangle::newTriangle(Object::scale(bird, ratio), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
 
     for (auto const& fruit : fruits) {
-        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/(Real)WIDTH);
+        fruit_triangle = triangle::newFruit(Object::scale(fruit), FRUIT_COLOR, fruit.get_size()/(Real)WIDTH);
         for (const auto & i : fruit_triangle) {
             trianglesFruit.push_back(i);
         }
@@ -362,7 +327,7 @@ void addAgent(
         if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
             birds[n_birds++] = newBird;
             trianglesBirds.push_back(triangle::newTriangle(
-                    scale(newBird, ratio),
+                Object::scale(newBird, ratio),
                     BIRD_COLOR,
                     newBird.get_angle(),
                     BODY_SIZE));
@@ -376,7 +341,7 @@ void addAgent(
         if ( newPredator.get_state()!=obst && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
             predators[n_predators++] = newPredator;
             trianglesPredators.push_back(triangle::newTriangle(
-                    scale(newPredator, ratio),
+                Object::scale(newPredator, ratio),
                     PRED_COLOR,
                     newPredator.get_angle(),
                     2 * BODY_SIZE));

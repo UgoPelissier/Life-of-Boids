@@ -29,15 +29,6 @@ void error_callback(int error, const char* description);
 
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/);
 
-vec2 scale(Agent const& agent);
-
-vec2 scale(Agent const& agent, Real ratio);
-
-vec2 scale(Obstacle const& obstacle);
-
-vec2 scale(Tree const& tree);
-
-vec2 scale(Fruit const& fruit);
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
               agents_t& predators,
