@@ -39,10 +39,7 @@ vec2 scale(Tree const& tree);
 
 vec2 scale(Fruit const& fruit);
 
-std::tuple <
-        birds_t,
-        std::vector<Fruit>
-        > updateObjects(std::vector<Obstacle>& obstacles,
+std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
               agents_t& predators,
               birds_t& birds,
               std::vector<Tree>& trees,

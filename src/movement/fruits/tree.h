@@ -20,7 +20,7 @@ public:
     virtual bool borders() const;
     virtual void obstacle(std::vector<Obstacle> const& obstacles);
 
-    virtual std::vector<Fruit> DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles);
+    virtual void DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles);
 
     virtual ~Tree();
 };

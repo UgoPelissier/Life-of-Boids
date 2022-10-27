@@ -30,7 +30,7 @@ public:
     virtual void fruitLaw(std::vector<Real> const& f);
     virtual void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
 
-    virtual int update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits);
+    virtual bool update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits);
 
     virtual ~Bird();
 };

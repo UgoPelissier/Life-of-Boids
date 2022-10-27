@@ -195,7 +195,7 @@ void Bird::biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird)
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-int Bird::update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits) {
+bool Bird::update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits) {
 
     m_state = constant;
     std::vector<Real> update, pred, f;
@@ -206,12 +206,14 @@ int Bird::update(std::vector<Obstacle>const& obstacles, agents_t& predators, bir
     if (m_state==obst) {
         this->obstacleLaw(update);
         this->windowUpdate();
-        return 0;
+        return true;
     }
 
     // Predators
     pred = this->pred(predators);
-
+    if (!m_alive) {
+        return false;
+    }
     // Fruits
     if ( m_state!= predator )
         f = this->fruits(fruits,birds);
@@ -223,41 +225,33 @@ int Bird::update(std::vector<Obstacle>const& obstacles, agents_t& predators, bir
     {
         case predatorANDseparation:
             this->biSeparationLaw(update, pred);
-            this->windowUpdate();
-            return 0;
+            break;
         case predator:
             this->separationLaw(pred);
-            this->windowUpdate();
-            return 0;
+            break;
         case fruitANDseparation:
             this->biFruitLaw(f,update);
-            this->windowUpdate();
-            return 0;
+            break;
         case fruit:
             this->fruitLaw(f);
-            this->windowUpdate();
-            return 0;
+            break;
         case separation:
             this->separationLaw(update);
-            this->windowUpdate();
-            return 0;
+            break;
         case alignment:
             this->alignmentLaw(update);
-            this->windowUpdate();
-            return 0;
+            break;
         case cohesion:
             this->cohesionLaw(update);
-            this->windowUpdate();
-            return 0;
+            break; 
         case constant:
-            this->constantUpdate();
-            this->windowUpdate();
-            return 0;
         default:
             this->constantUpdate();
-            this->windowUpdate();
-            return 0;
+            break;
     }
+
+    this->windowUpdate();
+    return true;
 }
 
 Bird::~Bird() = default;

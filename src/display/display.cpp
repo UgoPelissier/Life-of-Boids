@@ -60,11 +60,11 @@ vec2 scale(Fruit const& fruit) {
     };
 }
 
-std::tuple <birds_t, std::vector<Fruit>> updateObjects(std::vector<Obstacle>& obstacles,
-                                                      agents_t& predators,
-                                                      birds_t& birds,
-                                                      std::vector<Tree>& trees,
-                                                      std::vector<Fruit>& fruits) {
+std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
+                                      agents_t& predators,
+                                      birds_t& birds,
+                                      std::vector<Tree>& trees,
+                                      std::vector<Fruit>& fruits) {
 
     birds_t newBirds;
     std::vector<Fruit> newFruits;
@@ -75,12 +75,14 @@ std::tuple <birds_t, std::vector<Fruit>> updateObjects(std::vector<Obstacle>& ob
         predators[i].update_predator(obstacles, predators, birds2agents(birds));
     }
 
-    for (size_t i(0); i < bird_size; i++) {
-        birds[i].update(obstacles, predators, birds, fruits);
+    for (size_t i(0); i < birds.size(); i++) {
+        bool is_alive = birds[i].update(obstacles, predators, birds, fruits);
+        if (!is_alive)
+            birds.erase(i);
     }
 
     for (Tree& tree : trees) {
-        fruits = tree.DropFruit(fruits, obstacles);
+        tree.DropFruitAndAppend(fruits, obstacles);
     }
 
     for (Fruit& fruit : fruits) {
@@ -88,16 +90,7 @@ std::tuple <birds_t, std::vector<Fruit>> updateObjects(std::vector<Obstacle>& ob
             newFruits.push_back(fruit);
     }
 
-    for (auto& b : birds) {
-        
-        Bird& bird = b.second;
-        if ( bird.get_alive() ) {
-            bird.get_index() = n;
-            newBirds[n++] = bird;
-        }
-    }
-
-    return std::make_tuple(newBirds, newFruits);
+    return newFruits;
 }
 
 
@@ -250,7 +243,7 @@ initAgentWindow() {
     std::vector<Tree> trees = trees_init(obstacles);
     std::vector<Fruit> fruits = {};
     for (Tree tree : trees) {
-        fruits = tree.DropFruit(fruits, obstacles);
+        tree.DropFruitAndAppend(fruits, obstacles);
     }
 
     triangle_vertices_t trianglesPredators(predators.size());
@@ -264,12 +257,12 @@ initAgentWindow() {
     triangle_vertices_t trianglesFruit;
     triangle_vertices_t fruit_triangles(2);
 
-    for (auto &p : predators) {
-        Agent &predator = p.second;
+    for (auto& it : predators) {
+        Agent& predator = it.second;
         trianglesPredators.push_back(triangle::newTriangle(scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
-    for (auto &b : birds) {
-        Bird &bird = b.second;
+    for (auto& it : birds) {
+        Bird& bird = it.second;
         trianglesBirds.push_back(triangle::newTriangle(scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
     for (Obstacle const& obs : obstacles) {
@@ -317,15 +310,15 @@ void updateAgentWindow(
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    std::tie(birds, fruits) = updateObjects(obstacles, predators, birds, trees, fruits);
+    fruits = updateObjects(obstacles, predators, birds, trees, fruits);
 
-    for (auto &p : predators) {
-        Agent& predator = p.second;
+    for (auto& it : predators) {
+        Agent& predator = it.second;
         trianglesPredators.push_back(triangle::newTriangle(scale(predator, ratio), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
 
-    for (auto &b : birds) {
-        Bird& bird = b.second;
+    for (auto& it : birds) {
+        Bird& bird = it.second;
         trianglesBirds.push_back(triangle::newTriangle(scale(bird, ratio), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
 
@@ -364,10 +357,10 @@ void addAgent(
     std::mt19937 engine(dev());
 
     if (addBird) { // Add new bird to the window
-        newBird = Bird((Real)cursorX, (Real)cursorY, (Real)(2 * PI * unif(engine) - PI), n_birds);
+        newBird = Bird((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_birds);
         newBird.obstacle(obstacles);
         if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
-            birds[n_birds] = newBird;
+            birds[n_birds++] = newBird;
             trianglesBirds.push_back(triangle::newTriangle(
                     scale(newBird, ratio),
                     BIRD_COLOR,
@@ -381,7 +374,7 @@ void addAgent(
         newPredator = Agent((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_predators);
         newPredator.obstacle(obstacles);
         if ( newPredator.get_state()!=obst && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
-            predators[n_predators] = newPredator;
+            predators[n_predators++] = newPredator;
             trianglesPredators.push_back(triangle::newTriangle(
                     scale(newPredator, ratio),
                     PRED_COLOR,

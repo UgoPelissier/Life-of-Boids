@@ -34,7 +34,7 @@ bool Tree::borders() const {
     return false;
 }
 
-std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles) {
+void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles) {
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
     std::random_device dev;
@@ -69,7 +69,6 @@ std::vector<Fruit> Tree::DropFruit(std::vector<Fruit>& fruits, std::vector<Obsta
         }
         m_time = (double)uniTime(engine) + (double)time(&finish);
     }
-    return fruits;
 }
 
 void Tree::obstacle(std::vector<Obstacle> const& obstacles) {
