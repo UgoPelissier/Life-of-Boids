@@ -22,6 +22,9 @@
 #include "fruit.h"
 #include "tree.h"
 
+
+using triangle_vertices_t = std::vector<std::array<triangle::Vertex, 3>>;
+
 void error_callback(int error, const char* description);
 
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/);
@@ -37,40 +40,39 @@ vec2 scale(Tree const& tree);
 vec2 scale(Fruit const& fruit);
 
 std::tuple <
-        std::vector<Bird>,
+        birds_t,
         std::vector<Fruit>
         > updateObjects(std::vector<Obstacle>& obstacles,
-              std::vector<Agent>& predators,
-              std::vector<Bird>& birds,
+              agents_t& predators,
+              birds_t& birds,
               std::vector<Tree>& trees,
               std::vector<Fruit>& fruits);
 
 std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow();
 
 std::tuple<
-        std::vector<Obstacle>,
-                std::vector<Agent>,
-                        std::vector<Bird>,
-                                std::vector<Tree>,
-                                        std::vector<Fruit>,
-                                            std::vector<std::array<triangle::Vertex, 3>>,
-                                            std::vector<std::array<triangle::Vertex, 3>>,
-                                            std::vector<std::array<triangle::Vertex, 3>>,
-                                            std::vector<std::array<triangle::Vertex, 3>>,
-                                            std::vector<std::array<triangle::Vertex, 3>>
-                                            >
-                                            initAgentWindow();
+    std::vector<Obstacle>,
+    agents_t,
+    birds_t,
+    std::vector<Tree>,
+    std::vector<Fruit>,
+    triangle_vertices_t,
+    triangle_vertices_t,
+    triangle_vertices_t,
+    triangle_vertices_t,
+    triangle_vertices_t
+> initAgentWindow();
 
 void updateAgentWindow(
         GLFWwindow* window,
         std::vector<Obstacle>& obstacles,
-        std::vector<Agent>& predators,
-        std::vector<Bird>& birds,
+        agents_t& predators,
+        birds_t& birds,
         std::vector<Tree>& trees,
         std::vector<Fruit>& fruits,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds,
+        triangle_vertices_t& trianglesFruit
         );
 
 void addAgent(
@@ -78,19 +80,19 @@ void addAgent(
         bool& addBird,
         bool& addPredator,
         std::vector<Obstacle>& obstacles,
-        std::vector<Agent>& predators,
-        std::vector<Bird>& birds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds
+        agents_t& predators,
+        birds_t& birds,
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds
         );
 
 void updateWindow(
         GLFWwindow* window,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesObs,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesTree,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit,
+        triangle_vertices_t& trianglesObs,
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds,
+        triangle_vertices_t& trianglesTree,
+        triangle_vertices_t& trianglesFruit,
         VertexArray& triangleObs_vertexArray,
         VertexArray& trianglePred_vertexArray,
         VertexArray& triangleBird_vertexArray,

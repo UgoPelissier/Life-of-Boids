@@ -3,6 +3,9 @@
 #include "agent.h"
 #include "fruit.h"
 
+class Bird;
+using birds_t = std::unordered_map<size_t, Bird>;
+
 class Bird : public Agent {
 protected:
     bool m_alive;
@@ -15,9 +18,9 @@ public:
 
     virtual bool get_alive() const;
 
-    virtual std::vector<Real> neighbours(std::vector<Bird> const& birds);
-    virtual std::vector<Real> pred(std::vector<Agent> const& predators);
-    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds);
+    virtual std::vector<Real> neighbours(birds_t const& birds);
+    virtual std::vector<Real> pred(agents_t const& predators);
+    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, birds_t& birds);
 
     virtual void cohesionLaw(std::vector<Real> const& group);
     virtual void alignmentLaw(std::vector<Real> const& group);
@@ -27,12 +30,12 @@ public:
     virtual void fruitLaw(std::vector<Real> const& f);
     virtual void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
 
-    virtual int update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits);
+    virtual int update(std::vector<Obstacle>const& obstacles, agents_t const& predators, birds_t& birds, std::vector<Fruit>& fruits);
 
     virtual ~Bird();
 };
 
-std::vector<Agent> birds2agents(std::vector<Bird> const& birds);
+agents_t birds2agents(birds_t const& birds);
 
-std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector<Agent> const& predators);
+birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t const& predators);
 

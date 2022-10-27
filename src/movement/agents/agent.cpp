@@ -85,21 +85,23 @@ void Agent::constantUpdate() {
     m_y += SPEED * sin(m_angle);
 }
 
-std::vector<Real> Agent::neighbour(agents_t const& predators, agents_t const& birds) {
+std::vector<Real> Agent::neighbour(agents_t& predators, agents_t& birds) {
     std::vector<Real> v;
 
     Real current_distance;
     Real min_distance = (Real)(WIDTH+HEIGHT);
 
-    for (size_t i(0); i < predators.size(); i++) {
-        current_distance = this->distance(predators[i]);
+    for (auto & pr : predators) {
+        const Agent& p = pr.second;
+        size_t p_index = p.get_index();
+        current_distance = this->distance(p);
+        
+        if (m_index !=  p_index && (current_distance < PREDATOR_RANGE) && (current_distance < min_distance)) {
 
-        if (m_index != i && (current_distance < PREDATOR_RANGE) && (current_distance < min_distance)) {
-
-            if ( this->insideFieldView(predators[i]) ) {
+            if ( this->insideFieldView(p) ) {
                 m_state = separation;
                 min_distance = current_distance;
-                v = {predators[i].get_x(),predators[i].get_y()};
+                v = {p.get_x(), p.get_y()};
             }
         }
     }
@@ -107,15 +109,17 @@ std::vector<Real> Agent::neighbour(agents_t const& predators, agents_t const& bi
     if ( m_state!=separation ) {
         min_distance = (Real)(WIDTH+HEIGHT);
 
-        for (size_t i(0); i < birds.size(); i++) {
-            current_distance = this->distance(birds[i]);
+        for (auto const& br : birds) {
+            
+            auto &b = br.second;
+            current_distance = this->distance(b);
 
             if (current_distance < min_distance) {
 
-                if (this->insideFieldView(birds[i])) {
+                if (this->insideFieldView(b)) {
                     m_state = predator;
                     min_distance = current_distance;
-                    v = {birds[i].get_x(),birds[i].get_y()};
+                    v = {b.get_x(), b.get_y()};
                 }
             }
         }

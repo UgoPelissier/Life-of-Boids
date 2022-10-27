@@ -60,16 +60,13 @@ vec2 scale(Fruit const& fruit) {
     };
 }
 
-std::tuple <
-        std::vector<Bird>,
-                std::vector<Fruit>
-                        >updateObjects(std::vector<Obstacle>& obstacles,
-                                      std::vector<Agent>& predators,
-                                      std::vector<Bird>& birds,
-                                      std::vector<Tree>& trees,
-                                      std::vector<Fruit>& fruits) {
+std::tuple <birds_t, std::vector<Fruit>> updateObjects(std::vector<Obstacle>& obstacles,
+                                                      agents_t& predators,
+                                                      birds_t& birds,
+                                                      std::vector<Tree>& trees,
+                                                      std::vector<Fruit>& fruits) {
 
-    std::vector<Bird> newBirds;
+    birds_t newBirds;
     std::vector<Fruit> newFruits;
     size_t n = 0;
     size_t bird_size = birds.size(); //Birds size can change in the loop when eating fruit
@@ -91,7 +88,8 @@ std::tuple <
             newFruits.push_back(fruit);
     }
 
-    for (Bird& bird : birds) {
+    for (auto& b : birds) {
+        const Bird& bird = b.second;
         if ( bird.get_alive() ) {
             bird.get_index() = n;
             newBirds.push_back(bird);
@@ -231,23 +229,23 @@ std::tuple<
 
 std::tuple<
         std::vector<Obstacle>,
-        std::vector<Agent>,
-        std::vector<Bird>,
+        agents_t,
+        birds_t,
         std::vector<Tree>,
         std::vector<Fruit>,
-        std::vector<std::array<triangle::Vertex, 3>>,
-        std::vector<std::array<triangle::Vertex, 3>>,
-        std::vector<std::array<triangle::Vertex, 3>>,
-        std::vector<std::array<triangle::Vertex, 3>>,
-        std::vector<std::array<triangle::Vertex, 3>>
+        triangle_vertices_t,
+        triangle_vertices_t,
+        triangle_vertices_t,
+        triangle_vertices_t,
+        triangle_vertices_t
 >
 initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
     std::vector<Obstacle> obstacles = obstacles_init();
-    std::vector<Agent> predators = predators_init(obstacles);
-    std::vector<Bird> birds = birds_init(obstacles, predators);
+    agents_t predators = predators_init(obstacles);
+    birds_t birds = birds_init(obstacles, predators);
 
     std::vector<Tree> trees = trees_init(obstacles);
     std::vector<Fruit> fruits = {};
@@ -255,21 +253,23 @@ initAgentWindow() {
         fruits = tree.DropFruit(fruits, obstacles);
     }
 
-    std::vector<std::array<triangle::Vertex, 3>> trianglesPredators(predators.size());
-    std::vector<std::array<triangle::Vertex, 3>> trianglesBirds(birds.size());
+    triangle_vertices_t trianglesPredators(predators.size());
+    triangle_vertices_t trianglesBirds(birds.size());
 
-    std::vector<std::array<triangle::Vertex, 3>> trianglesObs(obstacles.size());
-    std::vector<std::array<triangle::Vertex, 3>> obstacle(2);
+    triangle_vertices_t trianglesObs(obstacles.size());
+    triangle_vertices_t obstacle(2);
 
-    std::vector<std::array<triangle::Vertex, 3>> trianglesTree(trees.size());
-    std::vector<std::array<triangle::Vertex, 3>> tree_triangles(2);
-    std::vector<std::array<triangle::Vertex, 3>> trianglesFruit;
-    std::vector<std::array<triangle::Vertex, 3>> fruit_triangles(2);
+    triangle_vertices_t trianglesTree(trees.size());
+    triangle_vertices_t tree_triangles(2);
+    triangle_vertices_t trianglesFruit;
+    triangle_vertices_t fruit_triangles(2);
 
-    for (Agent const& predator : predators) {
+    for (auto &p : predators) {
+        Agent &predator = p.second;
         trianglesPredators.push_back(triangle::newTriangle(scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
-    for (Bird const& bird : birds) {
+    for (auto &b : birds) {
+        Bird &bird = b.second;
         trianglesBirds.push_back(triangle::newTriangle(scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
     for (Obstacle const& obs : obstacles) {
@@ -296,19 +296,19 @@ initAgentWindow() {
 void updateAgentWindow(
         GLFWwindow* window,
         std::vector<Obstacle>& obstacles,
-        std::vector<Agent>& predators,
-        std::vector<Bird>& birds,
+        agents_t& predators,
+        birds_t& birds,
         std::vector<Tree>& trees,
         std::vector<Fruit>& fruits,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds,
+        triangle_vertices_t& trianglesFruit
         ) {
 
     trianglesPredators = {};
     trianglesBirds = {};
     trianglesFruit = {};
-    std::vector<std::array<triangle::Vertex, 3>> fruit_triangle;
+    triangle_vertices_t fruit_triangle;
 
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -319,11 +319,13 @@ void updateAgentWindow(
 
     std::tie(birds, fruits) = updateObjects(obstacles, predators, birds, trees, fruits);
 
-    for (auto const& predator : predators) {
+    for (auto &p : predators) {
+        Agent& predator = p.second;
         trianglesPredators.push_back(triangle::newTriangle(scale(predator, ratio), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
 
-    for (auto const& bird : birds) {
+    for (auto &b : birds) {
+        Bird& bird = b.second;
         trianglesBirds.push_back(triangle::newTriangle(scale(bird, ratio), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
     }
 
@@ -341,10 +343,10 @@ void addAgent(
         bool& addBird,
         bool& addPredator,
         std::vector<Obstacle>& obstacles,
-        std::vector<Agent>& predators,
-        std::vector<Bird>& birds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds
+        agents_t& predators,
+        birds_t& birds,
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds
         ) {
     int width{}, height{};
 
@@ -365,8 +367,7 @@ void addAgent(
         newBird = Bird((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_birds);
         newBird.obstacle(obstacles);
         if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
-            birds.push_back(newBird);
-            n_birds++;
+            birds[n_birds] = newBird;
             trianglesBirds.push_back(triangle::newTriangle(
                     scale(newBird, ratio),
                     BIRD_COLOR,
@@ -380,8 +381,7 @@ void addAgent(
         newPredator = Agent((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_predators);
         newPredator.obstacle(obstacles);
         if ( newPredator.get_state()!=obst && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
-            predators.push_back(newPredator);
-            n_predators ++;
+            predators[n_predators] = newPredator;
             trianglesPredators.push_back(triangle::newTriangle(
                     scale(newPredator, ratio),
                     PRED_COLOR,
@@ -394,11 +394,11 @@ void addAgent(
 
 void updateWindow(
         GLFWwindow* window,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesObs,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesPredators,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesBirds,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesTree,
-        std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit,
+        triangle_vertices_t& trianglesObs,
+        triangle_vertices_t& trianglesPredators,
+        triangle_vertices_t& trianglesBirds,
+        triangle_vertices_t& trianglesTree,
+        triangle_vertices_t& trianglesFruit,
         VertexArray& triangleObs_vertexArray,
         VertexArray& trianglePred_vertexArray,
         VertexArray& triangleBird_vertexArray,

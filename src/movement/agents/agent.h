@@ -2,6 +2,7 @@
 #include "object.h"
 #include "obstacle.h"
 
+class Agent;
 enum state {obst, predator, predatorANDseparation, fruit, fruitANDseparation, separation, alignment, cohesion, constant};
 using agents_t = std::unordered_map<size_t, Agent>;
 
@@ -19,7 +20,7 @@ public:
 
     virtual Real get_angle() const;
     virtual state get_state() const;
-    virtual size_t& get_index();
+    virtual size_t get_index();
 
     virtual Real angle (Agent const& a) const;
     virtual bool insideFieldView(Agent const& a) const;
@@ -33,7 +34,7 @@ public:
     virtual void windowUpdate();
     virtual void constantUpdate();
 
-    virtual std::vector<Real> neighbour(agents_t const& predators, agents_t const& birds);
+    virtual std::vector<Real> neighbour(agents_t & predators, agents_t & birds);
 
     virtual void obstacleLaw(std::vector<Real> const&  obstacle);
     virtual void separationLaw(std::vector<Real> const&  predator);

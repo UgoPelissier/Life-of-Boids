@@ -16,7 +16,7 @@ bool Bird::get_alive() const {
     return m_alive;
 }
 
-std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
+std::vector<Real> Bird::neighbours(birds_t const& birds) {
     std::vector<Real> v;
 
     Real xSeparation(0), ySeparation(0);
@@ -94,13 +94,15 @@ std::vector<Real> Bird::neighbours(std::vector<Bird> const& birds) {
     }
 }
 
-std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
+std::vector<Real> Bird::pred(agents_t const& predators) {
     std::vector<Real> pred;
 
     Real current_distance;
     Real min_distance = (Real)(WIDTH+HEIGHT);
 
-    for (const auto & p : predators) {
+    for (auto &pr : predators) {
+        
+        Agent& p = pr.second;
         current_distance = this->distance(p);
 
         if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
@@ -110,15 +112,17 @@ std::vector<Real> Bird::pred(std::vector<Agent> const& predators) {
                 min_distance = current_distance;
                 pred={p.get_x(), p.get_y()};
 
-                if (current_distance < DEAD_RANGE)
+                if (current_distance < DEAD_RANGE) {
                     m_alive = false;
+                    break;
+                }
             }
         }
     }
     return pred;
 }
 
-std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, std::vector<Bird>& birds) {
+std::vector<Real> Bird::fruits(std::vector<Fruit>& fruits, birds_t& birds) {
 
     std::vector<Real> fr;
 
@@ -191,7 +195,7 @@ void Bird::biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird)
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const& predators, std::vector<Bird>& birds, std::vector<Fruit>& fruits) {
+int Bird::update(std::vector<Obstacle>const& obstacles, agents_t const& predators, birds_t& birds, std::vector<Fruit>& fruits) {
 
     m_state = constant;
     std::vector<Real> update, pred, f;
@@ -258,17 +262,18 @@ int Bird::update(std::vector<Obstacle>const& obstacles, std::vector<Agent> const
 
 Bird::~Bird() = default;
 
-std::vector<Agent> birds2agents(std::vector<Bird> const& birds) {
-    std::vector<Agent> agents(birds.size());
-    for (Bird const& bird : birds) {
-        agents.emplace_back(bird);
+agents_t birds2agents(birds_t const& birds) {
+    agents_t agents(birds.size());
+    for (auto const &br : birds) {
+        Bird &b = br.second;
+        agents[b.get_index()] = bi;
     }
     return agents;
 }
 
-std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector<Agent> const& predators) {
+birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t const& predators) {
 
-    std::vector<Bird> birds;
+    birds_t birds;
     Bird bird;
 
     int randomX;
@@ -298,7 +303,7 @@ std::vector<Bird> birds_init(std::vector<Obstacle> const& obstacles, std::vector
             bird = Bird((Real)randomX,(Real)randomY,randomAngle,n);
             bird.obstacle(obstacles);
         }
-        birds.push_back(bird);
+        birds[n] = bird;
         n = birds.size();
     }
     return birds;

@@ -27,8 +27,8 @@ int main() {
 
     // Agents initialization
     std::vector<Obstacle> obstacles;
-    std::vector<Agent> predators;
-    std::vector<Bird> birds;
+    agents_t predators;
+    birds_t birds;
     std::vector<Tree> trees;
     std::vector<Fruit> fruits;
     std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
