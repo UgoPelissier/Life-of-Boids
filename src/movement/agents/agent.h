@@ -20,14 +20,14 @@ public:
 
     virtual Real get_angle() const;
     virtual state get_state() const;
-    virtual size_t get_index();
+    virtual size_t& get_index();
 
     virtual Real angle (Agent const& a) const;
     virtual bool insideFieldView(Agent const& a) const;
 
-    virtual bool operator==(Agent const& a) const;
-    virtual bool overlap(Agent const& a) const;
-    virtual bool overlap(agents_t const& agents) const;
+    virtual bool operator==(Agent & a) const;
+    virtual bool overlap(Agent& a) const;
+    virtual bool overlap(agents_t& agents) const;
 
     virtual std::vector<Real> obstacle(std::vector<Obstacle> const& obstacles);
 
@@ -40,7 +40,7 @@ public:
     virtual void separationLaw(std::vector<Real> const&  predator);
     virtual void predatorLaw(std::vector<Real> const& birds);
 
-    virtual int update_predator(std::vector<Obstacle>const& obstacles, agents_t const& predators, agents_t const& birds);
+    virtual int update_predator(std::vector<Obstacle>const& obstacles, agents_t& predators, agents_t& birds);
 
     virtual ~Agent();
 };

@@ -37,24 +37,24 @@ bool Agent::insideFieldView(Agent const& a) const {
     return true;
 }
 
-bool Agent::operator==(Agent const& a) const {
+bool Agent::operator==(Agent& a) const {
+    
     return (m_x == a.get_x() && m_y == a.get_y() && m_angle == a.get_angle());
 }
 
-bool Agent::overlap(Agent const& a) const {
-    if (this->distance(a)<BODY_OVERLAP) {
-        return true;
-    }
-    return false;
+bool Agent::overlap(Agent& a) const {
+    return this->distance(a) < BODY_OVERLAP;
 }
 
-bool Agent::overlap(agents_t const& agents) const {
-    if (std::any_of(agents.begin(),
-                    agents.end(),
-                    [this](Agent const& agent){ return this->operator==(agent) && this->overlap(agent);} ) ) {
-        return true;
-    }
-    return false;
+bool Agent::overlap(agents_t& agents) const {
+
+    return (std::any_of(agents.begin(),
+        agents.end(),
+        [this](auto &it) {
+            Agent& agent = it.second;
+            return this->operator==(agent) && this->overlap(agent);
+        }
+    ));
 }
 
 std::vector<Real> Agent::obstacle(std::vector<Obstacle> const& obstacles) {
@@ -92,7 +92,7 @@ std::vector<Real> Agent::neighbour(agents_t& predators, agents_t& birds) {
     Real min_distance = (Real)(WIDTH+HEIGHT);
 
     for (auto & pr : predators) {
-        const Agent& p = pr.second;
+        Agent& p = pr.second;
         size_t p_index = p.get_index();
         current_distance = this->distance(p);
         
@@ -157,7 +157,7 @@ void Agent::predatorLaw(std::vector<Real> const& bird) {
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-int Agent::update_predator(std::vector<Obstacle>const& obstacles, agents_t const& predators, agents_t const& birds) {
+int Agent::update_predator(std::vector<Obstacle>const& obstacles, agents_t& predators, agents_t& birds) {
     m_state = constant;
     std::vector<Real> update;
 

@@ -31,11 +31,11 @@ int main() {
     birds_t birds;
     std::vector<Tree> trees;
     std::vector<Fruit> fruits;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesPredators;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesBirds;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesTree;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesFruit;
+    triangle_vertices_t trianglesObs;
+    triangle_vertices_t trianglesPredators;
+    triangle_vertices_t trianglesBirds;
+    triangle_vertices_t trianglesTree;
+    triangle_vertices_t trianglesFruit;
 
     std::tie(obstacles, predators, birds, trees, fruits,
              trianglesObs, trianglesPredators, trianglesBirds, trianglesTree, trianglesFruit) = initAgentWindow();
@@ -53,12 +53,11 @@ int main() {
         addAgent(window,addBird,addPredator,
                 obstacles,predators,birds,
                 trianglesPredators,trianglesBirds);
-
         updateWindow(window,
                 trianglesObs,trianglesPredators,trianglesBirds,trianglesTree,trianglesFruit,
                 triangleObs_vertexArray,trianglePred_vertexArray,triangleBird_vertexArray,triangleTree_vertexArray,triangleFruit_vertexArray,
                 triangle_buffer,triangle_shaderProgram,mvp_location);
-
+   
         i++;
         if (i == NUMBER_LOOP_FPS) {
             auto end = std::chrono::high_resolution_clock::now();

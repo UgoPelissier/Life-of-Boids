@@ -16,7 +16,7 @@ bool Bird::get_alive() const {
     return m_alive;
 }
 
-std::vector<Real> Bird::neighbours(birds_t const& birds) {
+std::vector<Real> Bird::neighbours(birds_t& birds) {
     std::vector<Real> v;
 
     Real xSeparation(0), ySeparation(0);
@@ -94,7 +94,7 @@ std::vector<Real> Bird::neighbours(birds_t const& birds) {
     }
 }
 
-std::vector<Real> Bird::pred(agents_t const& predators) {
+std::vector<Real> Bird::pred(agents_t& predators) {
     std::vector<Real> pred;
 
     Real current_distance;
@@ -195,7 +195,7 @@ void Bird::biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird)
     m_y += PRED_SPEED * sin(m_angle);
 }
 
-int Bird::update(std::vector<Obstacle>const& obstacles, agents_t const& predators, birds_t& birds, std::vector<Fruit>& fruits) {
+int Bird::update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits) {
 
     m_state = constant;
     std::vector<Real> update, pred, f;
@@ -262,16 +262,16 @@ int Bird::update(std::vector<Obstacle>const& obstacles, agents_t const& predator
 
 Bird::~Bird() = default;
 
-agents_t birds2agents(birds_t const& birds) {
+agents_t birds2agents(birds_t& birds) {
     agents_t agents(birds.size());
-    for (auto const &br : birds) {
+    for (auto &br : birds) {
         Bird &b = br.second;
-        agents[b.get_index()] = bi;
+        agents[b.get_index()] = b;
     }
     return agents;
 }
 
-birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t const& predators) {
+birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t& predators) {
 
     birds_t birds;
     Bird bird;

@@ -29,5 +29,11 @@ RUN pip install conan && \
 	conan profile update settings.compiler.version="${VERSION}" default && \
 	conan profile update settings.compiler.libcxx=libstdc++11 default
 
+COPY conanfile.txt /tmp/conanfile.txt
+RUN mkdir /tmp/installs/ && \
+	cd /tmp/installs/ && \
+	conan install .. --build=missing -c tools.system.package_manager:mode=install && \
+	cd .. && rm -rf installs/
+
 ENTRYPOINT /bin/bash
 CMD echo -e '********************************\n\n\tLIFE-OF-BOIDS\n\n********************************\n\n'

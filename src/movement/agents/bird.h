@@ -18,8 +18,8 @@ public:
 
     virtual bool get_alive() const;
 
-    virtual std::vector<Real> neighbours(birds_t const& birds);
-    virtual std::vector<Real> pred(agents_t const& predators);
+    virtual std::vector<Real> neighbours(birds_t& birds);
+    virtual std::vector<Real> pred(agents_t& predators);
     virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, birds_t& birds);
 
     virtual void cohesionLaw(std::vector<Real> const& group);
@@ -30,12 +30,12 @@ public:
     virtual void fruitLaw(std::vector<Real> const& f);
     virtual void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
 
-    virtual int update(std::vector<Obstacle>const& obstacles, agents_t const& predators, birds_t& birds, std::vector<Fruit>& fruits);
+    virtual int update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits);
 
     virtual ~Bird();
 };
 
-agents_t birds2agents(birds_t const& birds);
+agents_t birds2agents(birds_t& birds);
 
-birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t const& predators);
+birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t& predators);
 

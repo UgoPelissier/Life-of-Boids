@@ -89,11 +89,11 @@ std::tuple <birds_t, std::vector<Fruit>> updateObjects(std::vector<Obstacle>& ob
     }
 
     for (auto& b : birds) {
-        const Bird& bird = b.second;
+        
+        Bird& bird = b.second;
         if ( bird.get_alive() ) {
             bird.get_index() = n;
-            newBirds.push_back(bird);
-            n++;
+            newBirds[n++] = bird;
         }
     }
 
@@ -364,7 +364,7 @@ void addAgent(
     std::mt19937 engine(dev());
 
     if (addBird) { // Add new bird to the window
-        newBird = Bird((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_birds);
+        newBird = Bird((Real)cursorX, (Real)cursorY, (Real)(2 * PI * unif(engine) - PI), n_birds);
         newBird.obstacle(obstacles);
         if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
             birds[n_birds] = newBird;
