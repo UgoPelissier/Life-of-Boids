@@ -22,7 +22,7 @@ public:
 
     virtual void DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles);
 
+    static std::vector<Tree> init(std::vector<Obstacle> const& obstacles);
+    
     virtual ~Tree();
 };
-
-std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles);

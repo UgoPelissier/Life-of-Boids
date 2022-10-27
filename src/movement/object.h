@@ -21,9 +21,10 @@ public:
 
     virtual Real get_x() const;
     virtual Real get_y() const;
-
     virtual Real distance(Object const& object) const;
+    
     static vec2 scale(Object const& obj, Real ratio=RATIO);
+    
     virtual ~Object();
 
 };

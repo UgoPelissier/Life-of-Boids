@@ -82,7 +82,7 @@ void Tree::obstacle(std::vector<Obstacle> const& obstacles) {
 
 Tree::~Tree() = default;
 
-std::vector<Tree> trees_init(std::vector<Obstacle> const& obstacles) {
+std::vector<Tree> Tree::init(std::vector<Obstacle> const& obstacles) {
     std::vector<Tree> trees;
     Tree newTree;
 

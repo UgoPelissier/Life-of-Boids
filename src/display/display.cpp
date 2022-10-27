@@ -31,7 +31,6 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                       std::vector<Tree>& trees,
                                       std::vector<Fruit>& fruits) {
 
-    birds_t newBirds;
     std::vector<Fruit> newFruits;
     size_t n = 0;
     size_t bird_size = birds.size(); //Birds size can change in the loop when eating fruit
@@ -201,11 +200,11 @@ initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
-    std::vector<Obstacle> obstacles = obstacles_init();
+    std::vector<Obstacle> obstacles = Obstacle::init();
     agents_t predators = predators_init(obstacles);
     birds_t birds = birds_init(obstacles, predators);
 
-    std::vector<Tree> trees = trees_init(obstacles);
+    std::vector<Tree> trees = Tree::init(obstacles);
     std::vector<Fruit> fruits = {};
     for (Tree tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);

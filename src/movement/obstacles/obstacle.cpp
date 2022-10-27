@@ -41,7 +41,7 @@ bool Obstacle::overlap(std::vector<Obstacle>  const& obstacles) const {
 
 Obstacle::~Obstacle() = default;
 
-std::vector<Obstacle> obstacles_init() {
+std::vector<Obstacle> Obstacle::init() {
     std::vector<Obstacle> obstacles;
     Obstacle newObstacle;
 

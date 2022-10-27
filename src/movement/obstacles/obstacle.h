@@ -10,13 +10,12 @@ public:
     Obstacle();
     Obstacle(Real const& x, Real const& y, Real const& height, Real const& width);
 
-    virtual Real get_height() const;
-    virtual Real get_width() const;
+    Real get_height() const;
+    Real get_width() const;
 
-    virtual bool borders() const;
-    virtual bool overlap(std::vector<Obstacle>  const& obstacles) const;
-
-    virtual ~Obstacle();
+    bool borders() const;
+    bool overlap(std::vector<Obstacle>  const& obstacles) const;
+    static std::vector<Obstacle> init();
+    ~Obstacle();
 };
 
-std::vector<Obstacle> obstacles_init();

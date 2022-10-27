@@ -42,6 +42,7 @@ void Fruit::obstacle(std::vector<Obstacle> const& obstacles) {
     for (const auto & obstacle : obstacles) {
         if ( this->distance(obstacle) < std::max(obstacle.get_height()/2,obstacle.get_width()/2) ) {
             m_obstacle = true;
+            break;
         }
     }
 }
