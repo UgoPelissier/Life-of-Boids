@@ -26,17 +26,14 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
 }
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
-                                      agents_t& predators,
+                                      predators_t& predators,
                                       birds_t& birds,
                                       std::vector<Tree>& trees,
                                       std::vector<Fruit>& fruits) {
 
     std::vector<Fruit> newFruits;
-    size_t n = 0;
-    size_t bird_size = birds.size(); //Birds size can change in the loop when eating fruit
-
     for (size_t i(0); i < predators.size(); i++) {
-        predators[i].update_predator(obstacles, predators, birds2agents(birds));
+        predators[i].update(obstacles, predators, birds);
     }
 
     for (size_t i(0); i < birds.size(); i++) {
@@ -186,23 +183,23 @@ std::tuple<
 
 std::tuple<
         std::vector<Obstacle>,
-        agents_t,
+        predators_t,
         birds_t,
         std::vector<Tree>,
         std::vector<Fruit>,
-        triangle_vertices_t,
-        triangle_vertices_t,
-        triangle_vertices_t,
-        triangle_vertices_t,
-        triangle_vertices_t
+        triangle::vertices_t,
+        triangle::vertices_t,
+        triangle::vertices_t,
+        triangle::vertices_t,
+        triangle::vertices_t
 >
 initAgentWindow() {
 
     std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
 
     std::vector<Obstacle> obstacles = Obstacle::init();
-    agents_t predators = predators_init(obstacles);
-    birds_t birds = birds_init(obstacles, predators);
+    predators_t predators = Predator::init(obstacles);
+    birds_t birds = Bird::init(obstacles, predators);
 
     std::vector<Tree> trees = Tree::init(obstacles);
     std::vector<Fruit> fruits = {};
@@ -210,19 +207,19 @@ initAgentWindow() {
         tree.DropFruitAndAppend(fruits, obstacles);
     }
 
-    triangle_vertices_t trianglesPredators(predators.size());
-    triangle_vertices_t trianglesBirds(birds.size());
+    triangle::vertices_t trianglesPredators(predators.size());
+    triangle::vertices_t trianglesBirds(birds.size());
 
-    triangle_vertices_t trianglesObs(obstacles.size());
-    triangle_vertices_t obstacle(2);
+    triangle::vertices_t trianglesObs(obstacles.size());
+    triangle::vertices_t obstacle(2);
 
-    triangle_vertices_t trianglesTree(trees.size());
-    triangle_vertices_t tree_triangles(2);
-    triangle_vertices_t trianglesFruit;
-    triangle_vertices_t fruit_triangles(2);
+    triangle::vertices_t trianglesTree(trees.size());
+    triangle::vertices_t tree_triangles(2);
+    triangle::vertices_t trianglesFruit;
+    triangle::vertices_t fruit_triangles(2);
 
     for (auto& it : predators) {
-        Agent& predator = it.second;
+        Predator& predator = it.second;
         trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
     for (auto& it : birds) {
@@ -253,19 +250,19 @@ initAgentWindow() {
 void updateAgentWindow(
         GLFWwindow* window,
         std::vector<Obstacle>& obstacles,
-        agents_t& predators,
+        predators_t& predators,
         birds_t& birds,
         std::vector<Tree>& trees,
         std::vector<Fruit>& fruits,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds,
-        triangle_vertices_t& trianglesFruit
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds,
+        triangle::vertices_t& trianglesFruit
         ) {
 
     trianglesPredators = {};
     trianglesBirds = {};
     trianglesFruit = {};
-    triangle_vertices_t fruit_triangle;
+    triangle::vertices_t fruit_triangle;
 
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -277,7 +274,7 @@ void updateAgentWindow(
     fruits = updateObjects(obstacles, predators, birds, trees, fruits);
 
     for (auto& it : predators) {
-        Agent& predator = it.second;
+        Predator& predator = it.second;
         trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator, ratio), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
     }
 
@@ -297,13 +294,11 @@ void updateAgentWindow(
 
 void addAgent(
         GLFWwindow* window,
-        bool& addBird,
-        bool& addPredator,
         std::vector<Obstacle>& obstacles,
-        agents_t& predators,
+        predators_t& predators,
         birds_t& birds,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds
         ) {
     int width{}, height{};
 
@@ -314,7 +309,7 @@ void addAgent(
     Real ratio = (Real)width / (Real)height;
 
     Bird newBird;
-    Agent newPredator;
+    Predator newPredator;
 
     std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::random_device dev;
@@ -323,7 +318,7 @@ void addAgent(
     if (addBird) { // Add new bird to the window
         newBird = Bird((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_birds);
         newBird.obstacle(obstacles);
-        if ( newBird.get_state()!=obst && !newBird.overlap(birds2agents(birds)) && !newBird.overlap(predators) ) {
+        if ( newBird.get_state()!= state::near_obstacle && !newBird.overlap(birds, predators) ) {
             birds[n_birds++] = newBird;
             trianglesBirds.push_back(triangle::newTriangle(
                 Object::scale(newBird, ratio),
@@ -335,9 +330,9 @@ void addAgent(
     }
 
     if (addPredator) { // Add new predator to the window
-        newPredator = Agent((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_predators);
+        newPredator = Predator((Real)cursorX, (Real)HEIGHT - (Real)cursorY, (Real)(2 * PI * unif(engine) - PI),n_predators);
         newPredator.obstacle(obstacles);
-        if ( newPredator.get_state()!=obst && !newPredator.overlap(predators) && !newPredator.overlap(birds2agents(birds)) ) {
+        if ( newPredator.get_state()!= state::near_obstacle && !newPredator.overlap(birds, predators)) {
             predators[n_predators++] = newPredator;
             trianglesPredators.push_back(triangle::newTriangle(
                 Object::scale(newPredator, ratio),
@@ -351,11 +346,11 @@ void addAgent(
 
 void updateWindow(
         GLFWwindow* window,
-        triangle_vertices_t& trianglesObs,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds,
-        triangle_vertices_t& trianglesTree,
-        triangle_vertices_t& trianglesFruit,
+        triangle::vertices_t& trianglesObs,
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds,
+        triangle::vertices_t& trianglesTree,
+        triangle::vertices_t& trianglesFruit,
         VertexArray& triangleObs_vertexArray,
         VertexArray& trianglePred_vertexArray,
         VertexArray& triangleBird_vertexArray,
@@ -436,17 +431,23 @@ void updateWindow(
     glfwPollEvents();
 }
 
-void display_fps(GLFWwindow* window, std::chrono::time_point<std::chrono::high_resolution_clock>& start, std::chrono::time_point<std::chrono::high_resolution_clock>& end) {
+void display_fps(GLFWwindow* window,
+                std::chrono::time_point<std::chrono::high_resolution_clock>& start,
+                std::chrono::time_point<std::chrono::high_resolution_clock>& end,
+                double &total_fps) {
+
     std::chrono::duration<double, std::milli> float_ms = end - start;
     std::stringstream ss;
-    ss << "FPS : " << (1 / (float_ms.count()) * 1000)* NUMBER_LOOP_FPS;
+    double fps = (1 / (float_ms.count()) * 1000) * NUMBER_LOOP_FPS;
+    ss << "FPS : " << fps;
     glfwSetWindowTitle(window, ss.str().c_str());
+    total_fps += fps;
 
 }
 
 void endWindow(GLFWwindow* window) {
-    glfwDestroyWindow(window);
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }

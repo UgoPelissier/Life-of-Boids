@@ -1,4 +1,4 @@
-add_library(agents agent.cpp agent.h bird.cpp bird.h)
+add_library(agents agent.cpp agent.h bird.cpp bird.h predator.cpp predator.h)
 target_include_directories(agents
         PUBLIC
         ${CMAKE_SOURCE_DIR}/src

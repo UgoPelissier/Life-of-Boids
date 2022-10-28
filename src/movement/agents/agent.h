@@ -3,8 +3,25 @@
 #include "obstacle.h"
 
 class Agent;
-enum state {obst, predator, predatorANDseparation, fruit, fruitANDseparation, separation, alignment, cohesion, constant};
 using agents_t = std::unordered_map<size_t, Agent>;
+
+class Predator;
+using predators_t = std::unordered_map<size_t, Predator>;
+
+class Bird;
+using birds_t = std::unordered_map<size_t, Bird>;
+
+enum class state {
+    near_obstacle,
+    near_predator,
+    near_predatorANDseparation,
+    near_fruit,
+    near_fruitANDseparation,
+    separation,
+    alignment,
+    cohesion,
+    constant
+};
 
 class Agent : public Object {
 protected:
@@ -18,31 +35,24 @@ public:
     Agent(Real const& x, Real const& y, Real const& angle);
     Agent(Real const& x, Real const& y, Real const& angle, size_t& index);
 
-    virtual Real get_angle() const;
-    virtual state get_state() const;
-    virtual size_t& get_index();
+    Real get_angle() const;
+    state get_state() const;
+    size_t& get_index();
 
-    virtual Real angle (Agent const& a) const;
-    virtual bool insideFieldView(Agent const& a) const;
+    Real angle (Agent const& a) const;
+    bool insideFieldView(Agent const& a) const;
 
-    virtual bool operator==(Agent & a) const;
-    virtual bool overlap(Agent& a) const;
-    virtual bool overlap(agents_t& agents) const;
+    bool operator==(Agent & a) const;
+    bool overlap(Agent& a) const;
+    bool overlap(birds_t& birds, predators_t& predators) const;
 
-    virtual std::vector<Real> obstacle(std::vector<Obstacle> const& obstacles);
+    std::vector<Real> obstacle(std::vector<Obstacle> const& obstacles);
 
-    virtual void windowUpdate();
-    virtual void constantUpdate();
+    void windowUpdate();
+    void constantUpdate();
 
-    virtual std::vector<Real> neighbour(agents_t & predators, agents_t & birds);
+    void obstacleLaw(std::vector<Real> const&  obstacle);
+    void separationLaw(std::vector<Real> const&  predator);
 
-    virtual void obstacleLaw(std::vector<Real> const&  obstacle);
-    virtual void separationLaw(std::vector<Real> const&  predator);
-    virtual void predatorLaw(std::vector<Real> const& birds);
-
-    virtual int update_predator(std::vector<Obstacle>const& obstacles, agents_t& predators, agents_t& birds);
-
-    virtual ~Agent();
+    ~Agent();
 };
-
-agents_t predators_init(std::vector<Obstacle> const& obstacles);

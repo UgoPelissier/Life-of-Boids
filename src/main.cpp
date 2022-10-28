@@ -27,21 +27,22 @@ int main() {
 
     // Agents initialization
     std::vector<Obstacle> obstacles;
-    agents_t predators;
+    predators_t predators;
     birds_t birds;
     std::vector<Tree> trees;
     std::vector<Fruit> fruits;
-    triangle_vertices_t trianglesObs;
-    triangle_vertices_t trianglesPredators;
-    triangle_vertices_t trianglesBirds;
-    triangle_vertices_t trianglesTree;
-    triangle_vertices_t trianglesFruit;
+    triangle::vertices_t trianglesObs;
+    triangle::vertices_t trianglesPredators;
+    triangle::vertices_t trianglesBirds;
+    triangle::vertices_t trianglesTree;
+    triangle::vertices_t trianglesFruit;
 
     std::tie(obstacles, predators, birds, trees, fruits,
              trianglesObs, trianglesPredators, trianglesBirds, trianglesTree, trianglesFruit) = initAgentWindow();
 
     // Global loop
-    int i = 0;
+    int i = 0, j = 0;
+    double total_fps = 0.f;
     auto start = std::chrono::high_resolution_clock::now();
 
     while (!glfwWindowShouldClose(window)) {
@@ -50,7 +51,7 @@ int main() {
                 obstacles,predators,birds,trees,fruits,
                 trianglesPredators,trianglesBirds,trianglesFruit);
 
-        addAgent(window,addBird,addPredator,
+        addAgent(window,
                 obstacles,predators,birds,
                 trianglesPredators,trianglesBirds);
         updateWindow(window,
@@ -61,12 +62,15 @@ int main() {
         i++;
         if (i == NUMBER_LOOP_FPS) {
             auto end = std::chrono::high_resolution_clock::now();
-            display_fps(window, start, end);
+            display_fps(window, start, end, total_fps);
             i = 0;
             start = std::chrono::high_resolution_clock::now();
+            j++;
         }
 
     }
 
+    std::cout << "Avg fps: " << total_fps / j << std::endl;
+    
     endWindow(window);
 }

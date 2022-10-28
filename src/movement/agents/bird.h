@@ -1,10 +1,9 @@
 #pragma once
-#include "object.h"
-#include "agent.h"
-#include "fruit.h"
 
-class Bird;
-using birds_t = std::unordered_map<size_t, Bird>;
+#include "agent.h"
+#include "predator.h"
+#include "bird.h"
+#include "fruit.h"
 
 class Bird : public Agent {
 protected:
@@ -16,26 +15,21 @@ public:
     Bird(Real const& x, Real const& y, Real const& angle);
     Bird(Real const& x, Real const& y, Real const& angle, size_t& index);
 
-    virtual bool get_alive() const;
+    bool get_alive() const;
 
-    virtual std::vector<Real> neighbours(birds_t& birds);
-    virtual std::vector<Real> pred(agents_t& predators);
-    virtual std::vector<Real> fruits(std::vector<Fruit>& fruits, birds_t& birds);
+    std::vector<Real> neighbours(birds_t& birds);
+    std::vector<Real> pred(predators_t& predators);
+    std::vector<Real> fruits(std::vector<Fruit>& fruits, birds_t& birds);
 
-    virtual void cohesionLaw(std::vector<Real> const& group);
-    virtual void alignmentLaw(std::vector<Real> const& group);
+    void cohesionLaw(std::vector<Real> const& group);
+    void alignmentLaw(std::vector<Real> const& group);
+    void biSeparationLaw(std::vector<Real> const& bird, std::vector<Real> const&  predator);
+    void fruitLaw(std::vector<Real> const& f);
+    void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
 
-    virtual void biSeparationLaw(std::vector<Real> const& bird, std::vector<Real> const&  predator);
+    bool update(std::vector<Obstacle>const& obstacles, predators_t& predators, birds_t& birds, std::vector<Fruit>& fruits);
 
-    virtual void fruitLaw(std::vector<Real> const& f);
-    virtual void biFruitLaw(std::vector<Real> const& f, std::vector<Real> const& bird);
+    static birds_t init(std::vector<Obstacle> const& obstacles, predators_t& predators);
 
-    virtual bool update(std::vector<Obstacle>const& obstacles, agents_t& predators, birds_t& birds, std::vector<Fruit>& fruits);
-
-    virtual ~Bird();
+    ~Bird();
 };
-
-agents_t birds2agents(birds_t& birds);
-
-birds_t birds_init(std::vector<Obstacle> const& obstacles, agents_t& predators);
-

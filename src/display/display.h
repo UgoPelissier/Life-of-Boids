@@ -15,15 +15,15 @@
 #include <iostream>
 #include <sstream>
 
-#include "config.h"
 #include "agent.h"
+#include "predator.h"
 #include "bird.h"
+#include "config.h"
 #include "obstacle.h"
 #include "fruit.h"
 #include "tree.h"
+#include "main.h"
 
-
-using triangle_vertices_t = std::vector<std::array<triangle::Vertex, 3>>;
 
 void error_callback(int error, const char* description);
 
@@ -31,7 +31,7 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
 
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
-              agents_t& predators,
+              predators_t& predators,
               birds_t& birds,
               std::vector<Tree>& trees,
               std::vector<Fruit>& fruits);
@@ -40,47 +40,45 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Vert
 
 std::tuple<
     std::vector<Obstacle>,
-    agents_t,
+    predators_t,
     birds_t,
     std::vector<Tree>,
     std::vector<Fruit>,
-    triangle_vertices_t,
-    triangle_vertices_t,
-    triangle_vertices_t,
-    triangle_vertices_t,
-    triangle_vertices_t
+    triangle::vertices_t,
+    triangle::vertices_t,
+    triangle::vertices_t,
+    triangle::vertices_t,
+    triangle::vertices_t
 > initAgentWindow();
 
 void updateAgentWindow(
         GLFWwindow* window,
         std::vector<Obstacle>& obstacles,
-        agents_t& predators,
+        predators_t& predators,
         birds_t& birds,
         std::vector<Tree>& trees,
         std::vector<Fruit>& fruits,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds,
-        triangle_vertices_t& trianglesFruit
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds,
+        triangle::vertices_t& trianglesFruit
         );
 
 void addAgent(
         GLFWwindow* window,
-        bool& addBird,
-        bool& addPredator,
         std::vector<Obstacle>& obstacles,
-        agents_t& predators,
+        predators_t& predators,
         birds_t& birds,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds
         );
 
 void updateWindow(
         GLFWwindow* window,
-        triangle_vertices_t& trianglesObs,
-        triangle_vertices_t& trianglesPredators,
-        triangle_vertices_t& trianglesBirds,
-        triangle_vertices_t& trianglesTree,
-        triangle_vertices_t& trianglesFruit,
+        triangle::vertices_t& trianglesObs,
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds,
+        triangle::vertices_t& trianglesTree,
+        triangle::vertices_t& trianglesFruit,
         VertexArray& triangleObs_vertexArray,
         VertexArray& trianglePred_vertexArray,
         VertexArray& triangleBird_vertexArray,
@@ -94,7 +92,8 @@ void updateWindow(
 void display_fps(
         GLFWwindow* window,
         std::chrono::time_point<std::chrono::high_resolution_clock>& start,
-        std::chrono::time_point<std::chrono::high_resolution_clock>& end
+        std::chrono::time_point<std::chrono::high_resolution_clock>& end,
+        double &total_fps
         );
 
 void endWindow(GLFWwindow* window);

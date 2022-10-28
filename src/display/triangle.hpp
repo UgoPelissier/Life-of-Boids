@@ -20,6 +20,7 @@ struct Vertex {
   vec2 pos;
   vec3 col;
 };
+using vertices_t = std::vector<std::array<Vertex, 3>>;
 
 inline std::array<Vertex, 3> rotate(std::array<Vertex, 3> triangle, Real angle, vec2 origin) {
     Real s = std::sin(angle);
@@ -72,9 +73,9 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientati
     return triangle;
 }
 
-inline std::vector<std::array<Vertex, 3>> newObstacle(vec2 center, vec3 color, Real h, Real w) {
+inline vertices_t newObstacle(vec2 center, vec3 color, Real h, Real w) {
 
-    std::vector<std::array<Vertex, 3>> obs;
+    vertices_t obs;
 
     Real x0 = center[0];
     Real y0 = center[1];
@@ -108,9 +109,9 @@ inline std::vector<std::array<Vertex, 3>> newObstacle(vec2 center, vec3 color, R
     return obs;
 }
 
-inline std::vector<std::array<Vertex, 3>> newTree(vec2 center, vec3 color, Real h, Real w) {
+inline vertices_t newTree(vec2 center, vec3 color, Real h, Real w) {
 
-    std::vector<std::array<Vertex, 3>> tree;
+    vertices_t tree;
 
     Real x0 = center[0];
     Real y0 = center[1];
@@ -144,9 +145,9 @@ inline std::vector<std::array<Vertex, 3>> newTree(vec2 center, vec3 color, Real 
     return tree;
 }
 
-inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real r) {
+inline vertices_t newFruit(vec2 center, vec3 color, Real r) {
 
-    std::vector<std::array<Vertex, 3>> fruit;
+    vertices_t fruit;
 
     Real x0 = center[0];
     Real y0 = center[1];

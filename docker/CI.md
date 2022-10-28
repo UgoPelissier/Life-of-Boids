@@ -2,7 +2,9 @@
 
 ## Building a docker image
 
-`docker build -t boids-image -f Dockerfile .`
+Run the following command from the root directory.
+
+`docker build -t boids-image -f docker/Dockerfile .`
 
 ## Optional: Running the docker image locally (just to make sure if we can build the project inside docker container)
 
