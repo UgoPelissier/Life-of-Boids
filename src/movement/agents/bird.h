@@ -3,7 +3,7 @@
 #include "agent.h"
 #include "predator.h"
 #include "bird.h"
-#include "fruit.h"
+#include "fruits/fruit.h"
 
 class Bird : public Agent {
 protected:
@@ -18,8 +18,8 @@ public:
     bool get_alive() const;
 
     std::vector<Real> neighbours(birds_t& birds);
-    std::vector<Real> pred(predators_t& predators);
-    std::vector<Real> fruits(std::vector<Fruit>& fruits, birds_t& birds);
+    std::vector<Real> closestPredator(predators_t& predators);
+    std::vector<Real> closestFruit(std::vector<Fruit>& fruits, birds_t& birds);
 
     void cohesionLaw(std::vector<Real> const& group);
     void alignmentLaw(std::vector<Real> const& group);

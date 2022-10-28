@@ -46,7 +46,7 @@ public:
     bool overlap(Agent& a) const;
     bool overlap(birds_t& birds, predators_t& predators) const;
 
-    std::vector<Real> obstacle(std::vector<Obstacle> const& obstacles);
+    std::vector<Real> closestObstacle(std::vector<Obstacle> const& obstacles);
 
     void windowUpdate();
     void constantUpdate();

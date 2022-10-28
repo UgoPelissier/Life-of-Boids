@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdio>
-
 #include <array>
 #include <cmath>
 #include <chrono>
@@ -22,6 +21,7 @@ extern const Real SPEED;
 extern const Real PRED_SPEED;
 extern const Real PI;
 extern const Real VIEW_RANGE;
+extern const Real HALF;
 
 // Display parameters
 extern const int WIDTH;

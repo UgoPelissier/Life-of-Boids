@@ -10,6 +10,7 @@ const Real SPEED = 2;
 const Real PRED_SPEED = 3*SPEED/2;
 const Real PI  = 3.14159265358979323846;
 const Real VIEW_RANGE = 3*PI/2;
+const Real HALF = 0.5;
 
 // Display parameters
 const int WIDTH = 2400;

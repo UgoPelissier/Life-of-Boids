@@ -55,33 +55,30 @@ void Predator::predatorLaw(std::vector<Real> const& bird) {
 
     vec2 target = calc::normVector({ (Real)(bird[0] - m_x),(Real)(bird[1] - m_y) });
     m_angle = calc::angle(PREDATOR_RELAXATION, target[1], target[0], m_angle);
-    //m_angle = (1 - PREDATOR_RELAXATION) * atan2(target[1], target[0]) + PREDATOR_RELAXATION * m_angle;
-
-    m_x += PRED_SPEED * cos(m_angle);
-    m_y += PRED_SPEED * sin(m_angle);
 }
 
 void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predators, birds_t& birds) {
     m_state = state::constant;
-    std::vector<Real> update;
+    std::vector<Real> closest_obstacle, closest_bird;
 
     // Obstacles
-    update = this->obstacle(obstacles);
+    closest_obstacle = this->closestObstacle(obstacles);
 
     if (m_state == state::near_obstacle) {
-        this->obstacleLaw(update);
+        this->obstacleLaw(closest_obstacle);
+        this->constantUpdate();
         this->windowUpdate();
     }
     // Neighbours and preys
-    update = this->neighbour(birds, predators);
+    closest_bird = this->neighbour(birds, predators);
 
     switch (m_state) {
 
         case state::near_predator:
-            this->predatorLaw(update);
+            this->predatorLaw(closest_bird);
             break;
         case state::separation:
-            this->separationLaw(update);
+            this->separationLaw(closest_bird);
             break;
         // for default or constant, do a constant update        
         default:
@@ -120,14 +117,14 @@ predators_t Predator::init(std::vector<Obstacle> const& obstacles) {
         randomAngle = (Real)(2 * PI * unif(engine) - PI);
 
         predator = Predator((Real)randomX, (Real)randomY, randomAngle, n);
-        predator.obstacle(obstacles);
+        predator.closestObstacle(obstacles);
         while (predator.get_state() == state::near_obstacle || predator.overlap(birds, predators)) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomAngle = (Real)2 * PI * unif(engine) - PI;
 
             predator = Predator((Real)randomX, (Real)randomY, randomAngle, n);
-            predator.obstacle(obstacles);
+            predator.closestObstacle(obstacles);
         }
         predators[n] = predator;
         n = predators.size();

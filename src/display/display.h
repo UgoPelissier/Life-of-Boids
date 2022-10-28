@@ -8,69 +8,26 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "glx.hpp"
-#include "triangle.hpp"
 #include <chrono>
 #include <thread>
 #include <iostream>
 #include <sstream>
 
-#include "agent.h"
-#include "predator.h"
-#include "bird.h"
-#include "config.h"
-#include "obstacle.h"
-#include "fruit.h"
-#include "tree.h"
-#include "main.h"
+#include "config/config.h"
+#include "glx.hpp"
+#include "triangle.hpp"
 
+// Adding agents initialization
+extern bool addBird;
+extern bool addPredator;
+extern double cursorX;
+extern double cursorY;
 
 void error_callback(int error, const char* description);
 
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/);
 
-
-std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
-              predators_t& predators,
-              birds_t& birds,
-              std::vector<Tree>& trees,
-              std::vector<Fruit>& fruits);
-
 std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow();
-
-std::tuple<
-    std::vector<Obstacle>,
-    predators_t,
-    birds_t,
-    std::vector<Tree>,
-    std::vector<Fruit>,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t
-> initAgentWindow();
-
-void updateAgentWindow(
-        GLFWwindow* window,
-        std::vector<Obstacle>& obstacles,
-        predators_t& predators,
-        birds_t& birds,
-        std::vector<Tree>& trees,
-        std::vector<Fruit>& fruits,
-        triangle::vertices_t& trianglesPredators,
-        triangle::vertices_t& trianglesBirds,
-        triangle::vertices_t& trianglesFruit
-        );
-
-void addAgent(
-        GLFWwindow* window,
-        std::vector<Obstacle>& obstacles,
-        predators_t& predators,
-        birds_t& birds,
-        triangle::vertices_t& trianglesPredators,
-        triangle::vertices_t& trianglesBirds
-        );
 
 void updateWindow(
         GLFWwindow* window,
