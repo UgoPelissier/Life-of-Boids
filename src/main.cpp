@@ -90,10 +90,15 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         predators[i].update(obstacles, predators, birds);
     }
 
-    for (size_t i(0); i < birds.size(); i++) {
-        bool is_alive = birds[i].update(obstacles, predators, birds, fruits);
-        if (!is_alive)
-            birds.erase(i);
+    for (auto it = birds.begin(); it != birds.end();) {
+        
+        Bird& bird = it->second;
+        bool is_alive = bird.update(obstacles, predators, birds, fruits);
+        if (!is_alive) {
+            it = birds.erase(it);
+        }
+        else
+            it++;
     }
 
     for (Tree& tree : trees) {

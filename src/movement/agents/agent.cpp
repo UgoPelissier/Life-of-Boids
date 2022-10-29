@@ -2,9 +2,9 @@
 #include "bird.h"
 #include "predator.h"
 
-Agent::Agent() : Object(), m_angle(0), m_state(state::constant), m_index(0){}
-Agent::Agent(Real const& x, Real const& y) : Object(x,y), m_angle(0), m_state(state::constant), m_index(0){}
-Agent::Agent(Real const& x, Real const& y, Real const& angle) : Object(x,y), m_angle(angle), m_state(state::constant), m_index(0){}
+Agent::Agent() : Object(), m_angle(0), m_state(state::constant), m_index(SIZE_MAX){}
+Agent::Agent(Real const& x, Real const& y) : Object(x,y), m_angle(0), m_state(state::constant), m_index(SIZE_MAX){}
+Agent::Agent(Real const& x, Real const& y, Real const& angle) : Object(x,y), m_angle(angle), m_state(state::constant), m_index(SIZE_MAX){}
 Agent::Agent(Real const& x, Real const& y, Real const& angle, size_t& index) : Object(x,y), m_angle(angle), m_state(state::constant), m_index(index){}
 
 Real Agent::get_angle() const {
@@ -20,9 +20,11 @@ size_t& Agent::get_index() {
 }
 
 Real Agent::angle(Agent const& a) const {
+
     vec2 v1 = {(Real)cos(m_angle), (Real)sin(m_angle)};
     vec2 v2 = calc::normVector({a.get_x()-m_x, a.get_y()-m_y});
     Real angle = calc::angleVector(v1,v2);
+
     return angle;
 }
 

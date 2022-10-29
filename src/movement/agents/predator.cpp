@@ -39,7 +39,7 @@ std::vector<Real> Predator::neighbour(birds_t& birds, predators_t& predators) {
             if (current_distance < min_distance) {
 
                 if (this->insideFieldView(b)) {
-                    m_state = state::near_predator;
+                    m_state = state::near_prey;
                     min_distance = current_distance;
                     v = { b.get_x(), b.get_y() };
                 }
@@ -51,7 +51,7 @@ std::vector<Real> Predator::neighbour(birds_t& birds, predators_t& predators) {
 }
 
 
-void Predator::predatorLaw(std::vector<Real> const& bird) {
+void Predator::preyLaw(std::vector<Real> const& bird) {
 
     vec2 target = calc::normVector({ (Real)(bird[0] - m_x),(Real)(bird[1] - m_y) });
     m_angle = calc::angle(PREDATOR_RELAXATION, target[1], target[0], m_angle);
@@ -67,6 +67,7 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
     if (m_state == state::near_obstacle) {
         this->obstacleLaw(closest_obstacle);
         this->windowUpdate();
+        return;
     }
     // Neighbours and preys
     closest_bird = this->neighbour(birds, predators);
@@ -74,8 +75,8 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
     // choose law by state and update the angle of agent
     switch (m_state) {
 
-        case state::near_predator:
-            this->predatorLaw(closest_bird);
+        case state::near_prey:
+            this->preyLaw(closest_bird);
             break;
         case state::separation:
             this->separationLaw(closest_bird);

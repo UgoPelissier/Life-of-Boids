@@ -13,7 +13,7 @@ public:
 
     std::vector<Real> neighbour(birds_t& birds, predators_t& predators);
     
-    void predatorLaw(std::vector<Real> const& birds);
+    void preyLaw(std::vector<Real> const& birds);
 
     void update(std::vector<Obstacle>const& obstacles, predators_t& predators, birds_t& birds);
     

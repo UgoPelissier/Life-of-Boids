@@ -14,6 +14,7 @@ using birds_t = std::unordered_map<size_t, Bird>;
 enum class state {
     near_obstacle,
     near_predator,
+    near_prey, // only for the predator
     near_predatorANDseparation,
     near_fruit,
     near_fruitANDseparation,

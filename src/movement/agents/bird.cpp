@@ -31,9 +31,11 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
 
             current_distance = this->distance(birds[i]);
 
-            if ( (current_distance < SEPARATION_RANGE) && (current_distance < min_distance) ) {
+            if ((current_distance < SEPARATION_RANGE) && (current_distance < min_distance)) {
                 if (this->insideFieldView(birds[i])) {
-                    if ( m_state == state::near_fruit || m_state == state::near_fruitANDseparation )
+                    if (m_state == state::near_predator)
+                        m_state = state::near_predatorANDseparation;
+                    else if (m_state == state::near_fruit)
                         m_state = state::near_fruitANDseparation;
                     else
                         m_state = state::separation;
@@ -42,7 +44,7 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
                     ySeparation = birds[i].get_y();
                 }
             }
-            else if ( ( (m_state == state::alignment) || (m_state == state::constant) ) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
+            else if (((m_state == state::alignment) || (m_state == state::constant) ) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE) ) {
                 if (this->insideFieldView(birds[i])) {
                     m_state = state::alignment;
                     angleAlignment += birds[i].get_angle();
@@ -95,7 +97,7 @@ std::vector<Real> Bird::closestPredator(predators_t& predators) {
         Agent& p = it.second;
         current_distance = this->distance(p);
 
-        if ( (current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
+        if ((current_distance < PREDATOR_RANGE) && (current_distance < min_distance) ) {
 
             if (this->insideFieldView(p)) {
                 m_state = state::near_predator;
@@ -189,7 +191,9 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
 
     // Predators
     closest_predator = this->closestPredator(predators);
+    // already dead then return
     if (!m_alive) {
+        this->windowUpdate();
         return false;
     }
     // Fruits
