@@ -13,8 +13,9 @@ build:
     - cd build
     # start the build process
     - echo "[INFO] conan build process started"
-    - conan install .. --build=missing -c tools.system.package_manager:mode=install > conan-logs.out
+    - conan install ..
     - export MODE=Release
+    - echo "[INFO] cmake build process started"
     - cmake -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake -DCMAKE_BUILD_TYPE="${MODE}" ..
     - cmake --build .
     - echo "[INFO] Build was successful"
@@ -29,4 +30,4 @@ test:
     - cd build
     - ctest
     - test -f src/life-of-boids
-    - echo "[INFO] TestS were successful"
+    - echo "[INFO] Tests were successful. CI End."
