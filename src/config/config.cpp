@@ -1,6 +1,6 @@
 #include "config.h"
 
-const size_t DEFAULT_NUM_BIRDS = 100;
+const size_t DEFAULT_NUM_BIRDS = 1;
 const size_t DEFAULT_NUM_PREDATORS = 20;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
 const size_t DEFAULT_NUM_TREES = 20;
