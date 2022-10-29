@@ -15,14 +15,11 @@ bool Eco::nearBorder() const {
 
 void Eco::closestObstacle(std::vector<Obstacle> const& obstacles) {
 
-    m_obstacle = false;
-    //optimize this
-    for (Obstacle const& obstacle : obstacles) {
-        if (this->distance(obstacle) < std::max(obstacle.get_height() * HALF, obstacle.get_width() * HALF)) {
-            m_obstacle = true;
-            break;
-        }
-    }
+    auto check = [this](Obstacle const& obstacle) {
+        return (this->distance(obstacle) < std::max(obstacle.get_height() * HALF, obstacle.get_width() * HALF));
+    };
+    
+    m_obstacle = std::any_of(obstacles.begin(), obstacles.end(), check);
 }
 
 Eco::~Eco() = default;

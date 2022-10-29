@@ -12,7 +12,7 @@ Real Obstacle::get_width() const {
     return m_width;
 }
 
-bool Obstacle::borders() const {
+bool Obstacle::nearBorder() const {
     
     return (m_x < m_half_w) || (((Real)WIDTH - m_half_w < m_x) && (m_x < (Real)WIDTH)) ||
         (m_y < m_half_h) || (((Real)HEIGHT - m_half_h < m_y) && (m_y < (Real)HEIGHT));
@@ -53,7 +53,7 @@ std::vector<Obstacle> Obstacle::init() {
         randomWidth = uniSize(engine);
         newObstacle = Obstacle((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth);
 
-        while ( newObstacle.overlap(obstacles) || newObstacle.borders() ) {
+        while ( newObstacle.overlap(obstacles) || newObstacle.nearBorder() ) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomHeight = uniSize(engine);

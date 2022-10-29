@@ -13,7 +13,7 @@ public:
     Real get_height() const;
     Real get_width() const;
 
-    bool borders() const;
+    bool nearBorder() const;
     bool overlap(std::vector<Obstacle>  const& obstacles) const;
     static std::vector<Obstacle> init();
 
