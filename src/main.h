@@ -9,45 +9,29 @@
 #include "movement/fruits/fruit.h"
 #include "movement/fruits/tree.h"
 
+namespace vars {
 
-
+    struct agentVars_t {
+        triangle::vertices_t trianglesObs,
+            trianglesPredators,
+            trianglesBirds,
+            trianglesTree,
+            trianglesFruit;
+        std::vector<Obstacle> obstacles;
+        predators_t predators;
+        birds_t birds;
+        std::vector<Tree> trees;
+        std::vector<Fruit> fruits;
+    };
+    using agentWindowVars_t = struct agentVars_t;
+};
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
-    predators_t& predators,
-    birds_t& birds,
-    std::vector<Tree>& trees,
-    std::vector<Fruit>& fruits);
+                                predators_t& predators,
+                                birds_t& birds,
+                                std::vector<Tree>& trees,
+                                std::vector<Fruit>& fruits);
 
-std::tuple<
-    std::vector<Obstacle>,
-    predators_t,
-    birds_t,
-    std::vector<Tree>,
-    std::vector<Fruit>,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t,
-    triangle::vertices_t
-> initAgentWindow();
-
-void updateAgentWindow(
-    GLFWwindow* window,
-    std::vector<Obstacle>& obstacles,
-    predators_t& predators,
-    birds_t& birds,
-    std::vector<Tree>& trees,
-    std::vector<Fruit>& fruits,
-    triangle::vertices_t& trianglesPredators,
-    triangle::vertices_t& trianglesBirds,
-    triangle::vertices_t& trianglesFruit
-);
-
-void addAgent(
-    GLFWwindow* window,
-    std::vector<Obstacle>& obstacles,
-    predators_t& predators,
-    birds_t& birds,
-    triangle::vertices_t& trianglesPredators,
-    triangle::vertices_t& trianglesBirds
-);
+vars::agentWindowVars_t initAgentWindow();
+void updateAgentWindow(GLFWwindow* window, vars::agentWindowVars_t &var);
+void addAgent(GLFWwindow* window, vars::agentWindowVars_t& var);

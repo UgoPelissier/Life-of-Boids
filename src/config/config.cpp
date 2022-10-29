@@ -1,6 +1,6 @@
 #include "config.h"
 
-const size_t DEFAULT_NUM_BIRDS = 100;
+const size_t DEFAULT_NUM_BIRDS = 1000;
 const size_t DEFAULT_NUM_PREDATORS = 20;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
 const size_t DEFAULT_NUM_TREES = 20;
@@ -21,8 +21,8 @@ const int MIN_FRUIT_TREE_SIZE = 50;
 const Real MAX_FRUIT_DISTANCE = 100;
 
 
-const Real  RATIO = (float)WIDTH / (float)HEIGHT;
-const Real  BODY_SIZE = 0.015;
+const Real RATIO = (float)WIDTH / (float)HEIGHT;
+const Real BODY_SIZE = 0.015;
 const Real BODY_OVERLAP = (Real)((sqrt(3)*BODY_SIZE/2)*((Real)WIDTH/2));
 const vec3 PRED_COLOR = { 1., 0., 0. };
 const vec3 BIRD_COLOR = { 1., 1., 1. };
@@ -32,12 +32,13 @@ const vec3 FRUIT_COLOR = {0., 1., 0.};
 const int NUMBER_LOOP_FPS = 10;
 
 // Laws parameters
-const Real SEPARATION_RANGE = (Real)(2*sqrt(5)*BODY_SIZE*((Real)WIDTH)/9);
-const Real DEAD_RANGE = SEPARATION_RANGE/4;
-const Real ALIGNMENT_RANGE = 3*SEPARATION_RANGE;
-const Real COHESION_RANGE = 2*ALIGNMENT_RANGE;
+const Real SEPARATION_RANGE = (Real)(2 * sqrt(5) * BODY_SIZE * ((Real)WIDTH) / 9);
+const Real DEAD_RANGE = SEPARATION_RANGE / 4;
+const Real ALIGNMENT_RANGE = 3 * SEPARATION_RANGE;
+const Real COHESION_RANGE = 2 * ALIGNMENT_RANGE;
 const Real PREDATOR_RANGE = COHESION_RANGE;
 const Real FRUIT_RANGE = COHESION_RANGE;
+const Real IGNORE_RANGE = 5 * COHESION_RANGE;
 
 const Real SEPARATION_RELAXATION = 0.75;
 const Real ALIGNMENT_RELAXATION = 0.9;

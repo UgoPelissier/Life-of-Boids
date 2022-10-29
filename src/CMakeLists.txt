@@ -2,7 +2,7 @@ add_subdirectory(display)
 add_subdirectory(movement)
 add_subdirectory(config)
 
-add_executable(life-of-boids main.cpp)
+add_executable(life-of-boids main.cpp coupled.cpp main.h)
 target_include_directories(life-of-boids
         PUBLIC
         ${CMAKE_SOURCE_DIR}/src

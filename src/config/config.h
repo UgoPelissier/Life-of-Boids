@@ -48,6 +48,7 @@ extern const Real ALIGNMENT_RANGE;
 extern const Real COHESION_RANGE;
 extern const Real PREDATOR_RANGE;
 extern const Real FRUIT_RANGE;
+extern const Real IGNORE_RANGE;
 
 extern const Real SEPARATION_RELAXATION;
 extern const Real ALIGNMENT_RELAXATION;

@@ -4,12 +4,25 @@
 #include "predator.h"
 #include "bird.h"
 #include "fruits/fruit.h"
+#include <mutex>
+
+/*
+#if DEFAULT_NUM_BIRDS > 1200
+const size_t RESERVE_COUNT = (size_t) DEFAULT_NUM_BIRDS * .05;
+#else
+const size_t RESERVE_COUNT = 10;
+#endif
+*/
+
+const size_t RESERVE_COUNT = DEFAULT_NUM_BIRDS;
 
 class Bird : public Agent {
+
 protected:
     bool m_alive;
-
 public:
+    // std::unordered_map<size_t, bool> m_ignore_ids;
+    
     Bird();
     Bird(Real const& x, Real const& y);
     Bird(Real const& x, Real const& y, Real const& angle);
@@ -31,5 +44,9 @@ public:
 
     static birds_t init(std::vector<Obstacle> const& obstacles, predators_t& predators);
 
+    /* bool canIgnore(size_t i);
+     void resetIgnore();
+     static void clearIgnore(birds_t& birds);
+     */
     ~Bird();
 };

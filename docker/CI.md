@@ -90,5 +90,5 @@ pull_policy = "if-not-present"
 - We then check the logs of the pipeline to make sure that the build was successful and the program passed all the tests.
 - One thing to add here, Since I've built this image from scratch, not all the libraries were installed. So, to build the missing ones
   we pass the flag `--build=missing` to the `conan install`. This will download all the missing libraries inside the docker. This process may take longer depending on the internet speed, of course.
-- To avoid this waiting, for the time being, I have disabled the CICD process in our project. [Click here](https://docs.gitlab.com/ee/ci/enable_or_disable_ci.html) to enable/disable CICD on GitLab.
+- To avoid this waiting, for the time being, I have disabled the CICD process in our project. ** [Click here](https://docs.gitlab.com/ee/ci/enable_or_disable_ci.html) to enable/disable CICD on GitLab.
 
