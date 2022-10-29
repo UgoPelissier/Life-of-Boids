@@ -60,6 +60,7 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
         }
     }
 
+    // choose x, y by state
     switch (m_state) {
         case state::separation:
             v = {xSeparation,ySeparation};
@@ -197,7 +198,8 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
 
     // Neighbours
     closest_bird = this->neighbours(birds);
-
+    
+    // choose law by state and update the angle of agent
     switch (m_state) {
         case state::near_predatorANDseparation:
             this->biSeparationLaw(closest_bird, closest_predator);
@@ -221,7 +223,7 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
             this->cohesionLaw(closest_bird);
             break;
     }
-
+    // update the window and then set new x, y
     this->windowUpdate();
     return true;
 }
@@ -238,7 +240,7 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
     Real randomAngle;
     size_t n = birds.size();
 
-    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::random_device dev;
