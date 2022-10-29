@@ -1,11 +1,10 @@
 #pragma  once
-#include "object.h"
-#include "obstacle.h"
+#include "eco.h"
 
-class Fruit : public Object {
+class Fruit : public Eco {
+
 protected:
     Real m_size;
-    bool m_obstacle;
     bool m_alive;
 
 public:
@@ -13,12 +12,8 @@ public:
     Fruit(Real const& x, Real const& y);
     Fruit(Real const& x, Real const& y, Real const& size, bool const& alive);
 
-    virtual Real get_size() const;
-    virtual bool get_obstacle() const;
-    virtual bool& get_alive();
+    Real get_size() const;
+    bool& get_alive();
 
-    virtual bool borders() const;
-    virtual void obstacle(std::vector<Obstacle> const& obstacles);
-
-    virtual ~Fruit();
+    ~Fruit();
 };

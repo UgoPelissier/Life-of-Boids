@@ -14,7 +14,6 @@ class Object {
 protected:
     Real m_x;
     Real m_y;
-    bool m_obstacle;
 
 public:
     Object();

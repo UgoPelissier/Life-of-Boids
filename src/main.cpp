@@ -235,7 +235,7 @@ void addAgent(
     Bird newBird;
     Predator newPredator;
 
-    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::random_device dev;
     std::mt19937 engine(dev());
 

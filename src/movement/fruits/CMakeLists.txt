@@ -1,4 +1,4 @@
-add_library(fruits fruit.cpp fruit.h tree.cpp tree.h)
+add_library(fruits eco.cpp eco.h fruit.cpp fruit.h tree.cpp tree.h)
 target_include_directories(fruits
         PUBLIC
         ${CMAKE_SOURCE_DIR}/src

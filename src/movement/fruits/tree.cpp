@@ -1,10 +1,7 @@
 #include "tree.h"
 
-Tree::Tree() : Object(), m_height(0), m_width(0), m_obstacle(false), m_time(0)
-{}
-
-Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Object(x,y), m_height(height), m_width(width), m_obstacle(false), m_time(time)
-{}
+Tree::Tree() : Eco(), m_height(0), m_width(0), m_time(0) {}
+Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Eco(x,y), m_height(height), m_width(width), m_time(time) {}
 
 Real Tree::get_height() const {
     return m_height;
@@ -14,27 +11,8 @@ Real Tree::get_width() const {
     return m_width;
 }
 
-bool Tree::get_obstacle() const {
-    return m_obstacle;
-}
-
-bool Tree::borders() const {
-    if (m_x < (Real)CLOSE) {
-        return true;
-    }
-    else if (( (Real)WIDTH- (Real)CLOSE < m_x) && (m_x < (Real)WIDTH)) {
-        return true;
-    }
-    else if (m_y < CLOSE) {
-        return true;
-    }
-    else if (( (Real)HEIGHT- (Real)CLOSE ) < m_y && (m_y < (Real)HEIGHT) ) {
-        return true;
-    }
-    return false;
-}
-
 void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles) {
+
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
     std::random_device dev;
@@ -58,12 +36,12 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
             randomY = m_y + uniY(engine);
 
             fruit = Fruit(randomX, randomY);
-            fruit.obstacle(obstacles);
-            while (fruit.borders() || fruit.get_obstacle()) {
+            fruit.closestObstacle(obstacles);
+            while (fruit.nearBorder() || fruit.get_obstacle()) {
                 randomX = uniX(engine);
                 randomY = uniY(engine);
                 fruit = Fruit(randomX, randomY);
-                fruit.obstacle(obstacles);
+                fruit.closestObstacle(obstacles);
             }
             fruits.emplace_back(randomX, randomY, std::min(m_height,m_width)/4, true);
         }
@@ -71,18 +49,11 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
     }
 }
 
-void Tree::obstacle(std::vector<Obstacle> const& obstacles) {
-    m_obstacle = false;
-    for (const auto & obstacle : obstacles) {
-        if ( this->distance(obstacle) < std::max(obstacle.get_height()/2,obstacle.get_width()/2) ) {
-            m_obstacle = true;
-        }
-    }
-}
 
 Tree::~Tree() = default;
 
 std::vector<Tree> Tree::init(std::vector<Obstacle> const& obstacles) {
+
     std::vector<Tree> trees;
     Tree newTree;
 
@@ -109,14 +80,14 @@ std::vector<Tree> Tree::init(std::vector<Obstacle> const& obstacles) {
         randomTime = (double)uniTime(engine)+(double)time(&start);
         newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
 
-        newTree.obstacle(obstacles);
-        while (newTree.borders() || newTree.get_obstacle()) {
+        newTree.closestObstacle(obstacles);
+        while (newTree.nearBorder() || newTree.get_obstacle()) {
             randomX = uniX(engine);
             randomY = uniY(engine);
             randomHeight = uniSize(engine);
             randomWidth = uniSize(engine);
             newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
-            newTree.obstacle(obstacles);
+            newTree.closestObstacle(obstacles);
         }
 
         trees.push_back(newTree);
