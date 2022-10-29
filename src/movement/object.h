@@ -14,36 +14,37 @@ class Object {
 protected:
     Real m_x;
     Real m_y;
+    bool m_obstacle;
 
 public:
     Object();
     Object(Real const& x, Real const& y);
 
-    virtual Real get_x() const;
-    virtual Real get_y() const;
-    virtual Real distance(Object const& object) const;
-    
+    Real get_x() const;
+    Real get_y() const;
+    Real distance(Object const& object) const;
+
     static vec2 scale(Object const& obj, Real ratio=RATIO);
     
-    virtual ~Object();
+    ~Object();
 
 };
 
-inline Real modulo(Real const& a, Real const& b)
-{
-    Real mod(a);
-    if (a < 0) {
-        while (mod < 0)
-            mod += b;
-    }
-    else {
-        while (mod >= b)
-            mod -= b;
-    }
-    return mod;
-}
 
 namespace calc {
+
+    inline Real modulo(Real const& a, Real const& b) {
+        Real mod(a);
+        if (a < 0) {
+            while (mod < 0)
+                mod += b;
+        }
+        else {
+            while (mod >= b)
+                mod -= b;
+        }
+        return mod;
+    }
 
     inline vec2 normVector(vec2 const& v) {
         float inv_norm = 1 / sqrt(v[0] * v[0] + v[1] * v[1]);

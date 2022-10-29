@@ -1,9 +1,7 @@
 #include "object.h"
 
-Object::Object() : m_x(0), m_y(0)
-{}
-Object::Object(Real const& x, Real const& y) : m_x(x), m_y(y)
-{}
+Object::Object() : m_x(0), m_y(0) {}
+Object::Object(Real const& x, Real const& y) : m_x(x), m_y(y) {}
 
 Real Object::get_x() const{
     return m_x;

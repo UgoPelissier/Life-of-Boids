@@ -67,14 +67,17 @@ std::vector<Real> Agent::closestObstacle(std::vector<Obstacle> const& obstacles)
     return v;
 }
 
-void Agent::windowUpdate() {
-    m_x = modulo(m_x,(Real)WIDTH);
-    m_y = modulo(m_y, (Real)HEIGHT);
-}
-
 void Agent::constantUpdate() {
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
+}
+
+void Agent::windowUpdate() {
+
+    this->constantUpdate();
+
+    m_x = calc::modulo(m_x,(Real)WIDTH);
+    m_y = calc::modulo(m_y, (Real)HEIGHT);
 }
 
 void Agent::obstacleLaw(std::vector<Real> const& obstacle) {

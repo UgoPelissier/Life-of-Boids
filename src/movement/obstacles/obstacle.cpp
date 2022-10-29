@@ -29,14 +29,12 @@ bool Obstacle::borders() const {
 
 bool Obstacle::overlap(std::vector<Obstacle>  const& obstacles) const {
 
-    if (std::any_of(obstacles.begin(),
-                    obstacles.end(),
-                    [this](Obstacle const& obs){ return ( (( std::abs(obs.get_x()-m_x) <= (obs.get_width()/2 + m_width/2 + ALIGNMENT_RANGE) )
-                                                           && ( std::abs(obs.get_y()-m_y) <= (obs.get_height()/2 + m_height/2 + ALIGNMENT_RANGE) )) ) ;}
-                                                           ) ) {
-        return true;
-    }
-    return false;
+    auto check = [this](Obstacle const& obs) {
+        return (std::abs(obs.get_x() - m_x) <= (obs.get_width() / 2 + m_width / 2 + ALIGNMENT_RANGE) &&
+                (std::abs(obs.get_y() - m_y) <= (obs.get_height() / 2 + m_height / 2 + ALIGNMENT_RANGE)));
+    };
+
+    return std::any_of(obstacles.begin(), obstacles.end(), check);
 }
 
 Obstacle::~Obstacle() = default;

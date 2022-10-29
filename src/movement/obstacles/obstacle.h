@@ -16,6 +16,7 @@ public:
     bool borders() const;
     bool overlap(std::vector<Obstacle>  const& obstacles) const;
     static std::vector<Obstacle> init();
+
     ~Obstacle();
 };
 

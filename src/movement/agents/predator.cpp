@@ -66,7 +66,6 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
 
     if (m_state == state::near_obstacle) {
         this->obstacleLaw(closest_obstacle);
-        this->constantUpdate();
         this->windowUpdate();
     }
     // Neighbours and preys
@@ -79,11 +78,6 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
             break;
         case state::separation:
             this->separationLaw(closest_bird);
-            break;
-        // for default or constant, do a constant update        
-        default:
-        case state::constant:
-            this->constantUpdate();
             break;
     }
 
@@ -104,7 +98,7 @@ predators_t Predator::init(std::vector<Obstacle> const& obstacles) {
     Real randomAngle;
     size_t n = predators.size();
 
-    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
+    std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
     std::uniform_int_distribution uniY(0, HEIGHT);
     std::random_device dev;

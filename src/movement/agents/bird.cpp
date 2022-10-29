@@ -112,7 +112,7 @@ std::vector<Real> Bird::closestPredator(predators_t& predators) {
     return pred;
 }
 
-std::vector<Real> Bird::closestFruit(std::vector<Fruit>& fruits, birds_t& birds) {
+std::vector<Real> Bird::closestFruit(std::vector<Fruit>& fruits) {
 
     std::vector<Real> fr;
 
@@ -182,7 +182,6 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
 
     if (m_state== state::near_obstacle) {
         this->obstacleLaw(closest_obstacle);
-        this->constantUpdate();
         this->windowUpdate();
         return true;
     }
@@ -194,13 +193,12 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
     }
     // Fruits
     if (m_state!= state::near_predator)
-        closest_fruit = this->closestFruit(fruits,birds);
+        closest_fruit = this->closestFruit(fruits);
 
     // Neighbours
     closest_bird = this->neighbours(birds);
 
-    switch ( m_state )
-    {
+    switch (m_state) {
         case state::near_predatorANDseparation:
             this->biSeparationLaw(closest_bird, closest_predator);
             break;
@@ -224,7 +222,6 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
             break;
     }
 
-    this->constantUpdate();
     this->windowUpdate();
     return true;
 }

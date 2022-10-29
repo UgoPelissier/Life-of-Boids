@@ -19,7 +19,7 @@ public:
 
     std::vector<Real> neighbours(birds_t& birds);
     std::vector<Real> closestPredator(predators_t& predators);
-    std::vector<Real> closestFruit(std::vector<Fruit>& fruits, birds_t& birds);
+    std::vector<Real> closestFruit(std::vector<Fruit>& fruits);
 
     void cohesionLaw(std::vector<Real> const& group);
     void alignmentLaw(std::vector<Real> const& group);
