@@ -29,7 +29,7 @@ Real Agent::angle(Agent const& a) const {
 }
 
 bool Agent::insideFieldView(Agent const& a) const {
-    return (std::abs(this->angle(a)) > VIEW_RANGE * HALF);
+    return (std::abs(this->angle(a)) <= VIEW_RANGE * HALF);
 }
 
 bool Agent::operator==(Agent& a) const {    
@@ -70,6 +70,7 @@ std::vector<Real> Agent::closestObstacle(std::vector<Obstacle> const& obstacles)
 }
 
 void Agent::constantUpdate() {
+
     m_x += SPEED * cos(m_angle);
     m_y += SPEED * sin(m_angle);
 }

@@ -85,9 +85,10 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
 
 
     std::vector<Fruit> newFruits;
-    std::vector<bool> toDelete(birds.size(), false);
-    for (size_t i(0); i < predators.size(); i++) {
-        predators[i].update(obstacles, predators, birds);
+
+    for (auto &it : predators) {
+        Predator& predator = it.second;
+        predator.update(obstacles, predators, birds);
     }
 
     for (auto it = birds.begin(); it != birds.end();) {
