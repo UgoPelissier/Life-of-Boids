@@ -69,6 +69,10 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())
             newFruits.push_back(fruit);
+        else {
+            size_t size = birds.size();
+            birds[size] = Bird(fruit.get_x(), fruit.get_y(), 0, size);
+        }
     }
 
     return newFruits;
