@@ -17,7 +17,8 @@ const size_t RESERVE_COUNT = 10;
 const size_t RESERVE_COUNT = DEFAULT_NUM_BIRDS;
 
 class Bird : public Agent {
-
+private:
+    static std::mutex bird_mtx;
 protected:
     bool m_alive;
 public:
@@ -31,6 +32,7 @@ public:
     bool get_alive() const;
 
     std::vector<Real> neighbours(birds_t& birds);
+    std::vector<Real> Bird::neighbours_par(birds_t& birds);
     std::vector<Real> closestPredator(predators_t& predators);
     std::vector<Real> closestFruit(std::vector<Fruit>& fruits);
 

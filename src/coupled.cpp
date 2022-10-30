@@ -1,6 +1,9 @@
 #include "main.h"
 #include <algorithm>
 #include <execution>
+#include <mutex>
+
+std::mutex kill_mtx;
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     predators_t& predators,
@@ -11,7 +14,7 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     std::vector<Fruit> newFruits;
     std::vector<size_t> kill;
 
-    std::for_each(std::execution::par_unseq,
+    std::for_each(std::execution::par,
         predators.begin(),
         predators.end(),
         [&](auto& it) {
@@ -25,31 +28,21 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     * Problem occurs inside update->neighbours().
     * Not the logic! But any usage of birds inside will raise an exception.
     */
-    std::for_each(std::execution::seq,
+    /*std::for_each(std::execution::par,
         birds.begin(),
         birds.end(),
         [&](auto& it) {
             bool is_alive = it.second.update(obstacles, predators, birds, fruits);
-            // lock mutex
+            // killing later cause some other thread might be reading that object.
+            kill_mtx.lock();
             if (!is_alive)
                 kill.push_back(it.first);
-            // unlock mutex
-        });
-    
-    for (size_t& k : kill)
-        birds.erase(k);
-    
-    std::for_each(std::execution::par_unseq,
-        trees.begin(),
-        trees.end(),
-        [&](Tree& t) {
-            t.DropFruitAndAppend(fruits, obstacles);
+            kill_mtx.unlock();
         });
 
-    /*for (auto& it : predators) {
-        Predator& predator = it.second;
-        predator.update(obstacles, predators, birds);
-    }
+        for (size_t& k : kill)
+            birds.erase(k);
+        */
     
     for (auto it = birds.begin(); it != birds.end();) {
 
@@ -64,7 +57,7 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     
     for (Tree& tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);
-    }*/
+    }
 
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())
