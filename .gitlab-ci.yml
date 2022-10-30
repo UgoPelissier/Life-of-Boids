@@ -1,43 +1,33 @@
-# This file is a template, and might need editing before it works on your project.
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/C++.gitlab-ci.yml
-
-# use the official gcc image, based on debian
-# can use versions as well, like gcc:5.2
-# see https://hub.docker.com/_/gcc/
-
-image: hpwxf/hpc-ai-2021:conan-clang10
+image: boids-image
 
 build:
   stage: build
-  # instead of calling g++ directly you can also use some build toolkit like make
-  # install the necessary build tools when needed
-  # before_script:
-  #   - apt update && apt -y install make autoconf
+  before_script:
+    - gcc --version
+    - cmake --version
+    - conan --version
   script:
+    # set up the build directory
+    - rm -rf build
     - mkdir build
     - cd build
+    # start the build process
+    - echo "[INFO] conan build process started"
     - conan install ..
+    - export MODE=Release
+    - echo "[INFO] cmake build process started"
     - cmake -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake -DCMAKE_BUILD_TYPE="${MODE}" ..
     - cmake --build .
-    - ctest 
+    - echo "[INFO] Build was successful"
 
   artifacts:
     paths:
       - build
-      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-      # cache:
-      #   paths:
-      #     - "*.o"
-
 # run tests using the binary built before
 test:
   stage: test
   script:
-    - test -f build/src/life-of-boids
-    - whoami
+    - cd build
+    - ctest
+    - test -f src/life-of-boids
+    - echo "[INFO] Tests were successful. CI End."

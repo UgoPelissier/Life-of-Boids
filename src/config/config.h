@@ -1,8 +1,8 @@
 #pragma once
 #include <cstdio>
-
 #include <array>
 #include <cmath>
+#include <chrono>
 
 using Real = float;
 using vec2 = std::array<Real, 2>;
@@ -11,16 +11,17 @@ using vec4 = std::array<Real, 4>;
 using mat4x4 = std::array<vec4, 4>;
 
 // Agent parameters
-extern const size_t DEFAULT_NUM_AGENTS;
+extern const size_t DEFAULT_NUM_BIRDS;
 extern const size_t  DEFAULT_NUM_PREDATORS;
 extern const size_t  DEFAULT_NUM_OBSTACLES;
-extern const size_t  DEFAULT_NUM_FRUIT_TREES;
+extern const size_t  DEFAULT_NUM_TREES;
 extern const int  DEFAULT_NUM_FRUITS_DROPS;
 extern const Real CLOSE;
 extern const Real SPEED;
 extern const Real PRED_SPEED;
 extern const Real PI;
 extern const Real VIEW_RANGE;
+extern const Real HALF;
 
 // Display parameters
 extern const int WIDTH;
@@ -28,7 +29,7 @@ extern const int HEIGHT;
 extern const int MAX_OBSTACLE_SIZE;
 extern const int MAX_FRUIT_TREE_SIZE;
 extern const int MIN_FRUIT_TREE_SIZE;
-extern const int MAX_FRUIT_DISTANCE;
+extern const Real MAX_FRUIT_DISTANCE;
 
 extern const Real RATIO;
 extern const Real BODY_SIZE;
@@ -47,6 +48,7 @@ extern const Real ALIGNMENT_RANGE;
 extern const Real COHESION_RANGE;
 extern const Real PREDATOR_RANGE;
 extern const Real FRUIT_RANGE;
+extern const Real IGNORE_RANGE;
 
 extern const Real SEPARATION_RELAXATION;
 extern const Real ALIGNMENT_RELAXATION;
