@@ -74,20 +74,17 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
         // choose law by state and update the angle of agent
         switch (m_state) {
 
-        case state::near_prey:
-            this->preyLaw(closest_bird);
-            break;
-        case state::separation:
-            this->separationLaw(closest_bird);
-            break;
-        default:
-            this->constantUpdate();
-            break;
+            case state::near_prey:
+                this->preyLaw(closest_bird);
+                break;
+            case state::separation:
+                this->separationLaw(closest_bird);
+                break;
         }
     }
 
     // update the window and then set new x, y
-    this->windowUpdate();
+    this->windowUpdate(PRED_SPEED);
 }
 
 Predator::~Predator() = default;

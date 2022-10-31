@@ -49,8 +49,8 @@ public:
 
     std::vector<Real> closestObstacle(std::vector<Obstacle> const& obstacles);
 
-    void windowUpdate();
-    void constantUpdate();
+    void windowUpdate(Real speed);
+    void constantUpdate(Real speed);
 
     void obstacleLaw(std::vector<Real> const&  obstacle);
     void separationLaw(std::vector<Real> const&  predator);

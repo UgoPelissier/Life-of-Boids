@@ -1,10 +1,19 @@
 #include "main.h"
 #include <algorithm>
-#include <execution>
 #include <mutex>
+
 static std::mutex kill_mtx;
 
-#define EXEC_PAR
+#if defined _WIN32 // IF WINDOWS
+
+#include <execution>
+// COMMENT THE FOLLOWING DEFINE, IF YOU WANT TO RUN THE CODE SEQUENTIALLY
+#define EXECUTION_PAR
+
+#elif defined __APPLE__ //IF APPLE
+
+// UNCOMMENT THE FOLLOWING DEFINE, IF YOU WANT TO RUN THE CODE SEQUENTIALLY
+//#define APPLE_SEQ
 
 std::vector<int> thread_index(int n) {
     int step = n/N_THREADS;
@@ -20,6 +29,7 @@ std::vector<int> thread_index(int n) {
     index.emplace_back(n);
     return index;
 }
+#endif
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     predators_t& predators,
@@ -30,8 +40,13 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     std::vector<Fruit> newFruits;
     std::vector<size_t> kill;
 
-// RUN PARALLELLY
-#ifdef EXEC_PAR
+/*
+IF YOU FEEL LIKE THE FOLLOWING CODE IS CONFUSING.
+VISUAL STUDIO WILL MAKE THE CODE BLACK AND WHITE IF IT IS NOT GONNA RUN BASED ON THE DIRECTIVES
+*/
+
+// RUN PARALLELLY ON WINDOWS WITH C++ PARALLELISM
+#ifdef EXECUTION_PAR //IF 1
     std::for_each(std::execution::par_unseq,
         predators.begin(),
         predators.end(),
@@ -45,45 +60,62 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         [&](auto& it) {
             bool is_alive = it.second.update(obstacles, predators, birds, fruits);
             // killing later cause some other thread might be reading that object.
-            kill_mtx.lock();
-            if (!is_alive)
+            
+            if (!is_alive) {
+                kill_mtx.lock();
                 kill.push_back(it.first);
-            kill_mtx.unlock();
+                kill_mtx.unlock();
+            }
         });
 
-        for (size_t& k : kill)
-           birds.erase(k);
+#else // IF 1 ELSE
 
-// RUN SEQUENTIALLY
-#else
+    // following loop is sequential cause not enough workload
     for (auto& it : predators) {
         it.second.update(obstacles, predators, birds);
     }
 
+//============================================BIRD-LOOP==============================================
+// RUN PARALLELY ON APPLE WITH C++ THREADS.
+#if defined(__APPLE__) && !defined(APPLE_SEQ) // IF 2
     std::vector<std::thread> birds_threads(N_THREADS);
     std::vector<int> index = thread_index((int)birds.size());
 
     for (int i = 0; i<(int)index.size()-1 ; ++i) {
-        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i, &kill]() { thread_update(birds,obstacles,predators,fruits,index[i],index[i+1],kill); });
+        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i, &kill]() { Bird::thread_update(birds,obstacles,predators,fruits,index[i],index[i+1],kill); });
     }
 
-    for (auto& th : birds_threads) th.join();
+    for (auto& th : birds_threads)
+        th.join();
 
+// RUN SEQUENTIALLY
+#else // IF 2 ELSE
+    for (auto it = birds.begin(); it != birds.end();) {
+        
+        bool is_alive = it->second.update(obstacles, predators, birds, fruits);
+        if (!is_alive)
+            it = birds.erase(it);
+        else
+            it++;
+    }
+#endif // END IF 2 ELSE
+//============================================BIRD-LOOP==============================================
+#endif // END IF 1 ELSE
+
+    // remove the dead agents from the list
     for (size_t& k : kill)
         birds.erase(k);
-
-#endif
-
+    // following loop is sequential cause not enough workload
     for (Tree& tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);
     }
-
+    // following loop is sequential cause not enough workload
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())
             newFruits.push_back(fruit);
         else {
-            size_t size = birds.size();
-            birds[size] = Bird(fruit.get_x(), fruit.get_y(), 0, size);
+            size_t n = birds.size();
+            birds[n] = Bird(fruit.get_x(), fruit.get_y(), 0, n);
         }
     }
 
