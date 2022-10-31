@@ -20,6 +20,7 @@ struct Vertex {
   vec2 pos;
   vec3 col;
 };
+using vertices_t = std::vector<std::array<Vertex, 3>>;
 
 inline std::array<Vertex, 3> rotate(std::array<Vertex, 3> triangle, Real angle, vec2 origin) {
     Real s = std::sin(angle);
@@ -45,7 +46,7 @@ inline vec2 center(std::array<Vertex, 3> triangle) {
 
 inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientation, Real a) {
     Real b = a/2;
-    Real h = a*std::sqrt(5)/3;
+    Real h = a*(Real)(std::sqrt(5)/3);
     Real l = 2*h/3;
 
     Real x0 = center[0];
@@ -72,9 +73,9 @@ inline std::array<Vertex, 3> newTriangle(vec2 center, vec3 color, Real orientati
     return triangle;
 }
 
-inline std::vector<std::array<Vertex, 3>> newObstacle(vec2 center, vec3 color, Real h, Real w) {
+inline vertices_t newObstacle(vec2 center, vec3 color, Real h, Real w) {
 
-    std::vector<std::array<Vertex, 3>> obs;
+    vertices_t obs;
 
     Real x0 = center[0];
     Real y0 = center[1];
@@ -108,9 +109,9 @@ inline std::vector<std::array<Vertex, 3>> newObstacle(vec2 center, vec3 color, R
     return obs;
 }
 
-inline std::vector<std::array<Vertex, 3>> newTree(vec2 center, vec3 color, Real h, Real w) {
+inline vertices_t newTree(vec2 center, vec3 color, Real h, Real w) {
 
-    std::vector<std::array<Vertex, 3>> tree;
+    vertices_t tree;
 
     Real x0 = center[0];
     Real y0 = center[1];
@@ -144,9 +145,9 @@ inline std::vector<std::array<Vertex, 3>> newTree(vec2 center, vec3 color, Real 
     return tree;
 }
 
-inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real r) {
+inline vertices_t newFruit(vec2 center, vec3 color, Real r) {
 
-    std::vector<std::array<Vertex, 3>> fruit;
+    vertices_t fruit;
 
     Real x0 = center[0];
     Real y0 = center[1];
@@ -158,8 +159,8 @@ inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real
     while (theta<2*PI) {
         x1 = x0 + r*cos(theta);
         y1 = y0 + r*sin(theta);
-        x2 = x0 + r*cos(theta + (2*PI/N));
-        y2 = y0 + r*sin(theta + (2*PI/N));
+        x2 = x0 + r*cos(theta + (2*PI/(Real)N));
+        y2 = y0 + r*sin(theta + (2*PI/(Real)N));
 
         fruit.push_back({ {
             // (position 2d + color 3d pack)
@@ -168,7 +169,7 @@ inline std::vector<std::array<Vertex, 3>> newFruit(vec2 center, vec3 color, Real
             {{x2, y2}, color}   //
         } });
 
-        theta += 2*PI/N;
+        theta += 2*PI/(Real)N;
     }
     return fruit;
 }

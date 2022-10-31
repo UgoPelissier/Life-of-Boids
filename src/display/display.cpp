@@ -1,6 +1,4 @@
 #include "display.h"
-#include "glx.hpp"
-#include "triangle.hpp"
 
 void error_callback(int error, const char* description) {
     std::cerr << "Error[" << error << "]: " << description << "\n";
@@ -27,42 +25,16 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
     }
 }
 
-vec2 scale(Agent& agent) {
-    return {
-            2 * RATIO * (((Real)(agent.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Agent& agent, Real ratio) {
-    return {
-            2 * ratio * (((Real)(agent.get_x())) / (Real)(WIDTH)) - ratio,
-            2 * (((Real)(agent.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Obstacle& obstacle) {
-    return {
-            2 * RATIO * (((Real)(obstacle.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(obstacle.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(FruitTree& tree) {
-    return {
-            2 * RATIO * (((Real)(tree.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(tree.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-vec2 scale(Fruit& fruit) {
-    return {
-            2 * RATIO * (((Real)(fruit.get_x())) / (Real)(WIDTH)) - RATIO,
-            2 * (((Real)(fruit.get_y())) / (Real)(HEIGHT)) - 1
-    };
-}
-
-std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buffer, ShaderProgram, GLint> initWindow() {
+std::tuple<
+        GLFWwindow*,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        VertexArray,
+        Buffer,
+        ShaderProgram,
+        GLint> initWindow() {
 
     glfwSetErrorCallback(error_callback);
 
@@ -95,17 +67,31 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buff
     // New
     ShaderProgram triangle_shaderProgram
             = ShaderProgram_new(triangle::vertex_shader_text, triangle::fragment_shader_text);
-    VertexArray triangle_vertexArray = VertexArray_new();
-
     const GLint mvp_location = ShaderProgram_getUniformLocation(triangle_shaderProgram, "MVP");
     const GLint vpos_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vPos");
     const GLint vcol_location = ShaderProgram_getAttribLocation(triangle_shaderProgram, "vCol");
-
-    // Agent triangle
-    //New
     Buffer triangle_buffer = Buffer_new();
+
+    // Birds triangle
+    //New
+    VertexArray triangleBird_vertexArray = VertexArray_new();
     // Init
-    VertexArray_bind(triangle_vertexArray);
+    VertexArray_bind(triangleBird_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glVertexAttribPointer(
+            vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, pos));
+    glVertexAttribPointer(
+            vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(triangle::Vertex), (void*)offsetof(triangle::Vertex, col));
+    glEnableVertexAttribArray(vpos_location);
+    glEnableVertexAttribArray(vcol_location);
+
+    // Birds triangle
+    //New
+    VertexArray trianglePred_vertexArray = VertexArray_new();
+    // Init
+    VertexArray_bind(trianglePred_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
     ShaderProgram_activate(triangle_shaderProgram);
 
@@ -162,153 +148,26 @@ std::tuple<GLFWwindow*, VertexArray, VertexArray, VertexArray, VertexArray, Buff
     glEnableVertexAttribArray(vpos_location);
     glEnableVertexAttribArray(vcol_location);
 
-    return std::make_tuple(window, triangle_vertexArray, triangleObs_vertexArray, triangleTree_vertexArray, triangleFruit_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
+    return std::make_tuple(window, triangleObs_vertexArray, trianglePred_vertexArray,triangleBird_vertexArray, triangleTree_vertexArray, triangleFruit_vertexArray, triangle_buffer, triangle_shaderProgram, mvp_location);
 }
 
-std::tuple<
-std::vector<Agent>,
-std::vector<Obstacle>,
-std::vector<FruitTree>,
-std::vector<Fruit>,
-std::vector<std::array<triangle::Vertex, 3>>,
-std::vector<std::array<triangle::Vertex, 3>>,
-std::vector<std::array<triangle::Vertex, 3>>,
-std::vector<std::array<triangle::Vertex, 3>>
-> initAgentWindow() {
 
-    std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
-
-    std::vector<Obstacle> obstacles = initObstacles();
-    std::vector<Agent> agents = initialiaze_agents(obstacles);
-
-    std::vector<FruitTree> trees = initFruitTree(obstacles);
-    std::vector<Fruit> fruits = {};
-    for (FruitTree tree : trees) {
-        fruits = tree.DropFruit(fruits, obstacles);
-    }
-
-    std::vector<std::array<triangle::Vertex, 3>> triangles;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesObs;
-    std::vector<std::array<triangle::Vertex, 3>> obstacle;
-
-    std::vector<std::array<triangle::Vertex, 3>> trianglesTree;
-    std::vector<std::array<triangle::Vertex, 3>> tree_triangle;
-    std::vector<std::array<triangle::Vertex, 3>> trianglesFruit;
-    std::vector<std::array<triangle::Vertex, 3>> fruit_triangle;
-
-    for (Agent agent : agents) {
-        if ( agent.get_predator() )
-            triangles.push_back(triangle::newTriangle(scale(agent), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
-        else
-            triangles.push_back(triangle::newTriangle(scale(agent), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
-    }
-    for (Obstacle obs : obstacles) {
-        obstacle = triangle::newObstacle(scale(obs), OBSTACLE_COLOR, obs.get_height()/HEIGHT, obs.get_width()/WIDTH);
-        for (const auto & i : obstacle) {
-            trianglesObs.push_back(i);
-        }
-    }
-    for (FruitTree tree : trees) {
-        tree_triangle = triangle::newTree(scale(tree), TREE_COLOR, tree.get_height() / HEIGHT, tree.get_width() / WIDTH);
-        for (const auto & i : tree_triangle) {
-            trianglesTree.push_back(i);
-        }
-    }
-    for (Fruit fruit : fruits) {
-        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
-        for (const auto & i : fruit_triangle) {
-            trianglesFruit.push_back(i);
-        }
-    }
-    return std::make_tuple(agents, obstacles, trees, fruits, triangles, trianglesObs, trianglesTree, trianglesFruit);
-}
-
-void updateAgentWindow(GLFWwindow* window, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<FruitTree>& trees, std::vector<Fruit>& fruits, std::vector<std::array<triangle::Vertex, 3>>& triangles, std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit) {
-    triangles = {};
-    trianglesFruit = {};
-    std::vector<std::array<triangle::Vertex, 3>> fruit_triangle;
-
-
-    int width{}, height{};
-    glfwGetFramebufferSize(window, &width, &height); // Get window size
-    Real ratio = (Real)width / (Real)height;
-
-    glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    std::tie(agents, fruits) = updateAgents(agents, obstacles, trees, fruits);
-
-    for (auto & agent : agents) {
-        if (agent.get_predator()) {
-            triangles.push_back(triangle::newTriangle(scale(agent, ratio), PRED_COLOR, agent.get_angle(), 2 * BODY_SIZE));
-        }
-        else {
-            triangles.push_back(triangle::newTriangle(scale(agent, ratio), BIRD_COLOR, agent.get_angle(), BODY_SIZE));
-        }
-    }
-
-    for (auto & fruit : fruits) {
-        fruit_triangle = triangle::newFruit(scale(fruit), FRUIT_COLOR, fruit.get_size()/WIDTH);
-        for (const auto & i : fruit_triangle) {
-            trianglesFruit.push_back(i);
-        }
-    }
-
-}
-
-void addAgent(GLFWwindow* window, bool& addBird, bool& addPredator, std::vector<Agent>& agents, std::vector<Obstacle>& obstacles, std::vector<std::array<triangle::Vertex, 3>>& triangles) {
-    int width{}, height{};
-    size_t n = agents.size();
-    glfwGetFramebufferSize(window, &width, &height); // Get window size
-    Real ratio = (Real)width / (Real)height;
-    Agent newAgent;
-    std::uniform_real_distribution<double> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
-    std::random_device dev;
-    std::mt19937 engine(dev());
-
-    if (addBird) { // Add new bird to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, false,n);
-        newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-            agents.push_back(newAgent);
-            n = agents.size();
-            triangles.push_back(triangle::newTriangle(
-                    scale(newAgent, ratio),
-                    BIRD_COLOR,
-                    newAgent.get_angle(),
-                    BODY_SIZE));
-        }
-        addBird = false;
-    }
-
-    if (addPredator) { // Add new predator to the window
-        newAgent = Agent(cursorX, HEIGHT - cursorY, 2 * PI * unif(engine) - PI, true,n);
-        newAgent.obstacle(obstacles);
-        if ( !newAgent.get_obstacle() && !newAgent.overlap(agents) ) {
-            agents.push_back(newAgent);
-            n = agents.size();
-            triangles.push_back(triangle::newTriangle(
-                    scale(newAgent, ratio),
-                    PRED_COLOR,
-                    newAgent.get_angle(),
-                    2 * BODY_SIZE));
-        }
-        addPredator = false;
-    }
-}
-
-void updateWindow(GLFWwindow* window,
-                  std::vector<std::array<triangle::Vertex, 3>>& triangles,
-                  std::vector<std::array<triangle::Vertex, 3>>& trianglesObs,
-                  std::vector<std::array<triangle::Vertex, 3>>& trianglesTree,
-                  std::vector<std::array<triangle::Vertex, 3>>& trianglesFruit,
-                  VertexArray& triangle_vertexArray,
-                  VertexArray& triangleObs_vertexArray,
-                  VertexArray& triangleTree_vertexArray,
-                  VertexArray& triangleFruit_vertexArray,
-                  Buffer& triangle_buffer,
-                  ShaderProgram& triangle_shaderProgram,
-                  GLint& mvp_location) {
+void updateWindow(
+        GLFWwindow* window,
+        triangle::vertices_t& trianglesObs,
+        triangle::vertices_t& trianglesPredators,
+        triangle::vertices_t& trianglesBirds,
+        triangle::vertices_t& trianglesTree,
+        triangle::vertices_t& trianglesFruit,
+        VertexArray& triangleObs_vertexArray,
+        VertexArray& trianglePred_vertexArray,
+        VertexArray& triangleBird_vertexArray,
+        VertexArray& triangleTree_vertexArray,
+        VertexArray& triangleFruit_vertexArray,
+        Buffer& triangle_buffer,
+        ShaderProgram& triangle_shaderProgram,
+        GLint& mvp_location
+        ) {
 
     int width{}, height{};
     glfwGetFramebufferSize(window, &width, &height); // Get window size
@@ -325,8 +184,8 @@ void updateWindow(GLFWwindow* window,
     glBindVertexArray(triangleTree_vertexArray.vertex_array);
 
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesTree.size() * sizeof(triangle::Vertex), trianglesTree.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesTree.size());
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr (3 * trianglesTree.size() * sizeof(triangle::Vertex)), trianglesTree.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, GLsizei(3 * trianglesTree.size()));
 
     //Fruit
     VertexArray_bind(triangleFruit_vertexArray);
@@ -337,20 +196,32 @@ void updateWindow(GLFWwindow* window,
     glBindVertexArray(triangleFruit_vertexArray.vertex_array);
 
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesFruit.size() * sizeof(triangle::Vertex), trianglesFruit.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesFruit.size());
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr (3 * trianglesFruit.size() * sizeof(triangle::Vertex)), trianglesFruit.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, GLsizei(3 * trianglesFruit.size()));
 
-    //Agents
-    VertexArray_bind(triangle_vertexArray);
+    //Predators
+    VertexArray_bind(trianglePred_vertexArray);
     Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
     ShaderProgram_activate(triangle_shaderProgram);
 
     glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
-    glBindVertexArray(triangle_vertexArray.vertex_array);
+    glBindVertexArray(trianglePred_vertexArray.vertex_array);
 
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * triangles.size() * sizeof(triangle::Vertex), triangles.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * triangles.size());
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr (3 * trianglesPredators.size() * sizeof(triangle::Vertex)), trianglesPredators.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, GLsizei(3 * trianglesPredators.size()));
+
+    //Birds
+    VertexArray_bind(triangleBird_vertexArray);
+    Buffer_bind(triangle_buffer, GL_ARRAY_BUFFER);
+    ShaderProgram_activate(triangle_shaderProgram);
+
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)&p);
+    glBindVertexArray(triangleBird_vertexArray.vertex_array);
+
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr (3 * trianglesBirds.size() * sizeof(triangle::Vertex)), trianglesBirds.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, GLsizei(3 * trianglesBirds.size()));
 
     //Obstacles
     VertexArray_bind(triangleObs_vertexArray);
@@ -361,24 +232,30 @@ void updateWindow(GLFWwindow* window,
     glBindVertexArray(triangleObs_vertexArray.vertex_array);
 
     glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STREAM_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, 3 * trianglesObs.size() * sizeof(triangle::Vertex), trianglesObs.data(), GL_STREAM_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, 3 * trianglesObs.size());
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr (3 * trianglesObs.size() * sizeof(triangle::Vertex)), trianglesObs.data(), GL_STREAM_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, GLsizei(3 * trianglesObs.size()));
 
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-void display_fps(GLFWwindow* window, std::chrono::time_point<std::chrono::high_resolution_clock>& start, std::chrono::time_point<std::chrono::high_resolution_clock>& end) {
+void display_fps(GLFWwindow* window,
+                std::chrono::time_point<std::chrono::high_resolution_clock>& start,
+                std::chrono::time_point<std::chrono::high_resolution_clock>& end,
+                double &total_fps) {
+
     std::chrono::duration<double, std::milli> float_ms = end - start;
     std::stringstream ss;
-    ss << "FPS : " << (1 / (float_ms.count()) * 1000)* NUMBER_LOOP_FPS;
+    double fps = (1 / (float_ms.count()) * 1000) * NUMBER_LOOP_FPS;
+    ss << "FPS : " << fps;
     glfwSetWindowTitle(window, ss.str().c_str());
+    total_fps += fps;
 
 }
 
 void endWindow(GLFWwindow* window) {
-    glfwDestroyWindow(window);
 
+    glfwDestroyWindow(window);
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }

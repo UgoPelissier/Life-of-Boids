@@ -1,11 +1,15 @@
-FIND_PACKAGE(glfw3 3.3 REQUIRED) # REQUIRED means : "fatal if not found"
-FIND_PACKAGE(glad REQUIRED)
-FIND_PACKAGE(OpenCV REQUIRED)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 add_subdirectory(display)
 add_subdirectory(movement)
 add_subdirectory(config)
 
-add_executable(life-of-boids main.cpp)
-target_include_directories(life-of-boids PUBLIC display/ movement/ config/)
-target_link_libraries(life-of-boids PUBLIC display agent config)
+add_executable(life-of-boids main.cpp coupled.cpp main.h)
+target_include_directories(life-of-boids
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/config
+        display/
+        movement/
+        config/)
+target_link_libraries(life-of-boids PUBLIC display movement config)
