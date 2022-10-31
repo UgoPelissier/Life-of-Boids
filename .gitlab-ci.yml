@@ -1,4 +1,4 @@
-image: boids-image
+image: ugopelissierminesparis/life-of-boids:latest
 
 build:
   stage: build

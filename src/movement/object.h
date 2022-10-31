@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <iomanip>
