@@ -1,6 +1,6 @@
 #include "main.h"
 #include <algorithm>
-#include <execution>
+//#include <execution>
 
 std::vector<int> thread_index(int n) {
     int step = n/N_THREADS;
@@ -25,7 +25,7 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
 
     std::vector<Fruit> newFruits;
 
-    std::vector<size_t> kill;
+/*    std::vector<size_t> kill;
 
     std::for_each(std::execution::par_unseq,
         predators.begin(),
@@ -34,13 +34,13 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
             it.second.update(obstacles, predators, birds);
         });
     
-    /* Running the following sequentially for now.
+    *//* Running the following sequentially for now.
     * Neighbour or the birds object needs fixing to run parallely!
     * Tried using std::vector<Bird> instead of unordered_map but still the same problem.
     * Illegal access to a memory location
     * Problem occurs inside update->neighbours().
     * Not the logic! But any usage of birds inside will raise an exception.
-     */
+     *//*
 
     std::for_each(std::execution::seq,
         birds.begin(),
@@ -61,9 +61,9 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         trees.end(),
         [&](Tree& t) {
             t.DropFruitAndAppend(fruits, obstacles);
-        });
+        });*/
 
-    /* for (auto& it : predators) {
+    for (auto& it : predators) {
         Predator& predator = it.second;
         predator.update(obstacles, predators, birds);
     }
@@ -79,7 +79,7 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     
     for (Tree& tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);
-    } */
+    }
 
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())

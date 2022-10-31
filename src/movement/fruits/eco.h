@@ -1,6 +1,6 @@
 #pragma once
-#include "../object.h"
-#include "../obstacles/obstacle.h"
+#include "object.h"
+#include "obstacle.h"
 
 class Eco : public Object {
 protected:

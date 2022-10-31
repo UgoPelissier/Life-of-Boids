@@ -1,6 +1,8 @@
 #include "agent.h"
 #include "bird.h"
 #include "predator.h"
+#include <numeric>
+#include <algorithm>
 
 Agent::Agent() : Object(), m_angle(0), m_state(state::constant), m_index(SIZE_MAX){}
 Agent::Agent(Real const& x, Real const& y) : Object(x,y), m_angle(0), m_state(state::constant), m_index(SIZE_MAX){}
