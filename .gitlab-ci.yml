@@ -1,4 +1,6 @@
-image: boids-image
+image:
+  name: boids-image
+  pull_policy: if-not-present
 
 build:
   stage: build
