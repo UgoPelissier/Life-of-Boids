@@ -1,9 +1,13 @@
 #include "main.h"
 #include <algorithm>
-#include <execution>
-#include <mutex>
-
-std::mutex kill_mtx;
+#ifdef __has_include
+    #if __has_include(<execution>)
+            #define EXEC_PAR
+            #include <execution>
+            #include <mutex>
+            static std::mutex kill_mtx;
+    #endif
+#endif
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     predators_t& predators,
@@ -12,23 +16,18 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     std::vector<Fruit>& fruits) {
 
     std::vector<Fruit> newFruits;
-    std::vector<size_t> kill;
 
-    std::for_each(std::execution::par,
+// RUN PARALLELLY
+#ifdef EXEC_PAR
+    std::vector<size_t> kill;
+    std::for_each(std::execution::par_unseq,
         predators.begin(),
         predators.end(),
         [&](auto& it) {
             it.second.update(obstacles, predators, birds);
         });
-    
-    /* Running the following sequentially for now.
-    * Neighbour or the birds object needs fixing to run parallely!
-    * Tried using std::vector<Bird> instead of unordered_map but still the same problem.
-    * Illegal access to a memory location
-    * Problem occurs inside update->neighbours().
-    * Not the logic! But any usage of birds inside will raise an exception.
-    */
-    /*std::for_each(std::execution::par,
+
+    std::for_each(std::execution::par_unseq,
         birds.begin(),
         birds.end(),
         [&](auto& it) {
@@ -41,9 +40,12 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         });
 
         for (size_t& k : kill)
-            birds.erase(k);
-        */
-    
+           birds.erase(k); 
+// RUN SEQUENTIALLY
+#else
+    for (auto& it : predators) {
+        it.second.update(obstacles, predators, birds);
+    }
     for (auto it = birds.begin(); it != birds.end();) {
 
         Bird& bird = it->second;
@@ -54,7 +56,8 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         else
             it++;
     }
-    
+#endif
+
     for (Tree& tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);
     }
