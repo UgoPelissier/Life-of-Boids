@@ -80,9 +80,9 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
         case state::separation:
             this->separationLaw(closest_bird);
             break;
-       default:
-           this->constantUpdate();
-           break;
+        default:
+            this->constantUpdate();
+            break;
         }
     }
 

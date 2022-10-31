@@ -1,37 +1,18 @@
 #include <algorithm>
-
+#include <execution>
 #include "bird.h"
 #include "predator.h"
 
+//std::unordered_map<size_t, std::vector<bool>> Bird::ignore_ids(DEFAULT_NUM_BIRDS);
 
-Bird::Bird() : Agent(), m_alive(true) {
-    // m_ignore_ids.reserve(RESERVE_COUNT);
-}
-Bird::Bird(Real const& x, Real const& y) : Agent(x,y), m_alive(true) {
-    // m_ignore_ids.reserve(RESERVE_COUNT);
-}
-Bird::Bird(Real const& x, Real const& y, Real const& angle) : Agent(x,y,angle), m_alive(true) {
-    // m_ignore_ids.reserve(RESERVE_COUNT);
-}
-Bird::Bird(Real const& x, Real const& y, Real const& angle, size_t& index) : Agent(x,y,angle,index), m_alive(true) {
-    // m_ignore_ids.reserve(RESERVE_COUNT);
-}
+Bird::Bird() : Agent(), m_alive(true) {}
+Bird::Bird(Real const& x, Real const& y) : Agent(x, y), m_alive(true) {}
+Bird::Bird(Real const& x, Real const& y, Real const& angle) : Agent(x,y,angle), m_alive(true) {}
+Bird::Bird(Real const& x, Real const& y, Real const& angle, size_t& index) : Agent(x,y,angle,index), m_alive(true) {}
 
 bool Bird::get_alive() const {
     return m_alive;
 }
-/*
-bool Bird::canIgnore(size_t i) {
-
-    if (m_ignore_ids.find(i) == m_ignore_ids.end())
-        return false;
-}
-
-void Bird::resetIgnore() {
-    //m_ignore_ids.clear();
-    std::for_each(m_ignore_ids.begin(), m_ignore_ids.end(), [](auto &it) {it.second = false;});
-}
-*/
 
 std::vector<Real> Bird::neighbours(birds_t& birds) {
     std::vector<Real> v;
@@ -47,13 +28,18 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
     Real min_distance = (Real)(WIDTH+HEIGHT);
     Real inv;
 
-    for (size_t i(0); i < birds.size(); i++) {
-        
+    size_t n = birds.size();
+    for (size_t i(0); i < n; i++) {
+        // this was the root cause of an invalid memory access.
+        // Parallelism was failing to get index i contents.
+        // before doing anything check if the index i exists in the birds map.
+        if (birds.find(i) == birds.end())
+            continue;
         Bird const& b = birds[i];
-        if (m_index != i  /*&& !canIgnore(i)*/) {
+        if (m_index != i) {//  && !canIgnore(m_index, i)) {
             current_distance = this->distance(b);
             if ((current_distance < SEPARATION_RANGE) && (current_distance < min_distance)) {
-                
+
                 if (this->insideFieldView(b)) {
                     if (m_state == state::near_predator)
                         m_state = state::near_predatorANDseparation;
@@ -67,15 +53,15 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
                 }
             }
             else if (((m_state == state::alignment) || (m_state == state::constant)) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE)) {
-                    
+
                 if (this->insideFieldView(b)) {
                     m_state = state::alignment;
                     angleAlignment += b.get_angle();
                     nAlignment++;
                 }
-        }
+            }
             else if (((m_state == state::cohesion) || (m_state == state::constant)) && (current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
-                
+
                 if (this->insideFieldView(b)) {
                     m_state = state::cohesion;
                     xCohesion += b.get_x();
@@ -83,12 +69,15 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
                     nCohesion++;
                 }
             }
-            /*(else if (current_distance > IGNORE_RANGE) {
-                m_ignore_ids[i] = true;
-                b.m_ignore_ids[m_index] = true;
+            /*else if (current_distance > IGNORE_RANGE) {
+
+                std::cout << m_index << ": " << Bird::ignore_ids[m_index].size() << std::endl;
+                Bird::ignore_ids[m_index][i] = true;
+                Bird::ignore_ids[i][m_index] = true;
             }*/
         }
     }
+    
     // choose x, y by state
     switch (m_state) {
         case state::separation:
@@ -112,7 +101,6 @@ std::vector<Real> Bird::neighbours(birds_t& birds) {
 
     return v;
 }
-
 std::vector<Real> Bird::closestPredator(predators_t& predators) {
     std::vector<Real> pred;
 
@@ -213,7 +201,6 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
     closest_predator = this->closestPredator(predators);
     // already dead then return
     if (!m_alive) {
-        this->windowUpdate();
         return false;
     }
 
@@ -275,7 +262,8 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
     int randomY;
     Real randomAngle;
     size_t n = birds.size();
-
+    std::vector<bool> vec(DEFAULT_NUM_BIRDS, false);
+    
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
     std::uniform_int_distribution uniY(0, HEIGHT);
@@ -299,30 +287,139 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
             bird.closestObstacle(obstacles);
         }
         birds[n] = bird;
-        n = birds.size();
+        //Bird::ignore_ids[n] = std::vector<bool>(DEFAULT_NUM_BIRDS, false);
+        n++;
     }
+
     return birds;
 }
 
-/*void Bird::clearIgnore(birds_t& birds) {
-    
-    auto apply = [](auto& it) {
-        it.second.resetIgnore();
-    };
-    std::for_each(birds.begin(), birds.end(), apply);
-}*/
+// DO NOT REMOVE THE FOLLOWING CODE
+// WE CAN STILL BUILD THE IGNORE IDS FEATURE TO AVOID COMPUTATIONS
+/*
+bool Bird::canIgnore(size_t i, size_t j) {
 
-void thread_update(birds_t& birds, std::vector<Obstacle>const& obstacles, predators_t& predators, std::vector<Fruit>& fruits, size_t const& start, size_t const& end) {
+    if (ignore_ids[i].size() <= j) {
+        // since j is always gonna be increasing it is the last index of the vector
+        ignore_ids[i].push_back(false);
+    }
+    return ignore_ids[i][j];
+}
 
-    auto it_start = birds.begin(); std::advance(it_start,start);
-    auto it_end = birds.begin(); std::advance(it_end,end);
+void Bird::resetIgnore(size_t i) {
+    std::vector<bool>& vec = ignore_ids[i];
+    std::for_each(vec.begin(), vec.end(), [](bool& b) { b = false;});
+}
 
-    for (auto it = it_start; it != it_end;) {
-        Bird &bird = it->second;
-        bool is_alive = bird.update(obstacles, predators, birds, fruits);
-        if (!is_alive) {
-            it = birds.erase(it);
-        } else
-            it++;
+void Bird::clearIgnore(size_t n_birds) {
+
+    for (size_t i = 0; i < n_birds; i++) {
+        Bird::resetIgnore(i);
     }
 }
+std::vector<Real> Bird::neighbours_par(birds_t& birds) {
+
+    std::vector<Real> v;
+    Real xSeparation(0), ySeparation(0);
+
+    Real angleAlignment(0);
+    int nAlignment(0);
+
+    Real xCohesion(0), yCohesion(0);
+    int nCohesion(0);
+
+    Real current_distance;
+    Real min_distance = (Real)(WIDTH + HEIGHT);
+    Real inv;
+
+    std::vector<Real> vec_distance(birds.size());
+    std::vector<bool> vec_visible(birds.size());
+
+    Bird const& tmp = *this;
+    auto compute = [&tmp, &vec_distance, &vec_visible](auto const& it) {
+
+        size_t const& i = it.first;
+        Bird const& b = it.second;
+        vec_distance[i] = tmp.distance(b);
+        vec_visible[i] = tmp.insideFieldView(b);
+    };
+
+    std::for_each(std::execution::par_unseq,
+        birds.begin(),
+        birds.end(),
+        compute
+    );
+    // avoiding checking of min distance for self
+    vec_distance[m_index] = SIZE_MAX;
+    vec_visible[m_index] =  false;
+    //obtain the index of the min distance
+    //auto it = std::min_element(vec_distance.begin(), vec_distance.end());
+    auto it = vec_distance.begin();
+    size_t min_index = std::distance(vec_distance.begin(), it);
+
+    //size_t min_index = 0;
+    if (vec_distance[min_index] < SEPARATION_RANGE && vec_visible[min_index]) {
+
+        Bird const& b = birds[min_index];
+
+        if (m_state == state::near_predator)
+            m_state = state::near_predatorANDseparation;
+        else if (m_state == state::near_fruit)
+            m_state = state::near_fruitANDseparation;
+        else
+            m_state = state::separation;
+
+        xSeparation = b.get_x();
+        ySeparation = b.get_y();
+    }
+    else {
+        size_t n = birds.size();
+        for (size_t i(0); i < n; i++) {
+            Bird const& b = birds[i];
+            if (m_index != i && vec_visible[i]) {
+                current_distance = vec_distance[i];
+                if (((m_state == state::alignment) || (m_state == state::constant)) && (current_distance > SEPARATION_RANGE) && (current_distance < ALIGNMENT_RANGE)) {
+
+                    m_state = state::alignment;
+                    angleAlignment += b.get_angle();
+                    nAlignment++;
+                }
+                else if (((m_state == state::cohesion) || (m_state == state::constant)) && (current_distance > ALIGNMENT_RANGE) && (current_distance < COHESION_RANGE)) {
+
+                    m_state = state::cohesion;
+                    xCohesion += b.get_x();
+                    yCohesion += b.get_y();
+                    nCohesion++;
+                }
+            }
+        }
+    }
+
+    // choose x, y by state
+    switch (m_state) {
+    case state::separation:
+        v = { xSeparation,ySeparation };
+        break;
+    case state::near_predatorANDseparation:
+        v = { xSeparation,ySeparation };
+        break;
+    case state::alignment:
+        inv = (Real)1 / (Real)(nAlignment + 1);
+        v = { angleAlignment * inv };
+        break;
+    case state::cohesion:
+        inv = (Real)1 / (Real)(nCohesion + 1);
+        v = { xCohesion * inv,yCohesion * inv };
+        break;
+    default:
+        v = { 0 };
+        break;
+    }
+
+    return v;
+}
+
+Bird::~Bird() {
+    ignore_ids.erase(m_index);
+}
+*/
