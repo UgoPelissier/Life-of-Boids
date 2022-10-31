@@ -50,3 +50,5 @@ public:
      */
     ~Bird();
 };
+
+void thread_update(birds_t& birds, std::vector<Obstacle>const& obstacles, predators_t& predators, std::vector<Fruit>& fruits, size_t const& start, size_t const& end);

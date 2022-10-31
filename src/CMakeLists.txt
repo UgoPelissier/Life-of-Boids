@@ -1,3 +1,5 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+
 add_subdirectory(display)
 add_subdirectory(movement)
 add_subdirectory(config)

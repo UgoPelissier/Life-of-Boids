@@ -2,6 +2,21 @@
 #include <algorithm>
 #include <execution>
 
+std::vector<int> thread_index(int n) {
+    int step = n/N_THREADS;
+    if (n%N_THREADS!=0)
+        step++;
+    int count = 0;
+
+    std::vector<int> index;
+    while (count<n) {
+        index.emplace_back(count);
+        count += step;
+    }
+    index.emplace_back(n);
+    return index;
+}
+
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     predators_t& predators,
                                     birds_t& birds,
@@ -9,6 +24,7 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     std::vector<Fruit>& fruits) {
 
     std::vector<Fruit> newFruits;
+
     std::vector<size_t> kill;
 
     std::for_each(std::execution::par_unseq,
@@ -24,7 +40,8 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     * Illegal access to a memory location
     * Problem occurs inside update->neighbours().
     * Not the logic! But any usage of birds inside will raise an exception.
-    */
+     */
+
     std::for_each(std::execution::seq,
         birds.begin(),
         birds.end(),
@@ -46,25 +63,23 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
             t.DropFruitAndAppend(fruits, obstacles);
         });
 
-    /*for (auto& it : predators) {
+    /* for (auto& it : predators) {
         Predator& predator = it.second;
         predator.update(obstacles, predators, birds);
     }
-    
-    for (auto it = birds.begin(); it != birds.end();) {
 
-        Bird& bird = it->second;
-        bool is_alive = bird.update(obstacles, predators, birds, fruits);
-        if (!is_alive) {
-            it = birds.erase(it);
-        }
-        else
-            it++;
+    std::vector<std::thread> birds_threads(N_THREADS);
+    std::vector<int> index = thread_index((int)birds.size());
+
+    for (int i = 0; i<(int)index.size()-1 ; ++i) {
+        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i]() { thread_update(birds, obstacles, predators, fruits, index[i], index[i+1]); });
     }
+
+    for (auto& thread : birds_threads) thread.join();
     
     for (Tree& tree : trees) {
         tree.DropFruitAndAppend(fruits, obstacles);
-    }*/
+    } */
 
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())

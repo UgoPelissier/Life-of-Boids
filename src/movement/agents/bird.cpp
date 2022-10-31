@@ -254,6 +254,9 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
         case state::cohesion:
             this->cohesionLaw(closest_bird);
             break;
+        default:
+            this->constantUpdate();
+            break;
         }
     }
     // update the window and then set new x, y
@@ -308,3 +311,18 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
     };
     std::for_each(birds.begin(), birds.end(), apply);
 }*/
+
+void thread_update(birds_t& birds, std::vector<Obstacle>const& obstacles, predators_t& predators, std::vector<Fruit>& fruits, size_t const& start, size_t const& end) {
+
+    auto it_start = birds.begin(); std::advance(it_start,start);
+    auto it_end = birds.begin(); std::advance(it_end,end);
+
+    for (auto it = it_start; it != it_end;) {
+        Bird &bird = it->second;
+        bool is_alive = bird.update(obstacles, predators, birds, fruits);
+        if (!is_alive) {
+            it = birds.erase(it);
+        } else
+            it++;
+    }
+}
