@@ -49,4 +49,4 @@ const Real OBSTACLE_RELAXATION = 0.5;
 const int FRUIT_TIME_MAX = 25;
 const int FRUIT_TIME_MIN = 0;
 
-const int N_THREADS = 8;
+const int N_THREADS = 4;

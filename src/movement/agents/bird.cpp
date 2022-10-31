@@ -3,6 +3,9 @@
 #include "bird.h"
 #include "predator.h"
 
+#include <mutex>
+static std::mutex kill_mutex;
+
 //std::unordered_map<size_t, std::vector<bool>> Bird::ignore_ids(DEFAULT_NUM_BIRDS);
 
 Bird::Bird() : Agent(), m_alive(true) {}
@@ -423,3 +426,22 @@ Bird::~Bird() {
     ignore_ids.erase(m_index);
 }
 */
+
+void thread_update(birds_t& birds, std::vector<Obstacle>const& obstacles, predators_t& predators, std::vector<Fruit>& fruits, size_t const& start, size_t const& end, std::vector<size_t> &kill) {
+
+    auto it_start = birds.begin();
+    std::advance(it_start,start);
+
+    auto it_end = birds.begin();
+    std::advance(it_end,end);
+
+    for(auto& it=it_start; it!=it_end;) {
+        bool is_alive = it->second.update(obstacles, predators, birds, fruits);
+        if (!is_alive) {
+            kill_mutex.lock();
+            kill.push_back(it->first);
+            kill_mutex.unlock();
+        }
+        it ++;
+    }
+}

@@ -1,13 +1,25 @@
 #include "main.h"
 #include <algorithm>
-#ifdef __has_include
-    #if __has_include(<execution>)
-            #define EXEC_PAR
-            #include <execution>
-            #include <mutex>
-            static std::mutex kill_mtx;
-    #endif
-#endif
+#include <execution>
+#include <mutex>
+static std::mutex kill_mtx;
+
+#define EXEC_PAR
+
+std::vector<int> thread_index(int n) {
+    int step = n/N_THREADS;
+    if (n%N_THREADS!=0)
+        step++;
+    int count = 0;
+
+    std::vector<int> index;
+    while (count<n) {
+        index.emplace_back(count);
+        count += step;
+    }
+    index.emplace_back(n);
+    return index;
+}
 
 std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     predators_t& predators,
@@ -16,10 +28,10 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
                                     std::vector<Fruit>& fruits) {
 
     std::vector<Fruit> newFruits;
+    std::vector<size_t> kill;
 
 // RUN PARALLELLY
 #ifdef EXEC_PAR
-    std::vector<size_t> kill;
     std::for_each(std::execution::par_unseq,
         predators.begin(),
         predators.end(),
@@ -40,20 +52,26 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
         });
 
         for (size_t& k : kill)
-           birds.erase(k); 
+           birds.erase(k);
+
 // RUN SEQUENTIALLY
 #else
     for (auto& it : predators) {
         it.second.update(obstacles, predators, birds);
     }
-    for (auto it = birds.begin(); it != birds.end();) {
 
     std::vector<std::thread> birds_threads(N_THREADS);
     std::vector<int> index = thread_index((int)birds.size());
 
     for (int i = 0; i<(int)index.size()-1 ; ++i) {
-        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i]() { thread_update(birds, obstacles, predators, fruits, index[i], index[i+1]); });
+        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i, &kill]() { thread_update(birds,obstacles,predators,fruits,index[i],index[i+1],kill); });
     }
+
+    for (auto& th : birds_threads) th.join();
+
+    for (size_t& k : kill)
+        birds.erase(k);
+
 #endif
 
     for (Tree& tree : trees) {
