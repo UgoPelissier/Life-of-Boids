@@ -1,4 +1,4 @@
-image: boids-image
+image: life-of-boids
 
 build:
   stage: build
