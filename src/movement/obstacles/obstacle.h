@@ -3,8 +3,10 @@
 
 class Obstacle : public Object {
 protected :
-    Real m_height, m_half_h;
-    Real m_width, m_half_w;
+    Real m_height;
+    Real m_half_h;
+    Real m_width;
+    Real m_half_w;
 
 public:
     Obstacle();

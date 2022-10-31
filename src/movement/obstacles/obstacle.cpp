@@ -1,8 +1,8 @@
 #include "obstacle.h"
 
-Obstacle::Obstacle() : Object(), m_height(0), m_width(0), m_half_h(0), m_half_w(0) {}
+Obstacle::Obstacle() : Object(), m_height(0), m_half_h(0), m_width(0), m_half_w(0) {}
 
-Obstacle::Obstacle(Real const& x, Real const& y, Real const& height, Real const& width) : Object(x,y), m_height(height), m_width(width), m_half_h(height/2), m_half_w(width/2) {}
+Obstacle::Obstacle(Real const& x, Real const& y, Real const& height, Real const& width) : Object(x,y), m_height(height), m_half_h(height/2), m_width(width), m_half_w(width/2) {}
 
 Real Obstacle::get_height() const {
     return m_height;
