@@ -58,3 +58,5 @@ extern const Real OBSTACLE_RELAXATION;
 
 extern const int FRUIT_TIME_MAX;
 extern const int FRUIT_TIME_MIN;
+
+extern const int N_THREADS;

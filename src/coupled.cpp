@@ -48,13 +48,11 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     }
     for (auto it = birds.begin(); it != birds.end();) {
 
-        Bird& bird = it->second;
-        bool is_alive = bird.update(obstacles, predators, birds, fruits);
-        if (!is_alive) {
-            it = birds.erase(it);
-        }
-        else
-            it++;
+    std::vector<std::thread> birds_threads(N_THREADS);
+    std::vector<int> index = thread_index((int)birds.size());
+
+    for (int i = 0; i<(int)index.size()-1 ; ++i) {
+        birds_threads[i] = std::thread([&birds, obstacles, &predators, &fruits, index, i]() { thread_update(birds, obstacles, predators, fruits, index[i], index[i+1]); });
     }
 #endif
 
@@ -65,6 +63,10 @@ std::vector<Fruit> updateObjects(std::vector<Obstacle>& obstacles,
     for (Fruit& fruit : fruits) {
         if (fruit.get_alive())
             newFruits.push_back(fruit);
+        else {
+            size_t size = birds.size();
+            birds[size] = Bird(fruit.get_x(), fruit.get_y(), 0, size);
+        }
     }
 
     return newFruits;
