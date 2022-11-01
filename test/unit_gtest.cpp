@@ -26,45 +26,45 @@ TEST(FirstGTest, ExpectCanary) {
 
 TEST(Initialization, VectorSize) {
 
-        vars::agentWindowVars_t var;
-        var.obstacles = Obstacle::init();
-        var.predators = Predator::init(var.obstacles);
-        var.birds = Bird::init(var.obstacles, var.predators);
+    vars::agentWindowVars_t var;
+    var.obstacles = Obstacle::init();
+    var.predators = Predator::init(var.obstacles);
+    var.birds = Bird::init(var.obstacles, var.predators);
 
-        var.trees = Tree::init(var.obstacles);
-        var.fruits = {};
-        for (Tree tree : var.trees) {
-            tree.DropFruitAndAppend(var.fruits, var.obstacles);
-        }
+    var.trees = Tree::init(var.obstacles);
+    var.fruits = {};
+    for (Tree tree : var.trees) {
+        tree.DropFruitAndAppend(var.fruits, var.obstacles);
+    }
 
-        triangle::vertices_t obstacle(2), tree_triangles(2), fruit_triangles(2);
+    triangle::vertices_t obstacle(2), tree_triangles(2), fruit_triangles(2);
 
-        for (auto& it : var.predators) {
-            Predator& predator = it.second;
-            var.trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
+    for (auto& it : var.predators) {
+        Predator& predator = it.second;
+        var.trianglesPredators.push_back(triangle::newTriangle(Object::scale(predator), PRED_COLOR, predator.get_angle(), 2 * BODY_SIZE));
+    }
+    for (auto& it : var.birds) {
+        Bird& bird = it.second;
+        var.trianglesBirds.push_back(triangle::newTriangle(Object::scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
+    }
+    for (Obstacle const& obs : var.obstacles) {
+        obstacle = triangle::newObstacle(Object::scale(obs), OBSTACLE_COLOR, obs.get_height() / (Real)HEIGHT, obs.get_width() / (Real)WIDTH);
+        for (const auto& i : obstacle) {
+            var.trianglesObs.push_back(i);
         }
-        for (auto& it : var.birds) {
-            Bird& bird = it.second;
-            var.trianglesBirds.push_back(triangle::newTriangle(Object::scale(bird), BIRD_COLOR, bird.get_angle(), BODY_SIZE));
+    }
+    for (Tree const& tree : var.trees) {
+        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
+        for (const auto& i : tree_triangles) {
+            var.trianglesTree.push_back(i);
         }
-        for (Obstacle const& obs : var.obstacles) {
-            obstacle = triangle::newObstacle(Object::scale(obs), OBSTACLE_COLOR, obs.get_height() / (Real)HEIGHT, obs.get_width() / (Real)WIDTH);
-            for (const auto& i : obstacle) {
-                var.trianglesObs.push_back(i);
-            }
+    }
+    for (Fruit const& fruit : var.fruits) {
+        fruit_triangles = triangle::newFruit(Object::scale(fruit), FRUIT_COLOR, fruit.get_size() / (Real)WIDTH);
+        for (const auto& i : fruit_triangles) {
+            var.trianglesFruit.push_back(i);
         }
-        for (Tree const& tree : var.trees) {
-            tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
-            for (const auto& i : tree_triangles) {
-                var.trianglesTree.push_back(i);
-            }
-        }
-        for (Fruit const& fruit : var.fruits) {
-            fruit_triangles = triangle::newFruit(Object::scale(fruit), FRUIT_COLOR, fruit.get_size() / (Real)WIDTH);
-            for (const auto& i : fruit_triangles) {
-                var.trianglesFruit.push_back(i);
-            }
-        }
+    }
 
     EXPECT_EQ(var.obstacles.size(), DEFAULT_NUM_OBSTACLES) << "Not the correct number of obstacles!";
     EXPECT_EQ(var.trianglesObs.size(), 2*DEFAULT_NUM_OBSTACLES) << "Not the correct number of obstacles!";
@@ -154,7 +154,7 @@ TEST(Law, Cohesion) {
 }
 
 TEST(Law, Alignment) {
-        birds_t birds;
+    birds_t birds;
 
     size_t index(0);
     birds[index] = Bird(0,0,0,index);
@@ -220,6 +220,25 @@ TEST(Law, Predator) {
     EXPECT_TRUE(birds[index].get_state()==state::near_predator);
     birds[index].neighbours(birds);
     EXPECT_TRUE(birds[index].get_state()==state::near_predatorANDseparation);
+}
+
+TEST(Law, Fruit) {
+    std::vector<Fruit> fruits = { Fruit(0,0) };
+
+    size_t index(0);
+
+    birds_t birds;
+    birds[index] = Bird(-(FRUIT_RANGE+1),0,0,index);
+    birds[index].closestFruit(fruits);
+    EXPECT_TRUE(birds[index].get_state()==state::constant && fruits[0].get_alive()==true);
+
+    birds[index] = Bird(-FRUIT_RANGE+1,0,0,index);
+    birds[index].closestFruit(fruits);
+    EXPECT_TRUE(birds[index].get_state()==state::near_fruit && fruits[0].get_alive()==true);
+
+    birds[index] = Bird(-DEAD_RANGE+1,0,0,index);
+    birds[index].closestFruit(fruits);
+    EXPECT_TRUE(birds[index].get_state()==state::near_fruit && fruits[0].get_alive()==false);
 }
 
 }  // namespace
