@@ -13,7 +13,7 @@ static std::mutex kill_mtx;
 #elif defined __APPLE__ //IF APPLE
 
 // UNCOMMENT THE FOLLOWING DEFINE, IF YOU WANT TO RUN THE CODE SEQUENTIALLY
-//#define APPLE_SEQ
+// #define APPLE_SEQ
 
 std::vector<int> thread_index(int n) {
     int step = n/N_THREADS;
@@ -124,7 +124,7 @@ VISUAL STUDIO WILL MAKE THE CODE BLACK AND WHITE IF IT IS NOT GONNA RUN BASED ON
 
 vars::agentWindowVars_t initAgentWindow() {
 
-    std::cout << "To add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator" << std::endl;
+    std::cout << "\nTo add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator\n" << std::endl;
     vars::agentWindowVars_t var;
     var.obstacles = Obstacle::init();
     var.predators = Predator::init(var.obstacles);

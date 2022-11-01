@@ -244,6 +244,8 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
             case state::cohesion:
                 this->cohesionLaw(closest_bird);
                 break;
+            default:
+                break;
         }
     }
     // update the window and then set new x, y

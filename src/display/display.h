@@ -46,11 +46,12 @@ void updateWindow(
         GLint& mvp_location
         );
 
-void display_fps(
+void display_FPS(
         GLFWwindow* window,
         std::chrono::time_point<std::chrono::high_resolution_clock>& start,
-        std::chrono::time_point<std::chrono::high_resolution_clock>& end,
-        double &total_fps
+        double &total_fps,
+        int &i,
+        int &j
         );
 
 void endWindow(GLFWwindow* window);
