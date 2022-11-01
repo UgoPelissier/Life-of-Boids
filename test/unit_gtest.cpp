@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "gtest/gtest.h"
 
 #include "main.h"
@@ -177,19 +179,30 @@ TEST(Law, Alignment) {
 }
 
 TEST(Law, Separation) {
+
     birds_t birds;
+    predators_t predators;
 
     size_t index(0);
     birds[index] = Bird(0,0,0,index);
+    predators[index] = Predator(WIDTH/2, HEIGHT/2, 0, index);
 
     index ++;
     birds[index] = Bird(SEPARATION_RANGE-1,0,-PI, index);
+    predators[index] = Predator(WIDTH/2 + SEPARATION_RANGE-1, HEIGHT/2, -PI, index);
 
-    std::vector<Real> target = birds[0].neighbours(birds);
-
+    std::vector<Real> target1 = birds[0].neighbours(birds);
+    std::vector<Real> target2 = predators[0].neighbours(birds, predators);
+    
+    
     EXPECT_TRUE(birds[0].get_state()==state::separation);
-    EXPECT_NEAR(target[0],birds[1].get_x(),1e-10);
-    EXPECT_NEAR(target[1],birds[1].get_y(),1e-10);
+    EXPECT_TRUE(predators[0].get_state() == state::separation);
+
+    EXPECT_NEAR(target1[0],birds[1].get_x(),1e-10);
+    EXPECT_NEAR(target1[1],birds[1].get_y(),1e-10);
+
+    EXPECT_NEAR(target2[0], predators[1].get_x(), 1e-10);
+    EXPECT_NEAR(target2[1], predators[1].get_y(), 1e-10);
 }
 
 TEST(Law, Predator) {
@@ -207,7 +220,7 @@ TEST(Law, Predator) {
     predators[index] = Predator(0,PREDATOR_RANGE-1,-PI/2,index);
 
     birds[index].closestPredator(predators);
-    std::vector<Real> target = predators[index].neighbour(birds,predators);
+    std::vector<Real> target = predators[index].neighbours(birds,predators);
 
     EXPECT_TRUE(birds[index].get_state()==state::near_predator && predators[index].get_state()==state::near_prey);
     EXPECT_NEAR(target[0],birds[index].get_x(),1e-10);
@@ -241,4 +254,31 @@ TEST(Law, Fruit) {
     EXPECT_TRUE(birds[index].get_state()==state::near_fruit && fruits[0].get_alive()==false);
 }
 
+TEST(Feature, Tree) {
+
+    std::vector<Obstacle> obstacles = Obstacle::init();
+    Tree tree(WIDTH/2, HEIGHT/2, 10, 10, 0);
+    std::vector<Fruit> fruits;
+
+    tree.DropFruitAndAppend(fruits, obstacles);
+    if (fruits.size() == 0) {
+        std::this_thread::sleep_for(std::chrono::seconds(FRUIT_TIME_MAX - 1));
+        tree.DropFruitAndAppend(fruits, obstacles);
+    }
+    EXPECT_GT(fruits.size(), 0);
+    EXPECT_LE(fruits.size(), DEFAULT_NUM_FRUITS_DROPS);
+    for (Fruit& f : fruits) {
+        EXPECT_LE(tree.distance(f), MAX_FRUIT_DISTANCE);
+    }
+}
+
+
+TEST(Integrate, Object) {
+
+
+
+
+}
+
+// Tests for parallel loops
 }  // namespace

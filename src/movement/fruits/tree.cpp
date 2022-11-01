@@ -15,6 +15,7 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
+    std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
     std::random_device dev;
     std::mt19937 engine(dev());
     time_t finish;
@@ -25,7 +26,6 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
         int randomNumFruit;
         Real randomX;
         Real randomY;
-        std::uniform_int_distribution uniTime(FRUIT_TIME_MIN, FRUIT_TIME_MAX);
 
         randomNumFruit = uniNumFruit(engine);
 

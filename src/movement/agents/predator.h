@@ -11,7 +11,7 @@ public:
     Predator(Real const& x, Real const& y, Real const& angle);
     Predator(Real const& x, Real const& y, Real const& angle, size_t& index);
 
-    std::vector<Real> neighbour(birds_t& birds, predators_t& predators);
+    std::vector<Real> neighbours(birds_t& birds, predators_t& predators);
     
     void preyLaw(std::vector<Real> const& birds);
 
