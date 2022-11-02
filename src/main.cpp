@@ -36,15 +36,16 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
 
+        // update all the objects by applying the laws.
         updateAgentWindow(window, var);
-
+        // add an agent by pressing "p" for a predator or "b" for a bird 
         addAgent(window, var);
-
+        // update the opengl window
         updateWindow(window,
                 var.trianglesObs, var.trianglesPredators, var.trianglesBirds, var.trianglesTree, var.trianglesFruit,
                 triangleObs_vertexArray,trianglePred_vertexArray,triangleBird_vertexArray,triangleTree_vertexArray,triangleFruit_vertexArray,
                 triangle_buffer,triangle_shaderProgram,mvp_location);
-   
+        // calculate the FPS and display on the window.
         display_FPS(window,start,total_FPS,count_FPS,count_LOOP);
 
     }
