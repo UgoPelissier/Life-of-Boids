@@ -36,7 +36,7 @@ TEST(Initialization, VectorSize) {
     var.trees = Tree::init(var.obstacles);
     var.fruits = {};
     for (Tree tree : var.trees) {
-        tree.DropFruitAndAppend(var.fruits, var.obstacles);
+        tree.DropFruitAndAppend(var.fruits);
     }
 
     triangle::vertices_t obstacle(2), tree_triangles(2), fruit_triangles(2);
@@ -56,7 +56,7 @@ TEST(Initialization, VectorSize) {
         }
     }
     for (Tree const& tree : var.trees) {
-        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
+        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_size() / (Real)HEIGHT);
         for (const auto& i : tree_triangles) {
             var.trianglesTree.push_back(i);
         }
@@ -257,16 +257,16 @@ TEST(Law, Fruit) {
 TEST(Feature, Tree) {
 
     std::vector<Obstacle> obstacles = Obstacle::init();
-    Tree tree(WIDTH/2, HEIGHT/2, 10, 10, 0);
+    Tree tree(HEIGHT/2, 10, 10, 0);
     std::vector<Fruit> fruits;
     Object obj(WIDTH / 2 + MAX_FRUIT_DISTANCE, HEIGHT / 2 + MAX_FRUIT_DISTANCE);
     Real max_dist = tree.distance(obj);
     std::cout << "MAX dist: " << max_dist << std::endl;
     std::cout << "Tree X : " << tree.get_x() << " ; Tree Y : " << tree.get_y() << std::endl;
-    tree.DropFruitAndAppend(fruits, obstacles);
+    tree.DropFruitAndAppend(fruits);
     if (fruits.size() == 0) {
         std::this_thread::sleep_for(std::chrono::seconds(FRUIT_TIME_MAX));
-        tree.DropFruitAndAppend(fruits, obstacles);
+        tree.DropFruitAndAppend(fruits);
     }
     EXPECT_GT(fruits.size(), 0);
     EXPECT_LE(fruits.size(), DEFAULT_NUM_FRUITS_DROPS);
