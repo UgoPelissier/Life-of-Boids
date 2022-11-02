@@ -78,7 +78,7 @@ TEST(Initialization, VectorSize) {
     EXPECT_EQ(var.trianglesBirds.size(), DEFAULT_NUM_BIRDS) << "Not the correct number of obstacles!";
 
     EXPECT_EQ(var.trees.size(), DEFAULT_NUM_TREES) << "Not the correct number of obstacles!";
-    EXPECT_EQ(var.trianglesTree.size(), 2*DEFAULT_NUM_TREES) << "Not the correct number of obstacles!";
+    EXPECT_EQ(var.trianglesTree.size(), 6*DEFAULT_NUM_TREES) << "Not the correct number of obstacles!";
 }
 
 TEST(Initialization, Position) {
