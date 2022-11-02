@@ -1,10 +1,10 @@
 #include "config.h"
 
-const size_t DEFAULT_NUM_BIRDS = 2000;
+const size_t DEFAULT_NUM_BIRDS = 100;
 const size_t DEFAULT_NUM_PREDATORS = 10;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
 const size_t DEFAULT_NUM_TREES = 10;
-const int DEFAULT_NUM_FRUITS_DROPS = 10;
+const int DEFAULT_NUM_FRUITS_DROPS = 6;
 const Real CLOSE = 50;
 const Real SPEED = 1;
 const Real PRED_SPEED = 1.5 * SPEED;
@@ -16,9 +16,9 @@ const Real HALF = 0.5;
 const int WIDTH = 2400;
 const int HEIGHT = 1300;
 const int MAX_OBSTACLE_SIZE = HEIGHT/5;
-const int MAX_FRUIT_TREE_SIZE = 75;
-const int MIN_FRUIT_TREE_SIZE = 50;
-const Real MAX_FRUIT_DISTANCE = 100;
+const int MAX_FRUIT_TREE_SIZE = 50;
+const int MIN_FRUIT_TREE_SIZE = 25;
+const Real MAX_FRUIT_DISTANCE = 75;
 
 
 const Real RATIO = (float)WIDTH / (float)HEIGHT;

@@ -107,7 +107,7 @@ VISUAL STUDIO WILL MAKE THE CODE BLACK AND WHITE IF IT IS NOT GONNA RUN BASED ON
         birds.erase(k);
     // following loop is sequential cause not enough workload
     for (Tree& tree : trees) {
-        tree.DropFruitAndAppend(fruits, obstacles);
+        tree.DropFruitAndAppend(fruits);
     }
     // following loop is sequential cause not enough workload
     for (Fruit& fruit : fruits) {
@@ -133,7 +133,7 @@ vars::agentWindowVars_t initAgentWindow() {
     var.trees = Tree::init(var.obstacles);
     var.fruits = {};
     for (Tree tree : var.trees) {
-        tree.DropFruitAndAppend(var.fruits, var.obstacles);
+        tree.DropFruitAndAppend(var.fruits);
     }
 
     triangle::vertices_t obstacle(2), tree_triangles(2), fruit_triangles(2);
@@ -153,7 +153,7 @@ vars::agentWindowVars_t initAgentWindow() {
         }
     }
     for (Tree const& tree : var.trees) {
-        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_height() / (Real)HEIGHT, tree.get_width() / (Real)WIDTH);
+        tree_triangles = triangle::newTree(Object::scale(tree), TREE_COLOR, tree.get_size() / (Real)HEIGHT);
         for (const auto& i : tree_triangles) {
             var.trianglesTree.push_back(i);
         }

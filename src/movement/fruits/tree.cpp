@@ -1,17 +1,30 @@
 #include "tree.h"
 
-Tree::Tree() : Eco(), m_height(0), m_width(0), m_time(0) {}
-Tree::Tree(Real const& x, Real const& y, Real const& height, Real const& width, double const& time) : Eco(x,y), m_height(height), m_width(width), m_time(time) {}
+Tree::Tree() : Eco(), m_time(0) {}
 
-Real Tree::get_height() const {
-    return m_height;
+Tree::Tree(Real const& x, Real const& y, Real const& size, double const& time) : Eco(x,y,size), m_time(time) {}
+
+
+
+bool Tree::equal(Tree const& tree) const {
+    if (m_x==tree.get_x() && m_y==tree.get_y())
+        return true;
+    return false;
 }
 
-Real Tree::get_width() const {
-    return m_width;
+
+bool Tree::overlap(std::vector<Tree> const& trees) const {
+    for (Tree const& tree : trees) {
+        if (!this->equal(tree)) {
+            if (this->distance(tree)<2*(m_size+tree.get_size()))
+                return true;
+        }
+    }
+    return false;
 }
 
-void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> const& obstacles) {
+
+void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits) {
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniNumFruit(1, DEFAULT_NUM_FRUITS_DROPS);
@@ -29,7 +42,19 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
 
         randomNumFruit = uniNumFruit(engine);
 
+        Real theta = 0;
+
         for (int i(0); i < randomNumFruit; i++) {
+            randomX = m_x + 1.25 * m_size * cos(theta);
+            randomY = m_y + 1.25 * m_size *  sin(theta);
+
+            fruit = Fruit(randomX, randomY);
+            fruits.emplace_back(randomX, randomY, MAX_FRUIT_TREE_SIZE/4, true);
+
+            theta += 2*PI/randomNumFruit;
+        }
+
+/*        for (int i(0); i < randomNumFruit; i++) {
             std::uniform_real_distribution<Real> uniX(0, MAX_FRUIT_DISTANCE);
             std::uniform_real_distribution<Real> uniY(0, MAX_FRUIT_DISTANCE);
             randomX = m_x + uniX(engine);
@@ -43,9 +68,9 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
                 fruit = Fruit(randomX, randomY);
                 fruit.closestObstacle(obstacles);
             }
-            std::cout << "Fruit X : " << randomX << " ; Fruit Y : " << randomY << std::endl;
-            fruits.emplace_back(randomX, randomY, std::min(m_height,m_width)/4, true);
-        }
+            fruits.emplace_back(randomX, randomY, MAX_FRUIT_TREE_SIZE/4, true);
+        }*/
+
         m_time = (double)uniTime(engine) + (double)time(&finish);
     }
 }
@@ -60,8 +85,7 @@ std::vector<Tree> Tree::init(std::vector<Obstacle> const& obstacles) {
 
     Real randomX;
     Real randomY;
-    int randomHeight;
-    int randomWidth;
+    int randomSize;
     double randomTime;
 
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
@@ -76,18 +100,16 @@ std::vector<Tree> Tree::init(std::vector<Obstacle> const& obstacles) {
     while (trees.size() < DEFAULT_NUM_TREES) {
         randomX = uniX(engine);
         randomY = uniY(engine);
-        randomHeight = uniSize(engine);
-        randomWidth = uniSize(engine);
+        randomSize = uniSize(engine);
         randomTime = (double)uniTime(engine)+(double)time(&start);
-        newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
+        newTree = Tree((Real)randomX, (Real)randomY, (Real)randomSize, randomTime);
 
         newTree.closestObstacle(obstacles);
-        while (newTree.nearBorder() || newTree.get_obstacle()) {
+        while (newTree.nearBorder() || newTree.get_obstacle() || newTree.overlap(trees)) {
             randomX = uniX(engine);
             randomY = uniY(engine);
-            randomHeight = uniSize(engine);
-            randomWidth = uniSize(engine);
-            newTree = Tree((Real)randomX, (Real)randomY, (Real)randomHeight, (Real)randomWidth, randomTime);
+            randomSize = uniSize(engine);
+            newTree = Tree((Real)randomX, (Real)randomY, (Real)randomSize, randomTime);
             newTree.closestObstacle(obstacles);
         }
 
