@@ -3,7 +3,7 @@
 #include "obstacle.h"
 
 class Agent;
-using agents_t = std::unordered_map<size_t, Agent>;
+//using agents_t = std::unordered_map<size_t, Agent>;
 
 class Predator;
 using predators_t = std::unordered_map<size_t, Predator>;

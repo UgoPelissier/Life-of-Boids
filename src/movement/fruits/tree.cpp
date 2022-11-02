@@ -38,11 +38,12 @@ void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits, std::vector<Obstacle> 
             fruit = Fruit(randomX, randomY);
             fruit.closestObstacle(obstacles);
             while (fruit.nearBorder() || fruit.get_obstacle()) {
-                randomX = uniX(engine);
-                randomY = uniY(engine);
+                randomX = m_x + uniX(engine);
+                randomY = m_y + uniY(engine);
                 fruit = Fruit(randomX, randomY);
                 fruit.closestObstacle(obstacles);
             }
+            std::cout << "Fruit X : " << randomX << " ; Fruit Y : " << randomY << std::endl;
             fruits.emplace_back(randomX, randomY, std::min(m_height,m_width)/4, true);
         }
         m_time = (double)uniTime(engine) + (double)time(&finish);

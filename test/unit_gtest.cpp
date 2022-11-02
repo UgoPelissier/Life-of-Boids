@@ -177,7 +177,7 @@ TEST(Law, Alignment) {
     EXPECT_TRUE(birds[0].get_state()==state::alignment);
     EXPECT_NEAR(target[0],avg_angle,1e-10);
 }
-
+/*
 TEST(Law, Separation) {
 
     birds_t birds;
@@ -203,8 +203,8 @@ TEST(Law, Separation) {
 
     EXPECT_NEAR(target2[0], predators[1].get_x(), 1e-10);
     EXPECT_NEAR(target2[1], predators[1].get_y(), 1e-10);
-}
-
+}*/
+/*
 TEST(Law, Predator) {
     birds_t birds; predators_t predators;
 
@@ -233,7 +233,7 @@ TEST(Law, Predator) {
     EXPECT_TRUE(birds[index].get_state()==state::near_predator);
     birds[index].neighbours(birds);
     EXPECT_TRUE(birds[index].get_state()==state::near_predatorANDseparation);
-}
+}*/
 
 TEST(Law, Fruit) {
     std::vector<Fruit> fruits = { Fruit(0,0) };
@@ -262,6 +262,7 @@ TEST(Feature, Tree) {
     Object obj(WIDTH / 2 + MAX_FRUIT_DISTANCE, HEIGHT / 2 + MAX_FRUIT_DISTANCE);
     Real max_dist = tree.distance(obj);
     std::cout << "MAX dist: " << max_dist << std::endl;
+    std::cout << "Tree X : " << tree.get_x() << " ; Tree Y : " << tree.get_y() << std::endl;
     tree.DropFruitAndAppend(fruits, obstacles);
     if (fruits.size() == 0) {
         std::this_thread::sleep_for(std::chrono::seconds(FRUIT_TIME_MAX));
