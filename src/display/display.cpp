@@ -239,22 +239,26 @@ void updateWindow(
     glfwPollEvents();
 }
 
-void display_fps(GLFWwindow* window,
+void display_FPS(GLFWwindow* window,
                 std::chrono::time_point<std::chrono::high_resolution_clock>& start,
-                std::chrono::time_point<std::chrono::high_resolution_clock>& end,
-                double &total_fps) {
-
-    std::chrono::duration<double, std::milli> float_ms = end - start;
-    std::stringstream ss;
-    double fps = (1 / (float_ms.count()) * 1000) * NUMBER_LOOP_FPS;
-    ss << "FPS : " << fps;
-    glfwSetWindowTitle(window, ss.str().c_str());
-    total_fps += fps;
-
+                double &total_fps,
+                int &i, int &j) {
+    i++;
+    if (i == NUMBER_LOOP_FPS) {
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> float_ms = end - start;
+        std::stringstream ss;
+        double fps = (1 / (float_ms.count()) * 1000) * NUMBER_LOOP_FPS;
+        ss << "FPS : " << fps;
+        glfwSetWindowTitle(window, ss.str().c_str());
+        total_fps += fps;
+        start = std::chrono::high_resolution_clock::now();
+        i = 0;
+        j++;
+    }
 }
 
 void endWindow(GLFWwindow* window) {
-
     glfwDestroyWindow(window);
     glfwTerminate();
     exit(EXIT_SUCCESS);

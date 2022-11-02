@@ -8,5 +8,8 @@ target_include_directories(unit_gtest
         ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/src/display
         ${CMAKE_SOURCE_DIR}/src/movement
+        ${CMAKE_SOURCE_DIR}/src/movement/obstacles
+        ${CMAKE_SOURCE_DIR}/src/movement/fruits
+        ${CMAKE_SOURCE_DIR}/src/movement/agents
         ${CMAKE_SOURCE_DIR}/src/config)
 gtest_discover_tests(unit_gtest)

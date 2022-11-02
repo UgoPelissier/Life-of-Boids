@@ -3,6 +3,9 @@
 #include "bird.h"
 #include "predator.h"
 
+#include <mutex>
+static std::mutex kill_mutex;
+
 //std::unordered_map<size_t, std::vector<bool>> Bird::ignore_ids(DEFAULT_NUM_BIRDS);
 
 Bird::Bird() : Agent(), m_alive(true) {}
@@ -220,38 +223,56 @@ bool Bird::update(std::vector<Obstacle>const& obstacles, predators_t& predators,
 
         // choose law by state and update the angle of agent
         switch (m_state) {
-        case state::near_predatorANDseparation:
-            this->biSeparationLaw(closest_bird, closest_predator);
-            break;
-        case state::near_predator:
-            this->separationLaw(closest_predator);
-            break;
-        case state::near_fruitANDseparation:
-            this->biFruitLaw(closest_fruit, closest_bird);
-            break;
-        case state::near_fruit:
-            this->fruitLaw(closest_fruit);
-            break;
-        case state::separation:
-            this->separationLaw(closest_bird);
-            break;
-        case state::alignment:
-            this->alignmentLaw(closest_bird);
-            break;
-        case state::cohesion:
-            this->cohesionLaw(closest_bird);
-            break;
-        default:
-            this->constantUpdate();
-            break;
+            case state::near_predatorANDseparation:
+                this->biSeparationLaw(closest_bird, closest_predator);
+                break;
+            case state::near_predator:
+                this->separationLaw(closest_predator);
+                break;
+            case state::near_fruitANDseparation:
+                this->biFruitLaw(closest_fruit, closest_bird);
+                break;
+            case state::near_fruit:
+                this->fruitLaw(closest_fruit);
+                break;
+            case state::separation:
+                this->separationLaw(closest_bird);
+                break;
+            case state::alignment:
+                this->alignmentLaw(closest_bird);
+                break;
+            case state::cohesion:
+                this->cohesionLaw(closest_bird);
+                break;
+            default:
+                break;
         }
     }
     // update the window and then set new x, y
-    this->windowUpdate();
+    this->windowUpdate(SPEED);
     return true;
 }
 
-Bird::~Bird() = default;
+#ifdef __APPLE__
+void Bird::thread_update(birds_t& birds, std::vector<Obstacle>const& obstacles, predators_t& predators, std::vector<Fruit>& fruits, size_t const& start, size_t const& end, std::vector<size_t>& kill) {
+
+    auto it_start = birds.begin();
+    std::advance(it_start, start);
+
+    auto it_end = birds.begin();
+    std::advance(it_end, end);
+
+    for (auto& it = it_start; it != it_end;) {
+        bool is_alive = it->second.update(obstacles, predators, birds, fruits);
+        if (!is_alive) {
+            kill_mutex.lock();
+            kill.push_back(it->first);
+            kill_mutex.unlock();
+        }
+        it++;
+    }
+}
+#endif
 
 birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predators) {
 
@@ -262,7 +283,6 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
     int randomY;
     Real randomAngle;
     size_t n = birds.size();
-    std::vector<bool> vec(DEFAULT_NUM_BIRDS, false);
     
     std::uniform_real_distribution<Real> unif(0, 1); // Uniform distribution on [0:1] => Random number between 0 and 1
     std::uniform_int_distribution uniX(0, WIDTH);
@@ -293,6 +313,8 @@ birds_t Bird::init(std::vector<Obstacle> const& obstacles, predators_t& predator
 
     return birds;
 }
+
+Bird::~Bird() = default;
 
 // DO NOT REMOVE THE FOLLOWING CODE
 // WE CAN STILL BUILD THE IGNORE IDS FEATURE TO AVOID COMPUTATIONS
@@ -423,3 +445,4 @@ Bird::~Bird() {
     ignore_ids.erase(m_index);
 }
 */
+

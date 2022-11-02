@@ -13,8 +13,6 @@ message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 project(life-of-boids
         VERSION "0.0.0")
 
-#include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-
 #------------------------------------------------------
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -39,6 +37,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
     set(CUSTOM_CXX_FLAGS "${CUSTOM_CXX_FLAGS} -Wall -Wextra")
     set(CUSTOM_CXX_FLAGS "${CUSTOM_CXX_FLAGS} -Wsign-compare -Wunused -Wunused-member-function -Wunused-private-field")
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set(CUSTOM_CXX_FLAGS "${CUSTOM_CXX_FLAGS} /W4 /Zc:__cplusplus")
     # workaround like https://github.com/nlohmann/json/issues/1408

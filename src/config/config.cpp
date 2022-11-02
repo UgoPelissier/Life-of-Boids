@@ -1,13 +1,13 @@
 #include "config.h"
 
 const size_t DEFAULT_NUM_BIRDS = 2000;
-const size_t DEFAULT_NUM_PREDATORS = 20;
+const size_t DEFAULT_NUM_PREDATORS = 10;
 const size_t DEFAULT_NUM_OBSTACLES = 10;
-const size_t DEFAULT_NUM_TREES = 20;
+const size_t DEFAULT_NUM_TREES = 10;
 const int DEFAULT_NUM_FRUITS_DROPS = 10;
 const Real CLOSE = 50;
-const Real SPEED = 3;
-const Real PRED_SPEED = 3*SPEED/2;
+const Real SPEED = 1;
+const Real PRED_SPEED = 1.5 * SPEED;
 const Real PI  = 3.14159265358979323846;
 const Real VIEW_RANGE = 3*PI/2;
 const Real HALF = 0.5;
@@ -25,7 +25,7 @@ const Real RATIO = (float)WIDTH / (float)HEIGHT;
 const Real BODY_SIZE = 0.015;
 const Real BODY_OVERLAP = (Real)((sqrt(3)*BODY_SIZE/2)*((Real)WIDTH/2));
 const vec3 PRED_COLOR = { 1., 0., 0. };
-const vec3 BIRD_COLOR = { 1., 1., 1. };
+const vec3 BIRD_COLOR = { 1., 1., .7 };
 const vec3 OBSTACLE_COLOR = { 0.2, 0.2, 0.2 };
 const vec3 TREE_COLOR = { (Real)98/(Real)256, (Real)52/(Real)256, (Real)18/(Real)256 };
 const vec3 FRUIT_COLOR = {0., 1., 0.};
@@ -49,4 +49,4 @@ const Real OBSTACLE_RELAXATION = 0.5;
 const int FRUIT_TIME_MAX = 25;
 const int FRUIT_TIME_MIN = 0;
 
-const int N_THREADS = 8;
+const int N_THREADS = 4;

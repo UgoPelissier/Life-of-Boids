@@ -6,7 +6,7 @@ Predator::Predator(Real const& x, Real const& y) : Agent(x, y) {}
 Predator::Predator(Real const& x, Real const& y, Real const& angle) : Agent(x, y, angle) {}
 Predator::Predator(Real const& x, Real const& y, Real const& angle, size_t& index) : Agent(x, y, angle, index) {}
 
-std::vector<Real> Predator::neighbour(birds_t& birds, predators_t& predators) {
+std::vector<Real> Predator::neighbours(birds_t& birds, predators_t& predators) {
     std::vector<Real> v;
 
     Real current_distance;
@@ -69,25 +69,24 @@ void Predator::update(std::vector<Obstacle>const& obstacles, predators_t& predat
     }
     else {
         // Neighbours and preys
-        closest_bird = this->neighbour(birds, predators);
+        closest_bird = this->neighbours(birds, predators);
 
         // choose law by state and update the angle of agent
         switch (m_state) {
 
-        case state::near_prey:
-            this->preyLaw(closest_bird);
-            break;
-        case state::separation:
-            this->separationLaw(closest_bird);
-            break;
-        default:
-            this->constantUpdate();
-            break;
+            case state::near_prey:
+                this->preyLaw(closest_bird);
+                break;
+            case state::separation:
+                this->separationLaw(closest_bird);
+                break;
+            default:
+                break;
         }
     }
 
     // update the window and then set new x, y
-    this->windowUpdate();
+    this->windowUpdate(PRED_SPEED);
 }
 
 Predator::~Predator() = default;
