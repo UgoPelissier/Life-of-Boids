@@ -9,51 +9,46 @@ The following explains how each rule affects each bird:
 - Alignment: steer towards the average heading of local flockmates
 - Cohesion: steer to move towards the average position (center of mass) of local flockmates
 
-## Instructions to build the project before running
+## Building the project executable
 
-Download the repository from the main branch and place it into a directory of your choice.
+Download the repository from the main branch. Assuming you are now inside the project's root directory on your computer, you can do the following commands to build the project executable depending on your OS.
 
-### Visual Studio 2019
+### Windows
+Create /build directory, build the executable and pass the tests:
 ```
-cd software-engineering-project-main/
+cd scripts/Windows
+bash build.sh
+bash test.sh
+```
 
-mkdir build && cd build/
-
-. venv/Script/activate #Path of the virtual env where you have installed conan
-
-conan install ..
-
-export PATH="/c/Program Files/CMake/bin":$PATH && cmake --version
-
-cmake \
-    -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \
-    -DCMAKE_GENERATOR_PLATFORM=x64 \
-    ..
-    
-cmake --build . --config Release
+Go to the executable location and launch it:
+```
+cd ../../build/src
+bash life-of-boids
+./life-of-boids
 ```
 
 ### MacOS
+Create /build directory, build the executable and pass the tests:
 ```
-cd software-engineering-project-main/
+cd scripts/MacOS
+chmod +x build.sh
+./build.sh
+chmod +x test.sh
+./test.sh
+```
 
-mkdir build && cd build/
-
-conan install ..
-
-cmake \
-    -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake \
-    -DCMAKE_BUILD_TYPE="${MODE}" \
-    ..
-    
-cmake --build .
+Go to the executable location and launch it:
+```
+cd ../../build/src
+chmod +x life-of-boids
+./life-of-boids
 ```
 
 ## Setting up the project
 
 ### Visual Studion 2019
-- If there are any lines with errors in file `CMakeLists.txt`, then remove those lines.
-- At the center top, You'll find a search box. There type, CMake Settings.
+- At the center top, you'll find a search box. There type, CMake Settings.
 - Set the configuration to `Release` mode
 - Change the CMake toolchain file to point to `build/conon_paths.cmake`
 - Save the changes.
@@ -62,17 +57,17 @@ cmake --build .
 
 ### CLion (MacOS)
 - Open the project in CLion
-- Let the default parameters of the Open Project Wizard window and click Ok
+- Let the default parameters of the Open Project Wizard window and click ```Ok```
 - Chose "Life-of-boids" as the target for Run at the center right.
 - Et voila!
 
 
-**Note: Make sure to update .gitignore file to avoid pushing large or unecessary files on the repository.
+**Note**: Make sure to update .gitignore file to avoid pushing large or unecessary files on the repository.
 
 ## Parameters
 The parameters of the project are defined in ```config/config.cpp``` and can be changed by the user.
 
 The 3 main parameters that the user can change are:
-- The number of birds const ```DEFAULT_NUM_AGENTS```
+- The number of birds const ```DEFAULT_NUM_BIRDS```
 - The number of predators ```DEFAULT_NUM_PREDATORS```
 - The number of obstacles ```DEFAULT_NUM_OBSTACLES```
