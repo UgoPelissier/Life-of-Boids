@@ -14,6 +14,14 @@
 #include "tree.h"
 #include "display.h"
 
+#if defined _WIN32 // IF WINDOWS
+
+#include <execution>
+// COMMENT THE FOLLOWING DEFINE, IF YOU WANT TO RUN THE CODE SEQUENTIALLY
+#define EXECUTION_PAR
+
+#endif
+
 bool addBird = false;
 bool addPredator = false;
 double cursorX = 0;
@@ -261,8 +269,7 @@ TEST(Feature, Tree) {
     std::vector<Fruit> fruits;
     Object obj(WIDTH / 2 + MAX_FRUIT_DISTANCE, HEIGHT / 2 + MAX_FRUIT_DISTANCE);
     Real max_dist = tree.distance(obj);
-    std::cout << "MAX dist: " << max_dist << std::endl;
-    std::cout << "Tree X : " << tree.get_x() << " ; Tree Y : " << tree.get_y() << std::endl;
+
     tree.DropFruitAndAppend(fruits);
     if (fruits.size() == 0) {
         std::this_thread::sleep_for(std::chrono::seconds(FRUIT_TIME_MAX));
@@ -283,5 +290,22 @@ TEST(Integrate, Object) {
 
 }
 
-// Tests for parallel loops
+TEST(Feature, parallelisation) {
+
+    size_t n = 10000;
+    float val = 3.1412;
+    std::vector<float> a(n);
+
+    std::for_each(std::execution::par_unseq,
+        a.begin(), a.end(),
+        [n, val](float& x) {
+            x = val * val;
+        }
+    );
+    // not really interested in the precision
+    int v1 = (int) std::accumulate(a.begin(), a.end(), 0.0f);
+    int v2 = (int) n * val * val;
+
+    EXPECT_EQ(v1, v2);
+}
 }  // namespace
