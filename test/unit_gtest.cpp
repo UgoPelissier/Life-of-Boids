@@ -16,6 +16,11 @@
 #include "tree.h"
 #include "display.h"
 
+#if defined _WIN32 // IF WINDOWS
+#include <execution>
+#define EXECUTION_PAR
+#endif
+
 bool addBird = false;
 bool addPredator = false;
 double cursorX = 0;
@@ -295,6 +300,8 @@ TEST(Feature, spawnBirdAfterFruitDies) {
             birds[index].get_y() == fruits[0].get_y());
 }
 
+#ifdef EXECUTION_PAR
+
 TEST(Feature, parallelisation) {
 
     size_t n = 10000;
@@ -314,6 +321,7 @@ TEST(Feature, parallelisation) {
     EXPECT_EQ(v1, v2);
 }
 
+#endif
 
 TEST(Integrate, Object) {
 
