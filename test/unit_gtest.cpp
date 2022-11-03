@@ -109,7 +109,17 @@ TEST(Initialization, Position) {
 
     EXPECT_NEAR(center[0], triangle::center(var.trianglesBirds[i])[0],1e-6) << "Agent is not well located from the pixel grid [0:WIDTH]*[0:HEIGHT] to the OpenGL grid [-1:1]*[-1:1]";
     EXPECT_NEAR(center[1], triangle::center(var.trianglesBirds[i])[1],1e-6) << "Agent is not well located from the pixel grid [0:WIDTH]*[0:HEIGHT] to the OpenGL grid [-1:1]*[-1:1]";
+    
+    bool ObstacleBorder = false;
+
+    for (size_t j(0); j < DEFAULT_NUM_OBSTACLES; j++) {
+        if (var.obstacles[j].nearBorder()) {
+            ObstacleBorder = true;
+        }
     }
+
+    EXPECT_FALSE(ObstacleBorder) << "An obstacle is near a border";
+}
 
 TEST(Function, FieldView) {
     Bird behind(-10,0,0);
@@ -127,6 +137,29 @@ TEST(Function, FieldView) {
     for (size_t i = 0; i < answer.size(); ++i) {
         EXPECT_TRUE(answer[i]==inside_field_of_view[i]) << "Incorrect detection of the field of view of an agent";
     }
+}
+
+TEST(Function, Overlap) {
+    birds_t birds;
+    predators_t predators;
+    size_t index(0);
+    birds[index] = Bird(0, 0, 0, index);
+    predators[index] = Predator(0, 0, 0, index);
+
+    Bird bird_1 = Bird(0, 0, 0, index);
+
+    Bird bird_2 = Bird(HEIGHT, WIDTH, 0, index);
+
+    EXPECT_TRUE(bird_1.overlap(birds, predators));
+    EXPECT_FALSE(bird_2.overlap(birds, predators));
+
+    std::vector<Obstacle> obstacles = { Obstacle(0, 0, 50, 50) };
+
+    Obstacle newObstacle_1 = Obstacle(0, 0, 50, 50);
+    Obstacle newObstacle_2 = Obstacle(HEIGHT, WIDTH, 50, 50);
+
+    EXPECT_TRUE(newObstacle_1.overlap(obstacles)) << "Overlap law of obstacle has an error. Should detect an overlap.";
+    EXPECT_FALSE(newObstacle_2.overlap(obstacles)) << "Overlap law of obstacle has an error. Shouldn't detect an overlap.";
 }
 
 TEST(Law, Constant) {
