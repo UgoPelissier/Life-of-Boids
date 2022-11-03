@@ -275,13 +275,24 @@ TEST(Feature, Tree) {
         EXPECT_LE(tree.distance(f), max_dist);
     }
 }
+TEST(Feature, spawnBirdAfterFruitDies) {
+    
+    size_t index = 0;
+    birds_t birds;
+    std::vector<Fruit> fruits = { Fruit(0,0) };
 
+    birds[index] = Bird(-DEAD_RANGE + 1, 0, 0, index);
+    size_t old_c = birds.size();
+    birds[index].closestFruit(fruits);
+    
+    index++;
+    birds[index] = Bird(fruits[0].get_x(), fruits[0].get_y(), 0, index);
+    size_t new_c = birds.size();
 
-TEST(Integrate, Object) {
-
-
-
-
+    EXPECT_GT(new_c, old_c);
+    EXPECT_TRUE(fruits[0].get_alive() == false && 
+            birds[index].get_x() == fruits[0].get_x() &&
+            birds[index].get_y() == fruits[0].get_y());
 }
 
 TEST(Feature, parallelisation) {
@@ -297,9 +308,18 @@ TEST(Feature, parallelisation) {
         }
     );
     // not really interested in the precision
-    int v1 = (int) std::accumulate(a.begin(), a.end(), 0.0f);
-    int v2 = (int) n * val * val;
+    int v1 = (int)std::accumulate(a.begin(), a.end(), 0.0f);
+    int v2 = (int)n * val * val;
 
     EXPECT_EQ(v1, v2);
 }
+
+
+TEST(Integrate, Object) {
+
+
+
+
+}
+
 }  // namespace
