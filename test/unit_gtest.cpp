@@ -179,7 +179,7 @@ TEST(Law, Alignment) {
     EXPECT_TRUE(birds[0].get_state()==state::alignment);
     EXPECT_NEAR(target[0],avg_angle,1e-10);
 }
-/*
+
 TEST(Law, Separation) {
 
     birds_t birds;
@@ -205,8 +205,8 @@ TEST(Law, Separation) {
 
     EXPECT_NEAR(target2[0], predators[1].get_x(), 1e-10);
     EXPECT_NEAR(target2[1], predators[1].get_y(), 1e-10);
-}*/
-/*
+}
+
 TEST(Law, Predator) {
     birds_t birds; predators_t predators;
 
@@ -235,7 +235,7 @@ TEST(Law, Predator) {
     EXPECT_TRUE(birds[index].get_state()==state::near_predator);
     birds[index].neighbours(birds);
     EXPECT_TRUE(birds[index].get_state()==state::near_predatorANDseparation);
-}*/
+}
 
 TEST(Law, Fruit) {
     std::vector<Fruit> fruits = { Fruit(0,0) };
