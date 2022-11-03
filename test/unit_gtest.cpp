@@ -261,6 +261,32 @@ TEST(Law, Fruit) {
     EXPECT_TRUE(birds[index].get_state()==state::near_fruit && fruits[0].get_alive()==false);
 }
 
+TEST(Law, Obstacle) {
+    int ObstacleHeight = 50;
+    int ObstacleWidth = 20;
+
+    std::vector<Obstacle> obstacles = { Obstacle(0,0,ObstacleHeight,ObstacleWidth) };
+
+    size_t index(0);
+
+    birds_t birds;
+    birds[index] = Bird(ObstacleHeight/2-1, 0, 0, index);
+    birds[index].closestObstacle(obstacles);
+    EXPECT_TRUE(birds[index].get_state() == state::near_obstacle) << "Incorrect detection of the obstacle on x positive axis";
+
+    birds[index] = Bird(-(ObstacleHeight / 2 - 1), 0, 0, index);
+    birds[index].closestObstacle(obstacles);
+    EXPECT_TRUE(birds[index].get_state() == state::near_obstacle) << "Incorrect detection of the obstacle on x negative axis";
+
+    birds[index] = Bird(0, ObstacleWidth / 2 - 1, 0, index);
+    birds[index].closestObstacle(obstacles);
+    EXPECT_TRUE(birds[index].get_state() == state::near_obstacle) << "Incorrect detection of the obstacle on y positive axis";
+
+    birds[index] = Bird(0, -(ObstacleWidth / 2 - 1), 0, index);
+    birds[index].closestObstacle(obstacles);
+    EXPECT_TRUE(birds[index].get_state() == state::near_obstacle) << "Incorrect detection of the obstacle on y negative axis";
+}
+
 TEST(Feature, Tree) {
 
     std::vector<Obstacle> obstacles = Obstacle::init();
