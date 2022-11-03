@@ -1,4 +1,6 @@
 #include <iostream>
+#include <execution>
+#include <algorithm>
 #include <chrono>
 #include <thread>
 #include "gtest/gtest.h"
@@ -13,14 +15,6 @@
 #include "fruit.h"
 #include "tree.h"
 #include "display.h"
-
-#if defined _WIN32 // IF WINDOWS
-
-#include <execution>
-// COMMENT THE FOLLOWING DEFINE, IF YOU WANT TO RUN THE CODE SEQUENTIALLY
-#define EXECUTION_PAR
-
-#endif
 
 bool addBird = false;
 bool addPredator = false;
