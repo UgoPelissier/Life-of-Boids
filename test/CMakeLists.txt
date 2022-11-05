@@ -1,7 +1,7 @@
 find_package(GTest REQUIRED)
 include(GoogleTest)
 
-add_executable(unit_gtest unit_gtest.cpp)
+add_executable(unit_gtest unit_gtest.cpp ../src/main.h ../src/coupled.cpp)
 target_link_libraries(unit_gtest movement display config GTest::GTest)
 target_include_directories(unit_gtest
         PUBLIC

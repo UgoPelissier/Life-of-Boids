@@ -1,13 +1,13 @@
 # Procedure for CI
 
-**Note**: The docker image we created and use for CI has been pushed to Docker Hub. Therefore, there is no need to build the image locally since the CI process will automatically pull the image from Docker Hub. However, if one wants to build it locally, he can un the following command from the root directory.
+**Note**: The docker image we created and use for CI has been pushed to Docker Hub. Therefore, there is no need to build the image locally since the CI process will automatically pull the image from Docker Hub. However, if one wants to build it locally, we can use the following command from the root directory.
 
 `docker pull ugopelissierminesparis/life-of-boids:latest`
 
 ## Optional: Running the docker image locally
 Assuming the current directory is the project's root directory
 ```
-docker run -it --rm -v /$PWD:/usr/project/ --name boids boids-image:latest
+docker run -it --rm -v /$PWD:/usr/project/ --name boids ugopelissierminesparis/life-of-boids
 ```
 
 ## Start a runner
@@ -72,6 +72,6 @@ docker run -d --name gitlab-runner --restart always \
 
 ## Running the pipeline inside Gitlab
 
-- Specify the image name `boids-image` in `.gitlab-ci.yaml` file.
+- Specify the image name `ugopelissierminesparis/life-of-boids` in `.gitlab-ci.yaml` file.
 
 

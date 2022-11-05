@@ -59,8 +59,8 @@ VISUAL STUDIO WILL MAKE THE CODE BLACK AND WHITE IF IT IS NOT GONNA RUN BASED ON
         birds.end(),
         [&](auto& it) {
             bool is_alive = it.second.update(obstacles, predators, birds, fruits);
+
             // killing later cause some other thread might be reading that object.
-            
             if (!is_alive) {
                 kill_mtx.lock();
                 kill.push_back(it.first);
@@ -124,7 +124,7 @@ VISUAL STUDIO WILL MAKE THE CODE BLACK AND WHITE IF IT IS NOT GONNA RUN BASED ON
 
 vars::agentWindowVars_t initAgentWindow() {
 
-    std::cout << "\nTo add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator\n" << std::endl;
+    std::cout << "\nTo add a new agent: move the mouse to the desired location and press 'b' for a bird or 'p' for a predator\n" << std::endl;    
     vars::agentWindowVars_t var;
     var.obstacles = Obstacle::init();
     var.predators = Predator::init(var.obstacles);
@@ -209,8 +209,12 @@ void addAgent(GLFWwindow* window, vars::agentWindowVars_t& var) {
 
     size_t n_predators = var.predators.size();
     size_t n_birds = var.birds.size();
-
-    glfwGetFramebufferSize(window, &width, &height); // Get window size
+    if (window != NULL)
+        glfwGetFramebufferSize(window, &width, &height); // Get window size
+    else {
+        width = WIDTH;
+        height = HEIGHT;
+    }
     Real ratio = (Real)width / (Real)height;
 
     Bird newBird;

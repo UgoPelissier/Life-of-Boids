@@ -4,11 +4,21 @@
 
 Boids, “bird-oid objects”, is the combination of simple rules that simulates flock behavior. Boids was originally introduced by computer graphics expert, Craig Reynolds, who also worked on scenes for the original Tron movie from 1982 and Batman Returns in 1992. It consists of three fundamental rules: Cohesion, Alignment, and Separation. Just like many other emergent behaviors, each bird can only register and apply these rules to its immediate neighbors within the limited ranges.
 
+Project Features:
+- Trees can drop fruits around themselves
+- Birds attract one another to form flocks
+- Birds can eat fruits
+- Predators can eat birds
+- Birds/Predators can avoid obstacles
+- User can spawn new birds, and predators at the cursor's location by pressing 'b', and 'p' respectively
+- Birds can be spawned at locations where fruits are eaten
+
 The following explains how each rule affects each bird:
 - Separation: steer to avoid crowding local flockmates
 - Alignment: steer towards the average heading of local flockmates
 - Cohesion: steer to move towards the average position (center of mass) of local flockmates
 
+ 
 ## Building the project executable
 
 Download the repository from the main branch. Assuming you are now inside the project's root directory on your computer, you can do the following commands to build the project executable depending on your OS.
@@ -64,10 +74,14 @@ chmod +x life-of-boids
 
 **Note**: Make sure to update .gitignore file to avoid pushing large or unecessary files on the repository.
 
-## Parameters
-The parameters of the project are defined in ```config/config.cpp``` and can be changed by the user.
+## About running the project
+1. The parameters of the project are defined in ```config/config.cpp``` and can be changed by the user.
 
 The 3 main parameters that the user can change are:
 - The number of birds const ```DEFAULT_NUM_BIRDS```
 - The number of predators ```DEFAULT_NUM_PREDATORS```
 - The number of obstacles ```DEFAULT_NUM_OBSTACLES```
+
+Most of the constants defined are declared as `Real` which is a `float`.
+
+2. Compile & Build the Project using CMake and execute `build/src/life-of-boids.exe` 

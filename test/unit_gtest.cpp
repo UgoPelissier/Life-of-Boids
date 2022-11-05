@@ -16,7 +16,7 @@
 #include "tree.h"
 #include "display.h"
 
-#if defined _WIN32 // IF WINDOWS
+#if defined _WIN32 || defined __linux__ // IF WINDOWS or LINUX
 #include <execution>
 #define EXECUTION_PAR
 #endif
@@ -359,6 +359,40 @@ TEST(Feature, spawnBirdAfterFruitDies) {
             birds[index].get_y() == fruits[0].get_y());
 }
 
+TEST(Feature, addAgents) {
+
+    vars::agentWindowVars_t var = initAgentWindow();
+    
+    size_t before_b = var.birds.size();
+    size_t before_p = var.predators.size();
+    addBird = false;
+    addPredator = false;
+    addAgent(NULL, var);
+    size_t after_b = var.birds.size();
+    size_t after_p = var.predators.size();
+    EXPECT_EQ(after_b, before_b);
+    EXPECT_EQ(after_p, before_p);
+    
+    before_b = var.birds.size();
+    before_p = var.predators.size();
+
+    for (int i = 0; i < 5; i++) {
+        cursorX = (i * 100.);
+        cursorY = (i * 100.);
+        addBird = true;
+        addAgent(NULL, var);
+        addPredator = true;
+        cursorX = 60 + (i * 100.);
+        cursorY = 60 + (i * 100.);
+        addAgent(NULL, var);
+    }
+    after_b = var.birds.size();
+    after_p = var.predators.size();
+
+    EXPECT_GT(after_b, before_b);
+    EXPECT_GT(after_p, before_p);
+}
+
 #ifdef EXECUTION_PAR
 
 TEST(Feature, parallelisation) {
@@ -381,12 +415,4 @@ TEST(Feature, parallelisation) {
 }
 
 #endif
-
-TEST(Integrate, Object) {
-
-
-
-
-}
-
 }  // namespace
