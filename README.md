@@ -4,7 +4,7 @@
 
 Boids, “bird-oid objects”, is the combination of simple rules that simulates flock behavior. Boids was originally introduced by computer graphics expert, Craig Reynolds, who also worked on scenes for the original Tron movie from 1982 and Batman Returns in 1992. It consists of three fundamental rules: Cohesion, Alignment, and Separation. Just like many other emergent behaviors, each bird can only register and apply these rules to its immediate neighbors within the limited ranges.
 
-Project Features:
+### Project Features
 - Trees can drop fruits around themselves
 - Birds attract one another to form flocks
 - Birds can eat fruits
@@ -12,8 +12,9 @@ Project Features:
 - Birds/Predators can avoid obstacles
 - User can spawn new birds, and predators at the cursor's location by pressing 'b', and 'p' respectively
 - Birds can be spawned at locations where fruits are eaten
+- Agents can cross the screen and re-appear from the opposite side
 
-The following explains how each rule affects each bird:
+### Rules
 - Separation: steer to avoid crowding local flockmates
 - Alignment: steer towards the average heading of local flockmates
 - Cohesion: steer to move towards the average position (center of mass) of local flockmates
