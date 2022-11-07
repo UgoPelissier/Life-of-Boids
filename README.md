@@ -19,6 +19,7 @@ Boids, “bird-oid objects”, is the combination of simple rules that simulates
 - Alignment: steer towards the average heading of local flockmates
 - Cohesion: steer to move towards the average position (center of mass) of local flockmates
 
+![](extras/life-of-boids.gif)
  
 ## Building the project executable
 
