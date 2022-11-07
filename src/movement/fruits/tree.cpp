@@ -4,25 +4,19 @@ Tree::Tree() : Eco(), m_time(0) {}
 
 Tree::Tree(Real const& x, Real const& y, Real const& size, double const& time) : Eco(x,y,size), m_time(time) {}
 
-
-
 bool Tree::equal(Tree const& tree) const {
-    if (m_x==tree.get_x() && m_y==tree.get_y())
-        return true;
-    return false;
+    return (m_x == tree.get_x() && m_y == tree.get_y());
 }
 
 
 bool Tree::overlap(std::vector<Tree> const& trees) const {
-    for (Tree const& tree : trees) {
-        if (!this->equal(tree)) {
-            if (this->distance(tree)<2*(m_size+tree.get_size()))
-                return true;
-        }
-    }
-    return false;
-}
 
+    auto check = [this](Tree const& tree) {
+        return (!this->equal(tree) && this->distance(tree) < 2 * (m_size + tree.get_size()));
+    };
+    
+    return std::any_of(trees.begin(), trees.end(), check);
+}
 
 void Tree::DropFruitAndAppend(std::vector<Fruit>& fruits) {
 

@@ -26,7 +26,7 @@ winpty docker run --rm -it \
 	--executor "docker" \
 	--docker-image alpine:3.9 \
 	--url "https://git.sophia.mines-paristech.fr/" \
-	--registration-token "GR1348941jqt1XzFRsc26p-mKxzsh" \
+	--registration-token "GR13489412Huq9sRRpw_8SpfFor8V" \
 	--description "docker-runner" \
 	--tag-list "docker,mytag" \
 	--run-untagged \
@@ -53,7 +53,7 @@ docker run --rm -it \
 	--executor "docker" \
 	--docker-image alpine:3.9 \
 	--url "https://git.sophia.mines-paristech.fr/" \
-	--registration-token "GR1348941jqt1XzFRsc26p-mKxzsh" \
+	--registration-token "GR13489412Huq9sRRpw_8SpfFor8V" \
 	--description "docker-runner" \
 	--tag-list "docker,mytag" \
 	--run-untagged \
