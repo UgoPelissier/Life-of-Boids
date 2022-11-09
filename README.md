@@ -4,6 +4,8 @@
 
 Boids, “bird-oid objects”, is the combination of simple rules that simulates flock behavior. Boids was originally introduced by computer graphics expert, Craig Reynolds, who also worked on scenes for the original Tron movie from 1982 and Batman Returns in 1992. It consists of three fundamental rules: Cohesion, Alignment, and Separation. Just like many other emergent behaviors, each bird can only register and apply these rules to its immediate neighbors within the limited ranges.
 
+![](extras/life-of-boids.gif)
+
 ### Project Features
 - Trees (in brown) can drop fruits (in green) around themselves
 - Birds (in white) attract one another to form flocks
@@ -15,32 +17,37 @@ Boids, “bird-oid objects”, is the combination of simple rules that simulates
 - Agents can cross the screen and re-appear from the opposite side
 
 ### Initialisation Rules
-- Begin by initialising obstacles : can't overlap with eah other, minimum distance from the border
-- Next are predators : can't overlap with over predators or birds, can't be close to an obstacle (initial state != near_obstacle)
-- Then are birds : same conditions as predators
-- Tree : can't overlap with each other, minimum distance from an obstacle, minimum distance from the border
+- Begin by initialising obstacles:
+    - can't overlap with eah other
+    - minimum distance from the border
+- Next are predators:
+    - can't overlap with over predators or birds
+    - can't be close to an obstacle (initial state != near_obstacle)
+- Then are birds:
+    - same conditions as predators
+- Tree:
+    - can't overlap with each other
+    - minimum distance from an obstacle, minimum distance from the border
 - Fruit initialisation is made with tree.DropFruitAndAppend and will be called for every tree in the updateObjects function. Then the fruits will be dropped depending of the random time variable in the tree object. A random number of fruit is dropped between 1 and DEFAULT_NUM_FRUITS_DROPS.
 
 ### Laws
-- SeparationLaw: steer to avoid crowding local flockmates
-- biSeparationLaw : mean of the angle obtained from separating from a bird and from a predator
-- AlignmentLaw: steer towards the average heading of local flockmates
-- CohesionLaw: steer to move towards the average position (center of mass) of local flockmates
-- PreyLaw: will chase closest bird to eat it, use predator relaxation
-- ObstacleLaw: steer to avoid flying in an obstacle, differ from separationLaw by using obstacle relaxation
-- FruitLaw : will chase a fruit as a predator would do, use predator relaxation
-- biFruitLaw : mean of the angles obtained from chasing a fruit and separating from other birds
+- **SeparationLaw:** steer to avoid crowding local flockmates
+- **biSeparationLaw:** mean of the angle obtained from separating from a bird and from a predator
+- **AlignmentLaw:** steer towards the average heading of local flockmates
+- **CohesionLaw:** steer to move towards the average position (center of mass) of local flockmates
+- **PreyLaw:** will chase closest bird to eat it, use predator relaxation
+- **ObstacleLaw:** steer to avoid flying in an obstacle, differ from separationLaw by using obstacle relaxation
+- **FruitLaw:** will chase a fruit as a predator would do, use predator relaxation
+- **biFruitLaw:** mean of the angles obtained from chasing a fruit and separating from other birds
 
 ### Update of each object
-1. Predators
-For each predator in predator vector :
+1. For Predators
 
 - Check closest obstacle, if near, state=near_obstacle and apply ObstacleLaw
 - if state!=near_obstacle, if near other predators, state=separation and apply SeparationLaw
 - if state!=separation, search for closest prey in field of view with no maximum distance constraint, state=near_prey and apply PreyLaw
 
-2. Birds
-For each bird in birds vector :
+2. For Birds
 
 - check the closest predator, if predator close, state=near_predator, if predator too close, m_alive=false
 - if m_alive=false, stop the update here
@@ -67,26 +74,21 @@ state=separation : separationLaw
 state=alignment : alignmentLaw
 state=cohesion : cohesionLaw
 
-3. Tree
-For each tree in trees vector :
+3. For Trees
 
 - Execute DropFruitAndAppend
 - DropFruitAndAppend : if current time > tree time, create a random number of fruit object in cercle around the tree and emplace them at the back of fruits vector.
 - Randomize next drop time
 
-4. Fruit
-create newFruits vector
-for each fruit in fruits vector :
+4. For Fruits
 
 - if alive, push at the back of newFruits vector
 - else, create new bird object at position of the fruit
 
-end of for
-newFruits vector becomes fruits vector
+5. Return the newly created fruits
 
 ![](extras/rules.png)
 
-![](extras/life-of-boids.gif)
  
 ## Building the project executable
 
