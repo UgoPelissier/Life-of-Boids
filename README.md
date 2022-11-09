@@ -43,47 +43,49 @@ Boids, “bird-oid objects”, is the combination of simple rules that simulates
 ### Update of each object
 1. For Predators
 
-- Check closest obstacle, if near, state=near_obstacle and apply ObstacleLaw
-- if state!=near_obstacle, if near other predators, state=separation and apply SeparationLaw
-- if state!=separation, search for closest prey in field of view with no maximum distance constraint, state=near_prey and apply PreyLaw
+    - Check closest obstacle, if near, state=near_obstacle and apply ObstacleLaw
+    - if state!=near_obstacle, if near other predators, state=separation and apply SeparationLaw
+    - if state!=separation, search for closest prey in field of view with no maximum distance constraint, state=near_prey and apply PreyLaw
 
 2. For Birds
 
-- check the closest predator, if predator close, state=near_predator, if predator too close, m_alive=false
-- if m_alive=false, stop the update here
+    - check the closest predator, if predator close, state=near_predator, if predator too close, m_alive=false
+    - if m_alive=false, stop the update here
 
-- Check the closest obstacle, if near, state=near_obstacle and apply ObstacleLaw
-- if state!=near_obstacle, if state!=near_predator, check closest fruit (so that a fruit is detected only if no predators are around)
+    - Check the closest obstacle, if near, state=near_obstacle and apply ObstacleLaw
+    - if state!=near_obstacle, if state!=near_predator, check closest fruit (so that a fruit is detected only if no predators are around)
 
-- check every bird in field of view
+    - check every bird in field of view
 
-- if bird in separation range, if state=near_predator, change state to near_predatorANDseparation and stock bird position in SeparatePosition
-- elseif bird in separation range, if state=near_fruit, change state to near_fruitANDseparation and add bird position in SeparatePosition
-- else bird in separation range, state=separation and stock bird position in SeparatePosition
+    - if bird in separation range, if state=near_predator, change state to near_predatorANDseparation and stock bird position in SeparatePosition
+    - elseif bird in separation range, if state=near_fruit, change state to near_fruitANDseparation and add bird position in SeparatePosition
+    - else bird in separation range, state=separation and stock bird position in SeparatePosition
 
-- elseif bird in aligment range and (state=aligment or state=constant), change state to aligment and add bird angle to aligment angle
+    - elseif bird in aligment range and (state=aligment or state=constant), change state to aligment and add bird angle to aligment angle
 
-- elseif bird in cohesion range and (state=cohesion or state=constant), change state to cohesion and add bird position in CohesionPosition
+    - elseif bird in cohesion range and (state=cohesion or state=constant), change state to cohesion and add bird position in CohesionPosition
 
-- switch depending of the state
-state=near_predatorANDseparation : biSeparationLaw
-state=near_predator : separationLaw
-state=near_fruitANDseparation : biFruitLaw
-state=near_fruit : fruitLaw
-state=separation : separationLaw
-state=alignment : alignmentLaw
-state=cohesion : cohesionLaw
+    - switch depending of the state
+```
+state = near_predatorANDseparation : biSeparationLaw
+state = near_predator : separationLaw
+state = near_fruitANDseparation : biFruitLaw
+state = near_fruit : fruitLaw
+state = separation : separationLaw
+state = alignment : alignmentLaw
+state = cohesion : cohesionLaw
+```
 
 3. For Trees
 
-- Execute DropFruitAndAppend
-- DropFruitAndAppend : if current time > tree time, create a random number of fruit object in cercle around the tree and emplace them at the back of fruits vector.
-- Randomize next drop time
+    - Execute DropFruitAndAppend
+    - DropFruitAndAppend : if current time > tree time, create a random number of fruit object in cercle around the tree and emplace them at the back of fruits vector.
+    - Randomize next drop time
 
 4. For Fruits
 
-- if alive, push at the back of newFruits vector
-- else, create new bird object at position of the fruit
+    - if alive, push at the back of newFruits vector
+    - else, create new bird object at position of the fruit
 
 5. Return the newly created fruits
 
